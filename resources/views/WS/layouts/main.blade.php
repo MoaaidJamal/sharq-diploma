@@ -1,0 +1,5 @@
+@include('WS.layouts.header')
+@include('WS.layouts.partials.nav')
+@yield('body')
+@include('WS.layouts.partials.footer')
+@include('WS.layouts.footer')

@@ -1,0 +1,25 @@
+.find-your-mate .interests a.btn
+{
+  height: 60px;
+  padding: 20px 30px;
+  margin-right: 15px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.find-your-mate .interests .link a
+{
+  color: #9B3B5A !important;
+}
+.find-your-mate .interests .link-mentor a
+{
+  color: #1B1B1B99 !important;
+}
+@media (max-width: 992px) {
+  .find-your-mate .interests a.btn
+  {
+    flex-grow: 1;
+    margin-bottom: 8px;
+    padding: 10px;
+    height: 40px;
+  }
+}

@@ -1,0 +1,11 @@
+/* header */
+.nav-item .active{
+  color: #9B3B5A !important;
+}
+.learning-path {
+  padding: 1rem 0 4rem 0;
+}
+.rangeslider--disabled
+{
+  opacity: 1;
+}

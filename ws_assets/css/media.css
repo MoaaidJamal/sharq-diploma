@@ -1,0 +1,445 @@
+@media (max-width: 1920px) {
+  .p-absolute {
+    position: absolute !important;
+  }
+
+  .p-relative {
+    position: relative !important;
+  }
+
+  .h-20 {
+    height: 20%;
+  }
+
+  .h-30 {
+    height: 50%;
+  }
+  .lightbox-contents img {
+    width: 50%;
+    height: auto;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 1400px) {
+
+  /* fellowship-program */
+  .fellowship-program {
+    display: flex;
+    align-items: center;
+  }
+
+  .container-video {
+    height: auto;
+  }
+
+  .my-5 {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .carousel-inner {
+    height: 500px;
+  }
+
+  .main-section {
+    height: 725px;
+  }
+
+  .image-person img {
+    height: 30px;
+  }
+
+  .font28 {
+    font-size: 24px;
+  }
+  .lightbox-contents img {
+    width: 80%;
+    height: auto;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 1200px) {
+
+  /* Find Your Mate */
+  .tabs {
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .tabs>div {
+    width: 90% !important;
+    flex-wrap: wrap;
+    justify-content: flex-start !important;
+  }
+
+  .tab {
+    margin: 10px 10px 10px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .container h3,
+  h2 {
+    font-size: 20px !important;
+  }
+
+  .form-label,
+  p {
+    font-size: 14px;
+  }
+
+  .font18 {
+    font-size: 16px;
+  }
+
+  .container-bg {
+    height: 400px;
+  }
+
+  .carousel-inner {
+    height: 450px;
+  }
+
+  .main-section {
+    height: 625px;
+  }
+
+  .flag {
+    transform: translate(0px, -93px);
+  }
+
+  .add-photo {
+    transform: translate(100px, -53px) !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .datepicker {
+    transform: translate(-38px, 10px) !important;
+  }
+
+  .find-your-mate .row {
+    justify-content: center !important;
+  }
+
+  .figure {
+    width: 75%;
+  }
+
+  .figure-img {
+    object-fit: cover;
+  }
+
+  .photo-logo {
+    height: 80px !important;
+  }
+
+  .photo-logo img {
+    object-fit: contain !important;
+  }
+
+  .container-img {
+    height: 300px;
+  }
+
+  .navbar-nav {
+    background-color: #fff;
+    padding: 0;
+  }
+
+  .nav-item {
+    margin: 10px 0;
+  }
+
+  .navbar-nav {
+    margin-bottom: 0 !important;
+  }
+
+  .login {
+    margin-left: 15px;
+  }
+
+  .left-box {
+    border: none;
+  }
+
+  .resetpass-img {
+    height: 300px;
+    margin-bottom: 20px;
+  }
+
+  .setpass {
+    margin-bottom: 50px;
+  }
+
+  .btn-login {
+    margin-bottom: 0;
+  }
+
+  .logo img {
+    width: auto;
+    height: 50px;
+    margin-top: 30px;
+  }
+
+  .my-5 {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .path-text {
+    font-size: 12px;
+  }
+
+  .p-absolute {
+    position: static !important;
+  }
+
+  .p-relative {
+    position: static !important;
+  }
+
+  .h-30 {
+    height: 30%;
+  }
+
+  .carousel-inner {
+    height: 400px;
+  }
+
+  .main-section {
+    height: 525px;
+  }
+
+  .right-login {
+    display: none;
+  }
+
+  .learning-path,
+  .fellowship-program,
+  .find-your-mate,
+  .popular-instructor,
+  .our-team,
+  .explore-our-gallery,
+  .our-great-partnars {
+    padding: 3rem 0;
+  }
+
+  .paragraph {
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    transform: none;
+    margin-left: 10px;
+  }
+
+  .dropdown-menu .arrow {
+    display: none;
+  }
+
+  .add-photo .btn {
+    width: 17px !important;
+    height: 30px !important;
+  }
+
+  .add-photo {
+    transform: translate(43px, -60px) !important;
+  }
+
+  .font42 {
+    font-size: 32px;
+  }
+
+  .request {
+    transform: translate(20px, -80px);
+  }
+
+  /* last */
+  .box {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .container h3,
+  h2 {
+    font-size: 16px !important;
+  }
+
+  .s-small {
+    font-size: xx-small !important;
+  }
+
+  .input-group {
+    height: 35px !important;
+  }
+
+  input {
+    height: 30px;
+    font-size: xx-small;
+  }
+
+  .setpass {
+    font-size: x-small;
+  }
+
+  .font18 {
+    font-size: 12px;
+  }
+
+  footer .mx-3 {
+    margin: 10px !important;
+  }
+
+  .text-f {
+    font-size: 12px !important;
+    margin-bottom: 15px;
+  }
+
+  .follow {
+    margin-bottom: 0;
+  }
+
+  .nav-link {
+    font-size: 13px !important;
+  }
+
+  .container-bg {
+    height: 300px;
+  }
+
+  .carousel-inner .w-50 {
+    width: 100% !important;
+  }
+
+  .start {
+    height: 40px;
+    padding: 0 2rem;
+  }
+
+  .container-text-prog {
+    flex-direction: column;
+  }
+
+  .font28 {
+    font-size: 20px;
+  }
+
+}
+
+@media (max-width: 576px) {
+  .tab {
+    flex-grow: 1;
+  }
+
+  .fellowship-program p {
+    line-height: 22px;
+    font-weight: 100;
+    font-size: 12px;
+  }
+
+  .popular-instructor .container>div,
+  .explore-our-gallery .container>div {
+    flex-direction: column !important;
+  }
+
+  .form-label,
+  p,
+  .text-prog {
+    font-size: xx-small;
+  }
+
+  .resetpass-img {
+    height: 200px;
+  }
+
+  .logo img {
+    width: auto;
+    height: 40px;
+    margin-top: 30px;
+  }
+
+  .path-text {
+    font-size: 11px;
+  }
+
+  /* .phase2 canvas 
+  {
+    width: 50px !important;
+    height: 50px !important;
+  } */
+  .small-text {
+    font-size: 11px;
+  }
+
+  h2 {
+    font-size: 13px !important;
+  }
+
+  .btn {
+    font-size: 12px;
+  }
+
+  form {
+    margin-top: 0;
+  }
+
+  .mb-3 {
+    margin-bottom: .5rem !important;
+  }
+
+  .photo-logo {
+    height: 60px !important;
+  }
+
+  .login-check .form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-color: #ddd;
+  }
+
+  .container-text-prog {
+    flex-direction: row;
+  }
+
+  .paragraph {
+    font-size: 11px;
+  }
+
+  .our-great-partnars {
+    padding-bottom: 0;
+    min-height: 520px;
+  }
+
+  .font42 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .forget-password {
+    flex-direction: column !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .h-30 {
+    height: 50%;
+  }
+
+  .resetpass-img {
+    height: 150px;
+  }
+
+}

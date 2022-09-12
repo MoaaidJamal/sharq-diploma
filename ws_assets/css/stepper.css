@@ -1,0 +1,52 @@
+#msform fieldset:not(:first-of-type) {
+  display: none
+}
+
+#progressbar {
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#progressbar .active {
+  color: #000000
+}
+
+#progressbar li {
+  list-style-type: none;
+  font-size: 12px;
+  float: left;
+  position: relative
+}
+
+#progressbar li span {
+    font-size: 12px;
+    border: 2px solid #EEEEEF;
+    background-color: transparent;
+    color: #000;
+    font-weight: 700;
+    margin-right: 12px;
+    width: 25px;
+    height: 25px;
+    display: block;
+    border-radius: 50%;
+    padding: 2px
+}
+
+
+
+.fit-image {
+  width: 100%;
+  object-fit: cover
+}
+
+#progressbar li.false:before,
+#progressbar li.current:before
+{
+  color: #fff !important;
+  background-color: #FF6161 !important;
+}
+#progressbar li.active span
+{
+  color: #fff !important;
+  background-color: #18B595 !important;
+}

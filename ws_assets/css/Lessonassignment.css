@@ -1,0 +1,134 @@
+.plus-mark
+{
+  color: #44AB96;
+}
+.form-check-input[type="radio"] {
+  margin-right: 15px;
+  min-width: 14px;
+  min-height: 14px;
+  border: 1px solid #C4C4C4!important;
+}
+.form-check-input:checked {
+  background-color: #44AB96 !important;
+}
+.form-check
+{
+  height: 60px;
+  border: 1px solid #DADADA;
+  display: flex;
+  align-items: center;
+  padding: 20px 40px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+.next-mark
+{
+  color: #C4C4C4;
+}
+input:disabled {
+  background-color: red;
+  color: red !important
+}
+
+.container-t-area
+{
+  min-height: 400px;
+  border-radius: 8px;
+  border: 1px solid #DADADA;
+  margin-top: 30px;
+}
+.box-icons
+{
+  min-height: 80px;
+  border-top: 1px solid #F1F1F5;
+
+}
+textarea
+{
+  width: 100%;
+  min-height: 320px;
+  border: none;
+  resize: none;
+}
+textarea:focus
+{
+  border: none;
+  outline: none;
+}
+
+button[type='submit']
+{
+  background-color: #9B3B5A;
+  padding: 0 2rem;
+  height: 40px;
+  color: #fff;
+  min-width: 200px;
+  width: auto;
+}
+.rangeslider--disabled
+{
+  opacity: 1;
+}
+.container-t-area textarea
+{
+  padding: 2rem;
+  border-radius: 16px;
+}
+.assignment button[type="submit"]:hover
+{
+  color: #fff !important;
+}
+/* media */
+
+@media (max-width: 1400px) { 
+  
+ }
+@media (max-width: 1200px) { 
+  .box-icons
+  {
+    min-height: 50px;
+  }
+  textarea
+  {
+    min-height: 250px;
+  }
+  .container-t-area
+  {
+    min-height: 300px;
+  } 
+}
+@media (max-width: 992px) { 
+  
+}
+@media (max-width: 768px) { 
+  .small
+  {
+    font-size: 11px !important;
+  }
+  .box-icons
+{
+  min-height: 40px;
+}
+textarea
+{
+  min-height: 160px;
+}
+.container-t-area
+{
+  min-height: 200px;
+}
+.container-t-area
+{
+  padding: 1rem;
+}
+  
+}
+
+@media (max-width: 576px) {
+  .form-check {
+    padding: 20px 40px;
+}
+}
+@media (max-width: 300px) {
+  
+}

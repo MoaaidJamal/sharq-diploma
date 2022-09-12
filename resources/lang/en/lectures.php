@@ -1,0 +1,36 @@
+<?php
+
+return [
+
+    'title' => 'Lectures',
+    'new' => 'New Lecture',
+    'update' => 'Update Lecture',
+    'title_en' => 'Title (English)',
+    'title_ar' => 'Title (Arabic)',
+    'group_id' => 'Lecture Group',
+    'category_id' => 'Lecture Category',
+    'course_id' => 'Module',
+    'order' => 'Order',
+    'next' => 'Next Lecture',
+    'description_en' => 'Description (English)',
+    'description_ar' => 'Description (Arabic)',
+    'image' => 'Image',
+    'file_type' => 'Lecture Type',
+    'youtube' => 'Youtube',
+    'vimeo' => 'Vimeo',
+    'pdf' => 'PDF',
+    'powerpoint' => 'Powerpoint',
+    'text' => 'Text',
+    'file' => 'File',
+    'content' => 'Lecture Content',
+    'video_id' => 'Video ID',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
+    'minutes' => 'Minutes',
+    'embedded_code' => 'Embedded Code',
+    'assignment_ar' => 'Assignment (Arabic)',
+    'assignment_en' => 'Assignment (English)',
+    'date' => 'Date',
+    'lectures_group' => 'Lecture Group',
+
+];

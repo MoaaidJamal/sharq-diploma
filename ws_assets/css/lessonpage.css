@@ -1,0 +1,126 @@
+.complete-text,
+.playing-text,
+.mark-as-complete {
+  background-color: #1DD6BD;
+  height: 20px;
+  padding: 0 4px;
+}
+
+.complete-lesson {
+  color: #1DD6BD;
+  font-weight: bold;
+}
+
+.playing-text {
+  background-color: #FF6161;
+  margin-left: 4px;
+}
+
+.playing-lesson {
+  color: #FF6161;
+  font-weight: bolder;
+}
+
+.mark-as-complete {
+  color: #1DD6BD;
+  background-color: #1DD6BD33;
+}
+
+.bi-check2 {
+  margin-right: 4px;
+}
+
+.rangeslider--disabled {
+  opacity: 1;
+}
+
+.l-assignment {
+  min-height: 284px;
+  background: #FFF0F0;
+  border: 2px solid #EEEEEF;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+ol {
+  padding-left: 20px !important;
+}
+
+button[type='submit'] {
+  background-color: #9B3B5A;
+  padding: 0 2rem;
+  height: 40px;
+  color: #fff;
+  min-width: 200px;
+  width: auto;
+}
+
+.complete-text,
+.playing-text,
+.mark-as-complete {
+  background-color: #1DD6BD;
+  height: 20px;
+  padding: 0 4px;
+}
+
+.complete-lesson {
+  color: #1DD6BD;
+  font-weight: bold;
+}
+
+.playing-text {
+  background-color: #FF6161;
+  margin-left: 4px;
+}
+
+.playing-lesson {
+  color: #FF6161;
+  font-weight: bolder;
+}
+
+.mark-as-complete {
+  color: #1DD6BD;
+  background-color: #1DD6BD33;
+}
+
+.bi-check2 {
+  margin-right: 4px;
+}
+
+.rangeslider--disabled {
+  opacity: 1;
+}
+
+.l-assignment {
+  min-height: 284px;
+  background: #FFF0F0;
+  border: 2px solid #EEEEEF;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+ol {
+  padding-left: 20px !important;
+}
+
+button[type='submit'] {
+  background-color: #9B3B5A;
+  padding: 0 2rem;
+  height: 40px;
+  color: #fff;
+  min-width: 200px;
+  width: auto;
+}
+
+button[type='submit']:hover {
+  color: #fff;
+}
+
+
+@media (max-width: 992px) {
+  .accordion
+  {
+    overflow: visible;
+    height: auto;
+  }
+}

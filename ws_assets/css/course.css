@@ -1,0 +1,242 @@
+.bi-dot {
+  padding: 5px !important;
+}
+
+.replay {
+  height: 52px;
+  padding: 8px;
+}
+
+.container-image {
+  width: 40px;
+  height: 40px;
+}
+
+.container-img img {
+  object-fit: contain !important;
+}
+
+/* top progress */
+.two-progress {
+  border-bottom: 1px solid #eeeeef;
+  border-top: 1px solid #eeeeef;
+  min-height: 100px;
+}
+.rangeslider__fill,
+.rangeslider__handle
+{
+  background-color: #F3BD01 !important;
+}
+.padding-r
+{
+  padding: 20px;
+  border-left: 1px solid #eeeeef;
+  border-right: 1px solid #eeeeef;
+}
+/* input */
+input:focus,
+.btn-send,
+.accordion-button:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+input {
+  outline: none !important;
+  border: none !important;
+  margin-top: 20px;
+}
+
+.progress-text
+{
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* right box */
+.titles-lessons {
+  color: #fff;
+  padding: 1rem;
+  background-color: #E53855;
+}
+
+.titles-lessons button {
+  background-color: #00DDC0;
+  height: 30px;
+  color: #fff;
+}
+
+.titles-lessons button:hover {
+  color: #fff;
+}
+
+.titles-lessons button:focus {
+  box-shadow: none !important;
+}
+
+.accordion-button {
+  background-color: #F4F4F4;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #F4F4F4;
+  box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
+}
+
+.line-height {
+  line-height: 18px;
+}
+
+.accordion-button span {
+  color: #C5322A;
+}
+
+.accordion-button div {
+  margin-right: 20px;
+}
+
+.accordion-button::after {
+  background-image: url('../images/course/arrow1.svg');
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: url('../images/course/arrow1.svg');
+  transform: rotate(-180deg);
+}
+
+/* Lesson description Box */
+.description {
+  min-height: 50px;
+  height: auto;
+  padding: 10px 20px !important;
+  border-bottom: 1px solid #ccc;
+}
+
+/* last */
+.container-last-box {
+  background-color: #ff6161;
+  position: relative;
+  max-height: 400px;
+}
+
+.container-last-box img {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.absolute-div {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(201, 59, 59, 0) 39.22%, rgba(0, 0, 0, 0.5) 100%);
+  position: absolute;
+  /* transform: translate(0, -341px); */
+  top: 0;
+}
+
+.absolute-text {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding: 16px;
+  top: 0;
+  color: #fff;
+}
+
+.btn-get-it-now {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.btn-get-it-now:hover {
+  color: #fff;
+}
+
+.btn-get-it-now:focus {
+  box-shadow: none !important;
+}
+
+/* progress */
+.one canvas {
+  width: 80px !important;
+  height: 80px !important;
+}
+
+.one .strong {
+  position: absolute !important;
+  transform: translate(-54px, 28px) !important;
+}
+.rangeslider--disabled
+{
+  opacity: 1;
+}
+/* ask */
+.ask .input-group
+{
+  background: rgba(249, 249, 249, 0.9);
+border-radius: 3px;
+padding: .5rem;
+margin-top: 2rem;
+}
+.ask input,
+.ask input:focus
+{
+  background-color: transparent;
+  margin: 0;
+}
+
+/* media */
+
+@media (max-width: 1400px) {
+  .accordion-button::after {
+    background-size: 1rem !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  iframe {
+    height: 350px;
+  }
+}
+
+@media (max-width: 992px) {
+  .right-box-course {
+    margin-top: 2rem;
+  }
+
+  .accordion-button::after {
+    background-size: .8rem !important;
+  }
+  .progress-text
+  {
+    font-size: 14px;
+  }
+  .padding-r
+  {
+    border: none;
+  }
+}
+
+@media (max-width: 768px) {}
+
+@media (max-width: 576px) {
+  .accordion-button::after {
+    background-size: .5rem !important;
+  }
+
+  iframe {
+    height: 250px;
+  }
+  .progress-text
+  {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 300px) {
+  iframe {
+    height: 100px;
+  }
+}
