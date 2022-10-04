@@ -226,9 +226,10 @@ class UserController extends Controller
                 'token' => $token
             ]);
             $link = route('ws.users.verify', ['token' => $token]);
-            curl_email([$user->email], 'Al Sharq Executive Diploma program | 2021-22 Cohort | Onboarding', 'emails.user_verification', [
+            curl_email([$user->email], 'معلومات الدخول للموقع – الدبلوم التنفيذي', 'emails.user_verification', [
                 'link' => $link,
                 'name' => $user->name,
+                'phase' => optional($user->phases()->first())->name ?: '-',
             ]);
         }
 
@@ -303,6 +304,7 @@ class UserController extends Controller
             curl_email([$user->email], 'Al Sharq Executive Diploma program | 2021-22 Cohort | Onboarding', 'emails.user_verification', [
                 'link' => $link,
                 'name' => $user->name,
+                'phase' => optional($user->phases()->first())->name ?: '-',
             ]);
             return response()->json([
                 'success'=> TRUE,

@@ -28,9 +28,12 @@ class EmailController extends Controller
         config(['mail' => $new]);
         foreach ($to as $recipient) {
             if($recipient){
-                Mail::send($view, $data, function ($message) use ($subject, $recipient) {
+                Mail::send($view, $data, function ($message) use ($subject, $recipient, $view) {
                     $message->subject($subject);
                     $message->to($recipient);
+                    if ($view == 'emails.user_verification') {
+                        $message->attach(public_path('assets/introductory_meeting.pdf'));
+                    }
                 });
             }
         }
