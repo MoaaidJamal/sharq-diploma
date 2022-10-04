@@ -24,6 +24,9 @@
                     <li class="nav-item">
                         <a class="nav-link @yield('schedule_active')" href="{{route('ws.schedule')}}">{{$settings->schedule_menu_title}}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('messages_active')" href="{{route('ws.messages')}}">{{$settings->messages_menu_title}}</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav @if(locale() == 'ar') me-auto @else ms-auto @endif mb-2 mb-lg-0 profile-menu">
                     <li class="nav-item">

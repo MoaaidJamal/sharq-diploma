@@ -4,11 +4,7 @@
     @lang($module.'.title')
 @endsection
 
-@section($module.'_menu')
-    menu-item-active
-@endsection
-
-@section('all_settings_menu')
+@section('user_assignments_menu')
     menu-item-active
 @endsection
 
@@ -40,6 +36,11 @@
                         <div class="card card-custom gutter-b example example-compact">
                             <div class="card-header">
                                 <h3 class="card-title">@lang($module.'.title')</h3>
+                                <div class="card-toolbar">
+                                    <button class="btn btn-primary" id="export">
+                                        <i class="fa fa-file-excel"></i>@lang($module.'.export')
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="collapse" id="collapseExample">
@@ -102,7 +103,10 @@
                                         <th>@lang($module.'.user_id')</th>
                                         <th>@lang($module.'.lecture_id')</th>
                                         <th>@lang($module.'.file')</th>
+                                        <th>@lang($module.'.grade')</th>
+                                        <th>@lang($module.'.comment')</th>
                                         <th>@lang($module.'.created_at')</th>
+                                        <th>@lang('constants.options')</th>
                                     </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -139,7 +143,10 @@
                     {className: 'text-center', data: 'user_id', name: 'user_id'},
                     {className: 'text-center', data: 'lecture_id', name: 'lecture_id'},
                     {className: 'text-center', data: 'file', name: 'file'},
+                    {className: 'text-center', data: 'grade', name: 'grade'},
+                    {className: 'text-center', data: 'comment', name: 'comment'},
                     {className: 'text-center', data: 'created_at', name: 'created_at'},
+                    {className: 'text-center', data: 'actions', name: 'actions', orderable: false},
                 ],
                 @if(locale() == 'ar')
                 language: {
@@ -157,6 +164,17 @@
                 $('#user_id').val('').trigger('change');
 
                 $('#items_table').DataTable().ajax.reload(null, false);
+            });
+
+            $('#export').click(function () {
+                let url = '{{route($module.'.download')}}?';
+                if($('#lecture_id').val()) {
+                    url += 'lecture_id=' + $('#lecture_id').val() + '&';
+                }
+                if($('#user_id').val()) {
+                    url += 'user_id=' + $('#user_id').val() + '&';
+                }
+                location.href = url;
             });
         });
     </script>

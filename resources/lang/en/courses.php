@@ -3,6 +3,7 @@
 return [
 
     'title' => 'Modules',
+    'singular' => 'Module',
     'new' => 'New Module',
     'update' => 'Update Module',
     'title_en' => 'Title (English)',
@@ -22,5 +23,7 @@ return [
     'courses_settings' => 'Modules Settings',
     'user_id' => 'Lecturer',
     'is_available' => 'Is Available',
+    'phase_id' => 'Diploma',
+    'lectures_groups' => 'Lectures Groups',
 
 ];

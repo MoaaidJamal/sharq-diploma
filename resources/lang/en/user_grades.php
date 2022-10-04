@@ -12,5 +12,6 @@ return [
     'grade3' => 'Semester Assignment Grade',
     'grade4' => 'Exam Grade',
     'grade5' => 'Extra Grade',
+    'lecturer_id' => 'Lecturer',
 
 ];

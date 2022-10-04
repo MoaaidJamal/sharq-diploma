@@ -20,7 +20,7 @@ class Lectures extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('course_id')->nullable();
             $table->integer('order')->nullable();
-            $table->string('title')->nullable();
+            $table->longText('title')->nullable();
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->dateTime('start_date')->nullable();

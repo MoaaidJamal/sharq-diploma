@@ -157,6 +157,7 @@
                                     </span>
                                 </div>
                             @endif
+                            <a href="{{route('ws.start_chat', ['id' => $user->id])}}" class="btn btn-primary btn-block">@lang('ws.go_to_chat')</a>
                         </div>
                     </div>
                 </div>

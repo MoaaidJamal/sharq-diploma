@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lecture;
 use App\Models\Question;
+use App\Models\Review;
 use App\Models\UserAttempt;
 use App\Models\UserAttemptAnswer;
 use App\Models\UsersAssignment;
+use App\Models\UsersCourse;
 use App\Models\UsersLecture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +20,7 @@ class CourseController extends Controller
 {
 
     public function show($course_id, $lecture_id = null) {
-        $data['course'] = Course::query()->where('enabled', 1)->findOrFail($course_id);
+        $data['course'] = Course::query()->whereIn('phase_id', userPhases())->where('enabled', 1)->findOrFail($course_id);
         if ($lecture_id) {
             $data['lecture'] = Lecture::query()->where('enabled', 1)->findOrFail($lecture_id);
         } else {
@@ -46,6 +48,52 @@ class CourseController extends Controller
         return view('WS.courses.show', $data);
     }
 
+    public function more_reviews(Request $request) {
+        $data['reviews'] = Review::query()->where('course_id', $request['id'])->paginate(6);
+        return response()->json([
+            'success' => TRUE,
+            'last_page' => !$data['reviews']->hasMorePages(),
+            'page' => view('WS.courses.list_reviews', $data)->render()
+        ]);
+    }
+
+    public function add_review(Request $request)
+    {
+        $rules = [
+            'id' => ['required', Rule::exists('courses', 'id')],
+            'rate' => ['required', Rule::in([1,2,3,4,5])],
+            'comment' => 'required|string',
+        ];
+        $validate = Validator::make(request()->all(), $rules);
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validate->errors()->all()
+            ]);
+        } else {
+            $data['reviews'] = [Review::query()->create([
+                'course_id' => $request['id'],
+                'user_id' => auth()->id(),
+                'rate' => $request['rate'],
+                'comment' => $request['comment'],
+            ])];
+            return response()->json([
+                'success' => TRUE,
+                'message' => __('ws.success_rate'),
+                'page' => view('WS.courses.list_reviews', $data)->render()
+            ]);
+        }
+    }
+
+    public function delete_review(Request $request)
+    {
+        Review::query()->findOrFail($request['id'])->delete();
+        return response()->json([
+            'success' => TRUE,
+            'message' => __('ws.review_deleted'),
+        ]);
+    }
+
     public function assignment(Request $request) {
         $validate = Validator::make($request->all(), [
             'lecture_id' => ['required', 'integer', Rule::exists('lectures', 'id')->where('enabled', 1)],
@@ -58,7 +106,7 @@ class CourseController extends Controller
         UsersAssignment::query()->create([
             'user_id' => auth()->id(),
             'lecture_id' => $request['lecture_id'],
-            'file' => upload_file($request->file('file'), 'lectures'),
+            'file' => $request->file('file')->storeAs('assignments', auth()->user()->name . '_' . now()->toDateTimeString() . '.' . $request->file('file')->getClientOriginalExtension()),
             'file_name' => $request->file('file')->getClientOriginalName(),
         ]);
         return back()->with('success', 'Your file has been submitted successfully');
@@ -73,9 +121,13 @@ class CourseController extends Controller
         }
         $lecture = Lecture::query()->find($request['lecture_id']);
         UsersLecture::query()->where('user_id', auth()->id())->where('lecture_id', $request['lecture_id'])->delete();
-        UsersLecture::query()->create([
+        UsersLecture::query()->updateOrCreate([
             'user_id' => auth()->id(),
             'lecture_id' => $request['lecture_id'],
+        ]);
+        UsersCourse::query()->updateOrCreate([
+            'user_id' => auth()->id(),
+            'course_id' => $lecture->course_id,
         ]);
         if ($lecture->next()) {
             return redirect()->route('ws.course.show', ['course_id' => $lecture->next()->course_id, 'lecture_id' => $lecture->next()->id])->with('success', 'Your completed the lecture successfully');

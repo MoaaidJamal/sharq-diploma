@@ -3,6 +3,7 @@
 return [
 
     'title' => 'Lectures',
+    'singular' => 'Lecture',
     'new' => 'New Lecture',
     'update' => 'Update Lecture',
     'title_en' => 'Title (English)',
@@ -32,5 +33,13 @@ return [
     'assignment_en' => 'Assignment (English)',
     'date' => 'Date',
     'lectures_group' => 'Lecture Group',
+    'quiz_questions' => 'Quiz Questions',
+    'question' => 'Question',
+    'answer1' => 'Answer 1',
+    'answer2' => 'Answer 2',
+    'answer3' => 'Answer 3',
+    'answer4' => 'Answer 4',
+    'correct_answer' => 'Correct Answer',
+    'copy_url' => 'Copy Join URL',
 
 ];

@@ -67,9 +67,11 @@ class Lecture extends Model
     const CATEGORY_DEBATE = 11;
     const CATEGORY_SKILL_LAB = 12;
     const CATEGORY_SOCIAL_EVENT = 13;
+    const CATEGORY_ZOOM = 14;
 
     const CATEGORIES = [
         self::CATEGORY_COURSE => 'Course',
+        self::CATEGORY_ZOOM => 'Zoom Meeting',
         self::CATEGORY_QUIZ => 'Quiz',
         self::CATEGORY_LIVE_SESSION => 'Live Session',
         self::CATEGORY_BASIC_LESSON => 'Basic Lesson',
@@ -98,11 +100,11 @@ class Lecture extends Model
         self::CATEGORY_DEBATE => 'warning',
         self::CATEGORY_SKILL_LAB => 'danger',
         self::CATEGORY_SOCIAL_EVENT => 'dark',
+        self::CATEGORY_ZOOM => 'primary',
     ];
 
 	protected $casts = [
 		'group_id' => 'int',
-		'category_id' => 'int',
 		'course_id' => 'int',
 		'order' => 'int',
 		'enabled' => 'int'
@@ -130,6 +132,9 @@ class Lecture extends Model
         'start_date',
         'end_date',
         'minutes',
+        'meeting_id',
+        'join_url',
+        'start_url',
 		'enabled'
 	];
 
@@ -143,11 +148,11 @@ class Lecture extends Model
     }
 
     public function getImageAttribute($file){
-        return $file && file_exists(base_path($file)) ? url($file) : url('uploads/image_placeholder.png');
+        return $file && file_exists(public_path($file)) ? url($file) : url('uploads/image_placeholder.png');
     }
 
     public function getFileAttribute($file){
-        return $file && file_exists(base_path($file)) ? url($file) : url('uploads/image_placeholder.png');
+        return $file && file_exists(public_path($file)) ? url($file) : url('uploads/image_placeholder.png');
     }
 
 	public function lectures_category()
@@ -189,4 +194,13 @@ class Lecture extends Model
 	{
 		return $this->getOriginal('order') ?  self::query()->where('order', '<', $this->getOriginal('order'))->where('course_id', $this->course_id)->where('enabled', 1)->orderBy('order', 'DESC')->first() : null;
 	}
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->whereHas('course', function ($q) {
+                $q->where('phase_id', session('dashboard_phase_id'));
+            });
+        });
+    }
 }

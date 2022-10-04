@@ -8,10 +8,6 @@
     menu-item-active
 @endsection
 
-@section('course_settings_menu')
-    menu-item-active
-@endsection
-
 @section('style')
     <style>
     </style>
@@ -39,15 +35,19 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-column-fluid">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-custom gutter-b example example-compact">
-                            <div class="card-header">
-                                <h3 class="card-title">@if($record) @lang($module.'.update') @else @lang($module.'.new') @endif</h3>
-                            </div>
-                            <form action="{{route('courses.'.$module.'.add_edit')}}" method="post" id="add_edit_form" enctype="multipart/form-data">
+        <form action="{{route('courses.'.$module.'.add_edit')}}" method="post" id="add_edit_form" enctype="multipart/form-data">
+            <div class="d-flex flex-column-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-custom gutter-b example example-compact">
+                                <div class="card-header">
+                                    <h3 class="card-title">@if($record) @lang($module.'.update') @else @lang($module.'.new') @endif</h3>
+                                    <div class="card-toolbar">
+                                        <a href="{{route($parent_module.'.'.$module, ['id' => $parent->id])}}" class="btn btn-secondary" style="margin: 0 5px">@lang('constants.cancel')</a>
+                                        <button type="button" class="btn btn-primary btn-submit" style="margin: 0 5px">@lang('constants.submit')</button>
+                                    </div>
+                                </div>
                                 <div class="card-body">
                                     <input type="hidden" name="course_id" value="{{$parent->id}}">
                                     @if($record)
@@ -55,6 +55,21 @@
                                     @endif
                                     @csrf
                                     <div class="row">
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <div class="row">
+                                                <label class="col-12" for="category_id">@lang($module.'.category_id') <span class="text-danger">*</span></label>
+                                                <div class="col-12">
+                                                    <select name="category_id" id="category_id" class="selectpicker form-control" data-live-search="true">
+                                                        <option selected value="">--</option>
+                                                        @foreach(\App\Models\Lecture::CATEGORIES as $id => $name)
+                                                            <option value="{{$id}}" @if(isset($record) && $record->category_id == $id) selected @endif>{{$name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 text-danger" id="category_id_error"></div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
                                                 <label class="col-12" for="title_en">@lang($module.'.title_en') <span class="text-danger">*</span></label>
@@ -94,21 +109,6 @@
 
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
-                                                <label class="col-12" for="category_id">@lang($module.'.category_id') <span class="text-danger">*</span></label>
-                                                <div class="col-12">
-                                                    <select name="category_id" id="category_id" class="selectpicker form-control" data-live-search="true">
-                                                        <option selected value="">--</option>
-                                                        @foreach(\App\Models\Lecture::CATEGORIES as $id => $name)
-                                                            <option value="{{$id}}" @if(isset($record) && $record->category_id == $id) selected @endif>{{$name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 text-danger" id="category_id_error"></div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                                            <div class="row">
                                                 <label class="col-md-12" for="date">@lang($module.'.date')</label>
                                                 <div class="col-md-12">
                                                     <input type="text" class="form-control my-daterangepicker-time" name="date" id="date" placeholder="@lang($module.'.date')" @if($record) value="{{\Carbon\Carbon::parse($record->start_date)->format('Y-m-d H:i')}} - {{\Carbon\Carbon::parse($record->end_date)->format('Y-m-d H:i')}}" @endif>
@@ -137,23 +137,27 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-12" @if($record && $record->category_id == \App\Models\Lecture::CATEGORY_QUIZ) style="display: none" @endif>
+                                        <div class="col-12" id="description_div" @if($record && $record->category_id == \App\Models\Lecture::CATEGORY_QUIZ) style="display: none" @endif>
                                             <div class="row">
-                                                <label class="col-12" for="description_en">@lang($module.'.description_en')</label>
-                                                <div class="col-12">
-                                                    <textarea rows="6" name="description[en]" id="description_en" class="form-control editor">@if($record){{$record->getTranslation('description', 'en')}}@endif</textarea>
+                                                <div class="form-group col-12">
+                                                    <div class="row">
+                                                        <label class="col-12" for="description_en">@lang($module.'.description_en')</label>
+                                                        <div class="col-12">
+                                                            <textarea rows="6" name="description[en]" id="description_en" class="form-control editor">@if($record){{$record->getTranslation('description', 'en')}}@endif</textarea>
+                                                        </div>
+                                                        <div class="col-12 text-danger" id="description_en_error"></div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-12 text-danger" id="description_en_error"></div>
-                                            </div>
-                                        </div>
 
-                                        <div class="form-group col-12" @if($record && $record->category_id == \App\Models\Lecture::CATEGORY_QUIZ) style="display: none" @endif>
-                                            <div class="row">
-                                                <label class="col-12" for="description_ar">@lang($module.'.description_ar')</label>
-                                                <div class="col-12">
-                                                    <textarea rows="6" name="description[ar]" id="description_ar" class="form-control editor">@if($record){{$record->getTranslation('description', 'ar')}}@endif</textarea>
+                                                <div class="form-group col-12">
+                                                    <div class="row">
+                                                        <label class="col-12" for="description_ar">@lang($module.'.description_ar')</label>
+                                                        <div class="col-12">
+                                                            <textarea rows="6" name="description[ar]" id="description_ar" class="form-control editor">@if($record){{$record->getTranslation('description', 'ar')}}@endif</textarea>
+                                                        </div>
+                                                        <div class="col-12 text-danger" id="description_ar_error"></div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-12 text-danger" id="description_ar_error"></div>
                                             </div>
                                         </div>
 
@@ -227,6 +231,42 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card-footer d-flex justify-content-between" id="second_actions">
+                                    <h3 class="card-title"></h3>
+                                    <div class="card-toolbar">
+                                        <a href="{{route($parent_module.'.'.$module, ['id' => $parent->id])}}" class="btn btn-secondary" style="margin: 0 5px">@lang('constants.cancel')</a>
+                                        <button type="button" class="btn btn-primary btn-submit" style="margin: 0 5px">@lang('constants.submit')</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" id="quiz_div"  @if(!$record || $record->category_id != \App\Models\Lecture::CATEGORY_QUIZ) style="display: none" @endif>
+                            <div class="card card-custom gutter-b example example-compact">
+                                <div class="card-header">
+                                    <h3 class="card-title">@lang($module.'.quiz_questions')</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12" id="quiz_questions">
+                                            <div class="repeater" data-repeater-list="quiz_questions">
+                                                @if($record && count($record->questions))
+                                                    @include('CP.lectures.quiz_questions', ['is_template' => true, 'item' => null])
+                                                    @foreach($record->questions as $item)
+                                                        @include('CP.lectures.quiz_questions', ['item' => $item])
+                                                    @endforeach
+                                                @else
+                                                    @include('CP.lectures.quiz_questions', ['item' => null])
+                                                @endif
+                                            </div>
+                                            <div class="form-group mt-5">
+                                                <a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+                                                    <i class="la la-plus"></i>@lang('constants.new')
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-footer d-flex justify-content-between">
                                     <h3 class="card-title"></h3>
                                     <div class="card-toolbar">
@@ -234,12 +274,12 @@
                                         <button type="button" class="btn btn-primary btn-submit" style="margin: 0 5px">@lang('constants.submit')</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 @endsection
 @section('js')
@@ -307,6 +347,12 @@
 
         $('.btn-submit').click(function () {
             if ($('#add_edit_form').valid()) {
+                KTApp.blockPage({
+                    overlayColor: '#000000',
+                    type: 'v2',
+                    state: 'success',
+                    message: '@lang('constants.please_wait') ...'
+                });
                 $('#add_edit_form').submit();
             }
         });
@@ -354,16 +400,53 @@
 
         $('#category_id').change(function () {
             if ($(this).val() == {{\App\Models\Lecture::CATEGORY_ASSIGNMENT}}) {
+                $('#description_div').show();
+                $('#second_actions').addClass('d-flex').show();
                 $('#assignment_div').show();
-            } else {
-                $('#assignment_div').hide();
-            }
-            if ($(this).val() == {{\App\Models\Lecture::CATEGORY_QUIZ}}) {
+                $('#lecture_content').show();
+                $('#quiz_div').hide();
+                $('#embedded_code').parents('.form-group').show();
+                $('#minutes').prop('required', false);
+                $('#date').prop('required', false);
+            } else if ($(this).val() == {{\App\Models\Lecture::CATEGORY_QUIZ}}) {
+                $('#description_div').hide();
+                $('#second_actions').removeClass('d-flex').hide();
+                $('#quiz_div').show();
                 $('#lecture_content').hide();
                 $('#embedded_code').parents('.form-group').hide();
+                $('#assignment_div').hide();
+                $('#minutes').prop('required', false);
+                $('#date').prop('required', false);
+            } else if ($(this).val() == {{\App\Models\Lecture::CATEGORY_ZOOM}}) {
+                $('#description_div').hide();
+                $('#second_actions').addClass('d-flex').show();
+                $('#lecture_content').hide();
+                $('#embedded_code').parents('.form-group').hide();
+                $('#assignment_div').hide();
+                $('#quiz_div').hide();
+                $('#minutes').prop('required', true);
+                $('#date').prop('required', true);
             } else {
+                $('#second_actions').addClass('d-flex').show();
+                $('#description_div').show();
+                $('#assignment_div').hide();
+                $('#quiz_div').hide();
                 $('#lecture_content').show();
                 $('#embedded_code').parents('.form-group').show();
+                $('#minutes').prop('required', false);
+                $('#date').prop('required', false);
+            }
+        });
+
+        $('#quiz_questions').repeater({
+            initEmpty: false,
+
+            show: function () {
+                $(this).slideDown();
+            },
+
+            hide: function (deleteElement) {
+                $(this).slideUp(deleteElement);
             }
         });
     </script>

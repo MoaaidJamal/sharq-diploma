@@ -82,4 +82,13 @@ class LecturesGroup extends Model
     {
         return $this->getOriginal('order') ? self::query()->where('order', '<', $this->getOriginal('order'))->where('course_id', $this->course_id)->orderBy('order', 'DESC')->first() : null;
     }
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->whereHas('course', function ($q) {
+                $q->where('phase_id', session('dashboard_phase_id'));
+            });
+        });
+    }
 }

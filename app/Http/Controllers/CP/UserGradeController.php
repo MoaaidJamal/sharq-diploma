@@ -26,7 +26,7 @@ class UserGradeController extends Controller
     }
 
     public function list(Request $request) {
-        $items = $this->model::query();
+        $items = $this->model::query()->WithMainPhase();
 
         if ($request['user_id'])
             $items->where('user_id', $request['user_id']);
@@ -81,7 +81,7 @@ class UserGradeController extends Controller
                 return $is_enabled;
             })
             ->addColumn('course', function ($item) {
-                return optional($item->course)->name;
+                return optional($item->course)->title;
             })
             ->addColumn('user', function ($item) {
                 return optional($item->user)->name;
@@ -126,7 +126,10 @@ class UserGradeController extends Controller
         $data['module'] = $this->module;
         $data['record'] = null;
         $data['users'] = User::query()->get();
-        $data['courses'] = Course::query()->where('user_id', auth()->id())->get();
+        $data['lecturers'] = User::query()->where('type', User::TYPE_LECTURER)->get();
+        $data['courses'] = Course::query()->when(auth()->user()->type == User::TYPE_LECTURER, function ($q) {
+            $q->where('user_id', auth()->id());
+        })->get();
         if ($id) {
             $data['record'] = $this->model::query()->findOrFail($id);
         }
@@ -141,7 +144,9 @@ class UserGradeController extends Controller
         $data = $request->toArray();
         unset($data['_token']);
 
-        $data['lecturer_id'] = auth()->id();
+        if (auth()->user()->type == User::TYPE_LECTURER) {
+            $data['lecturer_id'] = auth()->id();
+        }
         $this->model::query()->updateOrCreate(['id' => $id], $data);
 
         return response()->json([

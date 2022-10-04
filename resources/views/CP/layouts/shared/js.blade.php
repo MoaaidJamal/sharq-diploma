@@ -370,6 +370,7 @@
         cancelClass: 'btn-secondary',
         autoUpdateInput: false,
         timePicker: true,
+        minDate: new Date(),
         timePicker24Hour: true,
         locale: {
             format: 'YYYY-MM-DD HH:mm',
@@ -484,4 +485,11 @@
         showAlertMessage('error', '{{session('error')}}');
     @endif
 
+    function copyToClipboard(text) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(text).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
 </script>

@@ -8,10 +8,6 @@
     menu-item-active
 @endsection
 
-@section('course_settings_menu')
-    menu-item-active
-@endsection
-
 @section('style')
     <style>
     </style>
@@ -41,9 +37,9 @@
                             <div class="card-header">
                                 <h3 class="card-title">@lang($module.'.title')</h3>
                                 <div class="card-toolbar">
-                                    <button type="button" class="btn btn-primary" id="add_edit_btn" onclick="showModal('{{ route($module.'.show_form')}}')">
+                                    <a href="{{ route($module.'.show_form')}}" type="button" class="btn btn-primary" id="add_edit_btn">
                                         <i class="flaticon-plus"></i>@lang('constants.new')
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <div class="card-body">

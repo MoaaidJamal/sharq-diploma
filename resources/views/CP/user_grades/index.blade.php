@@ -8,10 +8,6 @@
     menu-item-active
 @endsection
 
-@section('all_settings_menu')
-    menu-item-active
-@endsection
-
 @section('style')
     <style>
     </style>

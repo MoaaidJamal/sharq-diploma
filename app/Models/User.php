@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Translatable\HasTranslations;
 
 /**
  * Class User
@@ -68,8 +69,9 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable
 {
-    use SoftDeletes, HasFactory, Notifiable, HasRoles;
+    use SoftDeletes, HasFactory, Notifiable, HasRoles, HasTranslations;
 	protected $table = 'users';
+    public $translatable = ['name', 'bio', 'position', 'work', 'study'];
 
     protected $casts = [
         'country_id' => 'int',
@@ -88,6 +90,7 @@ class User extends Authenticatable
         'gender' => 'int',
         'type' => 'int',
         'verified' => 'int',
+        'permissions' => 'array',
         'enabled' => 'int'
     ];
 
@@ -134,11 +137,30 @@ class User extends Authenticatable
         'dob',
         'type',
         'verified',
+        'permissions',
         'enabled'
     ];
 
+    const TYPE_ADMIN = 1;
+    const TYPE_USER = 2;
+    const TYPE_MENTOR = 3;
+    const TYPE_TEAM = 4;
+    const TYPE_LECTURER = 5;
+
+    const PERMISSIONS = [
+        'settings',
+        'users',
+        'phases',
+        'courses',
+        'user_grades',
+        'user_assignments',
+        'users_quizzes',
+        'users_courses',
+        'chats',
+    ];
+
     public function getFullPathImageAttribute(){
-        return $this->image && file_exists(base_path($this->image)) ? url($this->image) : url('uploads/image_placeholder.png');
+        return $this->image && file_exists(public_path($this->image)) ? url($this->image) : url('uploads/image_placeholder.png');
     }
 
     public function country()
@@ -177,6 +199,17 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function phasesPivot()
+    {
+        return $this->hasMany(UsersPhase::class);
+    }
+
+    public function phases()
+    {
+        return $this->belongsToMany(Phase::class, 'users_phases')
+            ->withTimestamps();
+    }
+
     public function lectures()
     {
         return $this->belongsToMany(Lecture::class, 'users_lectures')
@@ -212,5 +245,36 @@ class User extends Authenticatable
     public function grades()
     {
         return $this->hasMany(UsersGrades::class);
+    }
+
+    public function chat_messages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
+
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class, 'users_chats')
+            ->orderBy('created_at', 'desc')
+            ->withPivot('id')
+            ->withTimestamps();
+    }
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->whereHas('phasesPivot', function ($q) {
+                $q->where('phase_id', session('dashboard_phase_id'));
+            });
+        });
+    }
+
+    public function scopeInMyPhases($q)
+    {
+        return $q->when(auth()->id() != 1, function ($q) {
+            $q->whereHas('phases', function ($q) {
+                $q->whereIn('phases.id', userPhases());
+            });
+        });
     }
 }

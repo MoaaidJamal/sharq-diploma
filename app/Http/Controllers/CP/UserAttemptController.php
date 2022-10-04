@@ -40,7 +40,7 @@ class UserAttemptController extends Controller
 
     public function list($id) {
         $lecture = Lecture::query()->find($id);
-        $items = $this->model::query()->where('lecture_id', $id)->select('*');
+        $items = $this->model::query()->where('lecture_id', $id)->select('*')->WithMainPhase();
 
         return Datatables::of($items)
             ->addColumn('actions', function ($item) use ($id, $lecture) {

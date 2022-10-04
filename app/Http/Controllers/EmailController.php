@@ -16,14 +16,14 @@ class EmailController extends Controller
             $existing, [
             'driver' => 'smtp',
             'host' => 'smtp.gmail.com',
-            'port' => 465,
+            'port' => 587,
             'from' => [
                 'address' => 'exedu@sharqforum.org',
                 'name' => 'exedu@sharqforum.org',
             ],
             'username' => 'exedu@sharqforum.org',
             'password' => 'Google2021',
-            'encryption' => 'ssl',
+            'encryption' => 'tls',
         ]);
         config(['mail' => $new]);
         foreach ($to as $recipient) {

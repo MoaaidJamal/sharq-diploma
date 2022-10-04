@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CP;
 
 use App\Http\Controllers\Controller;
+use App\Models\Phase;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,7 +23,7 @@ class SliderController extends Controller
     }
 
     public function list(Request $request) {
-        $items = $this->model::query()->orderBy('created_at', 'DESC')->select('*');
+        $items = $this->model::query()->orderBy('created_at', 'DESC')->WithMainPhase()->select('*');
 
         return Datatables::of($items)
             ->addColumn('actions', function ($item) {
@@ -107,6 +108,7 @@ class SliderController extends Controller
     public function show_form($id = null) {
         $data['module'] = $this->module;
         $data['record'] = null;
+        $data['phases'] = Phase::query()->get();
         if ($id) {
             $data['record'] = $this->model::query()->findOrFail($id);
         }

@@ -5,6 +5,7 @@
     <base href="{{localURL('/')}}">
     <meta charset="utf-8"/>
     <title>@yield('title')</title>
+    <meta name="csrf-token" content="{{csrf_token()}}"/>
     <meta name="description" content="Login page example"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <!--begin::Fonts-->
@@ -148,6 +149,10 @@
         span.help-block.help-block-error {
             display: block;
             padding: 5px 0 0 5px;
+        }
+
+        .navi-link.active {
+            background-color: #e7f4ff;
         }
     </style>
     @yield('style')

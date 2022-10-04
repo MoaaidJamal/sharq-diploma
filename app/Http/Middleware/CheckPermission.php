@@ -13,9 +13,9 @@ class CheckPermission
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$permission_ids)
+    public function handle($request, Closure $next, $permission)
     {
-        if (check_permission($permission_ids)) {
+        if (check_permission($permission)) {
             return $next($request);
         } else {
             return redirect()->route('ws.login');

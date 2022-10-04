@@ -5,7 +5,14 @@
       <webServer id="11f61d8a-6808-4d24-ade2-8f6470faf5a4" name="roaia" url="http://ftp.sharqforum.net">
         <fileTransfer host="ftp.sharqforum.net" port="21">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="2883a66d-96ff-40be-874b-7224c41e8f1e" name="droplit">
+        <fileTransfer accessType="SFTP" host="46.101.1.121" port="22" sshConfigId="b11d3e8e-47d2-498e-8c8a-b3a44e202c8c" sshConfig="root@46.101.1.121:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>

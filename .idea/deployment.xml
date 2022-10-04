@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="roaia" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="droplit" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
+      <paths name="droplit">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/var/www/diploma" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="roaia">
         <serverdata>
           <mappings>
-            <mapping deploy="/exedu.sharqforum.net" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/diplomatest.sharqforum.net" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

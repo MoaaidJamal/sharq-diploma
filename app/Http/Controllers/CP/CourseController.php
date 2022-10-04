@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\CP;
 
 use App\Http\Controllers\Controller;
+use App\Models\Chat;
 use App\Models\Course;
-use App\Models\CoursesCategory;
+use App\Models\Phase;
 use App\Models\User;
+use App\Models\UsersChat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Yajra\DataTables\Facades\DataTables;
 
 class CourseController extends Controller
@@ -24,7 +27,7 @@ class CourseController extends Controller
     }
 
     public function list(Request $request) {
-        $items = $this->model::query();
+        $items = $this->model::query()->WithMainPhase();
 
         if ($request['title'])
             $items->where('title->en', 'like', '%' . $request['title'] . '%')->orWhere('title->ar', 'like', '%' . $request['title'] . '%');
@@ -37,7 +40,7 @@ class CourseController extends Controller
                             <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__($this->module.'.lectures').'</span>
                         </a>';
-                $edit = '<a href="javascript:;" class="dropdown-item" onclick="showModal(\''.route($this->module.'.show_form', ['id' => $item->id]).'\')">
+                $edit = '<a class="dropdown-item" href="'.route($this->module.'.show_form', ['id' => $item->id]).'">
                             <i class="flaticon-edit" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__('constants.update').'</span>
                         </a>';
@@ -153,15 +156,12 @@ class CourseController extends Controller
     public function show_form($id = null) {
         $data['module'] = $this->module;
         $data['record'] = null;
-        $data['categories'] = CoursesCategory::query()->get();
+        $data['phases'] = Phase::query()->get();
         $data['users'] = User::query()->where('type', 5)->get();
         if ($id) {
             $data['record'] = $this->model::query()->findOrFail($id);
         }
-        return response()->json([
-            'success' => TRUE,
-            'page' => view('CP.'.$this->module.'.form', $data)->render()
-        ]);
+        return view('CP.'.$this->module.'.form', $data);
     }
 
     public function add_edit(Request $request) {
@@ -175,12 +175,29 @@ class CourseController extends Controller
             $data['order'] = $this->model::query()->max('order') + 1;
         }
 
-        $this->model::query()->updateOrCreate(['id' => $id], $data);
+        $course = $this->model::query()->updateOrCreate(['id' => $id], $data);
 
-        return response()->json([
-            'success' => TRUE,
-            'message' => $id ? __('constants.success_update') : __('constants.success_add'),
-        ]);
+        if ($request->lectures_groups && is_array($request->lectures_groups) && count($request->lectures_groups)) {
+            $ids = array_filter(Arr::pluck($request->lectures_groups, 'id'));
+            if (count($ids)) {
+                $course->all_lectures_groups()->whereNotIn('id', array_filter(Arr::pluck($request->lectures_groups, 'id')))->delete();
+            }
+            $i = 1;
+            foreach ($request->lectures_groups as $item) {
+                if ($item['title_ar'] && $item['title_en']) {
+                    $course->all_lectures_groups()->updateOrCreate(['id' => $item['id'] ?? null], [
+                        'title' => [
+                            'ar' => $item['title_ar'],
+                            'en' => $item['title_en'],
+                        ],
+                        'order' => $i
+                    ]);
+                    $i++;
+                }
+            }
+        }
+
+        return redirect()->route($this->module)->with('success', $id ? __('constants.success_update') : __('constants.success_add'));
     }
 
     public function reorder(Request $request) {

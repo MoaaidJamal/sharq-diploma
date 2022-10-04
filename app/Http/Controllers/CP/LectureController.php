@@ -7,8 +7,11 @@ use App\Models\Course;
 use App\Models\Lecture;
 use App\Models\LecturesCategory;
 use App\Models\LecturesGroup;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use MacsiDigital\Zoom\Facades\Zoom;
 use Yajra\DataTables\Facades\DataTables;
 
 class LectureController extends Controller
@@ -40,40 +43,42 @@ class LectureController extends Controller
         return Datatables::of($items)
             ->addColumn('actions', function ($item) use ($id) {
                 $assignments = '';
+                $users_attempts = '';
+                $edit = '';
                 if ($item->category_id == $this->model::CATEGORY_ASSIGNMENT) {
                     $assignments = '<a href="'.route($this->parent_module.'.'.$this->module.'.assignments', ['id' => $item->id]).'" href="javascript:;" class="dropdown-item">
                             <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__('assignments.title').'</span>
                         </a>';
                 }
-                $questions = '';
-                $users_attempts = '';
                 if ($item->category_id == $this->model::CATEGORY_QUIZ) {
-                    $questions = '<a href="'.route($this->parent_module.'.'.$this->module.'.questions', ['id' => $item->id]).'" href="javascript:;" class="dropdown-item">
-                            <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
-                            <span style="padding-top: 3px">'.__('questions.title').'</span>
-                        </a>';
-                    $users_attempts = '<a href="'.route($this->parent_module.'.'.$this->module.'.users_attempts', ['id' => $item->id]).'" href="javascript:;" class="dropdown-item">
+                    $users_attempts = '<a href="'.route($this->parent_module.'.'.$this->module.'.users_attempts', ['id' => $item->id]).'" class="dropdown-item">
                             <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__('users_attempts.title').'</span>
                         </a>';
                 }
-                $edit = '<a href="'.route($this->parent_module.'.'.$this->module.'.show_form', ['course_id' => $id,'id' => $item->id]).'" href="javascript:;" class="dropdown-item">
-                            <i class="flaticon-edit" style="padding: 0 10px 0 13px;"></i>
-                            <span style="padding-top: 3px">'.__('constants.update').'</span>
-                        </a>';
+                if ($item->category_id != $this->model::CATEGORY_ZOOM) {
+                    $edit = '<a href="'.route($this->parent_module.'.'.$this->module.'.show_form', ['course_id' => $id,'id' => $item->id]).'" class="dropdown-item">
+                                <i class="flaticon-edit" style="padding: 0 10px 0 13px;"></i>
+                                <span style="padding-top: 3px">'.__('constants.update').'</span>
+                            </a>';
+                } else {
+                    $edit = '<a href="javascript:;" onclick="copyToClipboard(\'' . $item->join_url . '\')" class="dropdown-item">
+                                <i class="flaticon2-copy" style="padding: 0 10px 0 13px;"></i>
+                                <span style="padding-top: 3px">'.__($this->module.'.copy_url').'</span>
+                            </a>';
+                }
                 $delete = '<a href="javascript:;" class="dropdown-item" onclick="delete_items('.$item->id.', \''.route($this->parent_module.'.'.$this->module.'.delete').'\')">
                             <i class="flaticon-delete" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__('constants.delete').'</span>
                         </a>';
-                if ($edit || $delete || $assignments) {
+                if ($edit || $delete || $users_attempts || $assignments) {
                     return '<div class="dropdown dropdown-inline">
                             <a href="#" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" aria-expanded="true">
                                 <i class="la la-ellipsis-h"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                 '.$assignments.'
-                                '.$questions.'
                                 '.$users_attempts.'
                                 '.$edit.'
                                 '.$delete.'
@@ -120,7 +125,16 @@ class LectureController extends Controller
     }
 
     public function delete(Request $request) {
-        $this->model::query()->whereIn('id', $request['ids'])->delete();
+        $lectures = $this->model::query()->whereIn('id', $request['ids'])->get();
+        foreach ($lectures as $lecture) {
+            if ($lecture->category_id == Lecture::CATEGORY_ZOOM && $lecture->meeting_id) {
+                $meeting = Zoom::meeting()->find($lecture->meeting_id);
+                if ($meeting) {
+                    $meeting->delete();
+                }
+            }
+            $lecture->delete();
+        }
         return response()->json([
             'success'=> TRUE,
             'message'=> __('constants.success_delete')
@@ -174,8 +188,46 @@ class LectureController extends Controller
         if (!$id) {
             $data['order'] = $this->model::query()->where('course_id', $data['course_id'])->max('order') + 1;
         }
+        if ($request->category_id == Lecture::CATEGORY_ZOOM) {
+            $meeting = createMeeting($request);
+            $data['meeting_id'] = $meeting->id;
+            $data['join_url'] = $meeting->join_url;
+            $data['start_url'] = $meeting->start_url;
 
-        $this->model::query()->updateOrCreate(['id' => $id], $data);
+            $course = Course::query()->find($data['course_id']);
+            $emails = array_filter(User::query()->whereHas('phasesPivot', function ($q) use ($course) {
+                $q->where('phase_id', $course->phase_id);
+            })->pluck('email')->toArray());
+            curl_email($emails, 'New live lecture about ' . $request->title['en'], 'emails.zoom_meeting', [
+                'link' => $meeting->join_url,
+                'date' => $data['start_date'],
+                'title' => $request->title['en'],
+            ]);
+        }
+
+        $lecture = $this->model::query()->updateOrCreate(['id' => $id], $data);
+
+        if ($request->quiz_questions && is_array($request->quiz_questions) && count($request->quiz_questions)) {
+            $ids = array_filter(Arr::pluck($request->quiz_questions, 'id'));
+            if (count($ids)) {
+                $lecture->questions()->whereNotIn('id', array_filter(Arr::pluck($request->quiz_questions, 'id')))->delete();
+            }
+            $i = 1;
+            foreach ($request->quiz_questions as $item) {
+                if ($item['question'] && $item['answer1'] && $item['answer2'] && $item['correct_answer']) {
+                    $lecture->questions()->updateOrCreate(['id' => $item['id'] ?? null], [
+                        'question' => $item['question'],
+                        'answer1' => $item['answer1'],
+                        'answer2' => $item['answer2'],
+                        'answer3' => $item['answer3'] ?? null,
+                        'answer4' => $item['answer4'] ?? null,
+                        'correct_answer' => $item['correct_answer'],
+                        'order' => $i
+                    ]);
+                    $i++;
+                }
+            }
+        }
 
         return redirect()->route($this->parent_module.'.'.$this->module, ['id' => $request['course_id']])->with('success', $id ? __('constants.success_update') : __('constants.success_add'));
     }

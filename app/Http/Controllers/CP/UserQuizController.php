@@ -20,8 +20,10 @@ class UserQuizController extends Controller
 
     public function index() {
         $data['module'] = $this->module;
-        $data['lectures'] = Lecture::query()->where('category_id', Lecture::CATEGORY_ASSIGNMENT)->whereHas('course', function ($q) {
-            $q->where('user_id', auth()->id());
+        $data['lectures'] = Lecture::query()->where('category_id', Lecture::CATEGORY_ASSIGNMENT)->when(auth()->user()->type == User::TYPE_LECTURER, function ($q) {
+            $q->whereHas('course', function ($q) {
+                $q->where('user_id', auth()->id());
+            });
         })->get();
         $data['users'] = User::query()->get();
         return view('CP.'.$this->module.'.index', $data);

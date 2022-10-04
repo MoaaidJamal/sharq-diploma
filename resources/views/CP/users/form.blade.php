@@ -73,20 +73,21 @@
 
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
-                                                <label class="col-12" for="name">@lang($module.'.name')</label>
+                                                <label class="col-12" for="name_ar">@lang($module.'.name_ar')</label>
                                                 <div class="col-12">
-                                                    <input type="text" name="name" id="name" class="form-control" placeholder="@lang($module.'.name')" @if($record) value="{{$record->name}}" @endif>
+                                                    <input type="text" name="name[ar]" id="name_ar" class="form-control" placeholder="@lang($module.'.name_ar')"
+                                                           @if($record) value="{{$record->getTranslation('name', 'ar')}}" @endif>
                                                 </div>
-                                                <div class="col-12 text-danger" id="name_error"></div>
+                                                <div class="col-12 text-danger" id="name_ar_error"></div>
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || $record->type != 3) style="display: none" @endif>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
                                                 <label class="col-12" for="name_en">@lang($module.'.name_en')</label>
                                                 <div class="col-12">
-                                                    <input type="text" name="name_en" id="name_en" class="form-control" placeholder="@lang($module.'.name_en')"
-                                                           @if($record) value="{{$record->name_en}}" @endif>
+                                                    <input type="text" name="name[en]" id="name_en" class="form-control" placeholder="@lang($module.'.name_en')"
+                                                           @if($record) value="{{$record->getTranslation('name', 'en')}}" @endif>
                                                 </div>
                                                 <div class="col-12 text-danger" id="name_en_error"></div>
                                             </div>
@@ -141,11 +142,21 @@
 
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || $record->type != 4) style="display: none" @endif>
                                             <div class="row">
-                                                <label class="col-12" for="position">@lang($module.'.position')</label>
+                                                <label class="col-12" for="position_ar">@lang($module.'.position_ar')</label>
                                                 <div class="col-12">
-                                                    <input type="text" name="position" id="position" class="form-control" placeholder="@lang($module.'.position')" @if($record) value="{{$record->position}}" @endif>
+                                                    <input type="text" name="position[ar]" id="position_ar" class="form-control" placeholder="@lang($module.'.position_ar')" @if($record) value="{{$record->getTranslation('position', 'ar')}}" @endif>
                                                 </div>
-                                                <div class="col-12 text-danger" id="position_error"></div>
+                                                <div class="col-12 text-danger" id="position_ar_error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || $record->type != 4) style="display: none" @endif>
+                                            <div class="row">
+                                                <label class="col-12" for="position_en">@lang($module.'.position_en')</label>
+                                                <div class="col-12">
+                                                    <input type="text" name="position[en]" id="position_en" class="form-control" placeholder="@lang($module.'.position_en')" @if($record) value="{{$record->getTranslation('position', 'en')}}" @endif>
+                                                </div>
+                                                <div class="col-12 text-danger" id="position_en_error"></div>
                                             </div>
                                         </div>
 
@@ -160,11 +171,11 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-12 text-danger" id="position_error"></div>
+                                                <div class="col-12 text-danger" id="course_id_error"></div>
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || !in_array($record->type, [1, 2, 5])) style="display: none" @endif>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
                                                 <label class="col-12" for="password">@lang($module.'.password')</label>
                                                 <div class="col-12 input-group">
@@ -177,7 +188,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || !in_array($record->type, [1, 2, 5])) style="display: none" @endif>
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
                                                 <label class="col-12" for="password_confirmation">@lang($module.'.password_confirmation')</label>
                                                 <div class="col-12">
@@ -185,6 +196,34 @@
                                                            placeholder="@lang($module.'.password_confirmation')">
                                                 </div>
                                                 <div class="col-12 text-danger" id="password_confirmation_error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || $record->type == 1) style="display: none" @endif>
+                                            <div class="row">
+                                                <label class="col-12" for="phases">@lang($module.'.phases')</label>
+                                                <div class="col-12">
+                                                    <select name="phases[]" id="phases" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
+                                                        @foreach($phases as $item)
+                                                            <option value="{{$item->id}}" @if(isset($record) && $record->phases->contains($item->id)) selected @endif>{{$item->title}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 text-danger" id="phases_error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" @if(!$record || $record->type != 1) style="display: none" @endif>
+                                            <div class="row">
+                                                <label class="col-12" for="permissions">@lang($module.'.permissions')</label>
+                                                <div class="col-12">
+                                                    <select name="permissions[]" id="permissions" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
+                                                        @foreach(\App\Models\User::PERMISSIONS as $item)
+                                                            <option value="{{$item}}" @if(isset($record) && collect($record->permissions)->contains($item)) selected @endif>@lang($item.'.title')</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 text-danger" id="permissions_error"></div>
                                             </div>
                                         </div>
 
@@ -210,11 +249,20 @@
                                     <div class="row">
                                         <div class="form-group col-12">
                                             <div class="row">
-                                                <label class="col-12" for="bio">@lang($module.'.bio')</label>
+                                                <label class="col-12" for="bio_ar">@lang($module.'.bio_ar')</label>
                                                 <div class="col-12">
-                                                    <textarea name="bio" id="bio" class="form-control" rows="6" placeholder="@lang($module.'.bio')">@if($record){{$record->bio}}@endif</textarea>
+                                                    <textarea name="bio[ar]" id="bio_ar" class="form-control" rows="6" placeholder="@lang($module.'.bio_ar')">@if($record){{$record->getTranslation('bio', 'ar')}}@endif</textarea>
                                                 </div>
-                                                <div class="col-12 text-danger" id="bio_error"></div>
+                                                <div class="col-12 text-danger" id="bio_ar_error"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <div class="row">
+                                                <label class="col-12" for="bio_en">@lang($module.'.bio_en')</label>
+                                                <div class="col-12">
+                                                    <textarea name="bio[en]" id="bio_en" class="form-control" rows="6" placeholder="@lang($module.'.bio_en')">@if($record){{$record->getTranslation('bio', 'en')}}@endif</textarea>
+                                                </div>
+                                                <div class="col-12 text-danger" id="bio_en_error"></div>
                                             </div>
                                         </div>
 
@@ -244,21 +292,41 @@
 
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
-                                                <label class="col-12" for="work">@lang($module.'.work')</label>
+                                                <label class="col-12" for="work_ar">@lang($module.'.work_ar')</label>
                                                 <div class="col-12">
-                                                    <input type="text" name="work" id="work" class="form-control" placeholder="@lang($module.'.work')" @if($record) value="{{$record->work}}" @endif>
+                                                    <input type="text" name="work[ar]" id="work_ar" class="form-control" placeholder="@lang($module.'.work_ar')" @if($record) value="{{$record->getTranslation('work', 'ar')}}" @endif>
                                                 </div>
-                                                <div class="col-12 text-danger" id="work_error"></div>
+                                                <div class="col-12 text-danger" id="work_ar_error"></div>
                                             </div>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
-                                                <label class="col-12" for="study">@lang($module.'.study')</label>
+                                                <label class="col-12" for="work_en">@lang($module.'.work_en')</label>
                                                 <div class="col-12">
-                                                    <input type="text" name="study" id="study" class="form-control" placeholder="@lang($module.'.study')" @if($record) value="{{$record->study}}" @endif>
+                                                    <input type="text" name="work[en]" id="work_en" class="form-control" placeholder="@lang($module.'.work_en')" @if($record) value="{{$record->getTranslation('work', 'en')}}" @endif>
                                                 </div>
-                                                <div class="col-12 text-danger" id="study_error"></div>
+                                                <div class="col-12 text-danger" id="work_en_error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <div class="row">
+                                                <label class="col-12" for="study_ar">@lang($module.'.study_ar')</label>
+                                                <div class="col-12">
+                                                    <input type="text" name="study[ar]" id="study_ar" class="form-control" placeholder="@lang($module.'.study_ar')" @if($record) value="{{$record->getTranslation('study', 'ar')}}" @endif>
+                                                </div>
+                                                <div class="col-12 text-danger" id="study_ar_error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                            <div class="row">
+                                                <label class="col-12" for="study_en">@lang($module.'.study_en')</label>
+                                                <div class="col-12">
+                                                    <input type="text" name="study[en]" id="study_en" class="form-control" placeholder="@lang($module.'.study_en')" @if($record) value="{{$record->getTranslation('study', 'en')}}" @endif>
+                                                </div>
+                                                <div class="col-12 text-danger" id="study_en_error"></div>
                                             </div>
                                         </div>
 
@@ -507,6 +575,34 @@
                         </div>
                     </div>
                 </form>
+                @if($record && $record->type == \App\Models\User::TYPE_USER && $courses && count($courses))
+                    <div class="card card-custom gutter-b example example-compact">
+                        <div class="card-header">
+                            <h3 class="card-title">User Courses Score</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach($courses as $course)
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="card card-custom wave wave-animate-slow wave-success mb-8 mb-lg-0">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center p-5">
+                                                    <div class="mr-6">
+                                                        <img src="{{$course->image}}" alt="{{$course->title}}" style="max-width: 100px; max-height: 100px;">
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="javascript:void(0)" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">{{$course->title}}</a>
+                                                        <div class="text-dark-75 font-size-h5">{{$course->getUserScore($record->id)}}%</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -579,44 +675,45 @@
         });
 
         $('#type').change(function (e) {
-            if ($(this).val() == 1 || $(this).val() == 5) {
-                $('#password').parents('.form-group').show();
-                $('#password_confirmation').parents('.form-group').show();
+            if ($(this).val() == {{\App\Models\User::TYPE_ADMIN}} || $(this).val() == {{\App\Models\User::TYPE_LECTURER}}) {
                 $('#request_session_description').parents('.form-group').hide();
                 $('#mobile').parents('.form-group').hide();
                 $('#dob').parents('.form-group').hide();
-                $('#position').parents('.form-group').hide();
+                $('#position_ar').parents('.form-group').hide();
+                $('#position_en').parents('.form-group').hide();
                 $('#interests').parents('.form-group').hide();
                 $('#user_info').hide();
                 $('#user_personality').hide();
                 $('#user_roles').hide();
                 $('#social_media').hide();
-                $('#name_en').parents('.form-group').hide();
-                if ($(this).val() == 5) {
+                if ($(this).val() == {{\App\Models\User::TYPE_LECTURER}}) {
                     $('#course_id').parents('.form-group').show();
+                    $('#phases').parents('.form-group').show();
+                    $('#permissions').parents('.form-group').hide();
                 } else {
+                    $('#permissions').parents('.form-group').show();
                     $('#course_id').parents('.form-group').hide();
+                    $('#phases').parents('.form-group').hide();
                 }
-            } else if ($(this).val() == 2) {
-                $('#password').parents('.form-group').show();
-                $('#password_confirmation').parents('.form-group').show();
+            } else if ($(this).val() == {{\App\Models\User::TYPE_USER}}) {
                 $('#request_session_description').parents('.form-group').hide();
                 $('#mobile').parents('.form-group').show();
                 $('#dob').parents('.form-group').show();
-                $('#position').parents('.form-group').hide();
+                $('#position_ar').parents('.form-group').hide();
+                $('#position_en').parents('.form-group').hide();
                 $('#interests').parents('.form-group').show();
                 $('#user_info').show();
                 $('#user_personality').show();
                 $('#user_roles').show();
                 $('#social_media').show();
                 $('#course_id').parents('.form-group').hide();
-                $('#name_en').parents('.form-group').hide();
-            } else if ($(this).val() == 3) {
-                $('#password').parents('.form-group').hide();
-                $('#password_confirmation').parents('.form-group').hide();
+                $('#phases').parents('.form-group').show();
+                $('#permissions').parents('.form-group').hide();
+            } else if ($(this).val() == {{\App\Models\User::TYPE_MENTOR}}) {
                 $('#mobile').parents('.form-group').hide();
                 $('#dob').parents('.form-group').show();
-                $('#position').parents('.form-group').hide();
+                $('#position_ar').parents('.form-group').hide();
+                $('#position_en').parents('.form-group').hide();
                 $('#interests').parents('.form-group').hide();
                 $('#request_session_description').parents('.form-group').show();
                 $('#user_info').show();
@@ -624,13 +721,13 @@
                 $('#user_roles').hide();
                 $('#social_media').show();
                 $('#course_id').parents('.form-group').hide();
-                $('#name_en').parents('.form-group').show();
-            } else if ($(this).val() == 4) {
-                $('#password').parents('.form-group').hide();
-                $('#password_confirmation').parents('.form-group').hide();
+                $('#phases').parents('.form-group').show();
+                $('#permissions').parents('.form-group').hide();
+            } else if ($(this).val() == {{\App\Models\User::TYPE_TEAM}}) {
                 $('#mobile').parents('.form-group').hide();
                 $('#dob').parents('.form-group').show();
-                $('#position').parents('.form-group').show();
+                $('#position_ar').parents('.form-group').show();
+                $('#position_en').parents('.form-group').show();
                 $('#interests').parents('.form-group').hide();
                 $('#request_session_description').parents('.form-group').hide();
                 $('#user_info').show();
@@ -638,7 +735,8 @@
                 $('#user_roles').hide();
                 $('#social_media').show();
                 $('#course_id').parents('.form-group').hide();
-                $('#name_en').parents('.form-group').hide();
+                $('#phases').parents('.form-group').show();
+                $('#permissions').parents('.form-group').hide();
             }
         });
 

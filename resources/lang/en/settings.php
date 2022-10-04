@@ -36,6 +36,8 @@ return [
     'find_your_mate_menu_title_en' => 'Find Your Mate Menu Title (English)',
     'mentors_menu_title_en' => 'Mentors Menu Title (English)',
     'schedule_menu_title_en' => 'Schedule Menu Title (English)',
+    'messages_menu_title_ar' => 'Messages Menu Title (English)',
+    'messages_menu_title_en' => 'Messages Menu Title (English)',
     'follow_us_on_social_media_en' => 'Follow us on social media (English)',
     'copyright_en' => 'Copyright (English)',
 

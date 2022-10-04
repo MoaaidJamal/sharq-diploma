@@ -1,7 +1,10 @@
 <?php
 
 use App\Helpers\APIResponse;
+use App\Models\Phase;
+use App\Models\User;
 use Illuminate\Support\Str;
+use MacsiDigital\Zoom\Facades\Zoom;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -108,24 +111,17 @@ function language($en, $ar)
     return app()->getLocale() == 'ar' ? $ar : $en;
 }
 
-function check_permission($id)
+function check_permission($name)
 {
-    return true;
-//    if (auth()->check()) {
-//        return auth()->user()->getAllPermissions()->contains(function ($value, $key) use ($id) {
-//                if (is_array($id)) {
-//                    if (count($id)) {
-//                        return in_array($value->id, $id);
-//                    } else {
-//                        return false;
-//                    }
-//                } else {
-//                    return $value->id == $id;
-//                }
-//            }) || auth()->id() == 1;
-//    } else {
-//        return false;
-//    }
+    if (auth()->check()) {
+        if (auth()->user()->type == User::TYPE_ADMIN) {
+            return collect(auth()->user()->permissions)->contains($name) || auth()->id() == 1;
+        } else if (in_array($name, ['user_grades', 'user_assignments', 'users_quizzes'])) {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 function check_group_permission($pid, $gid)
@@ -264,4 +260,39 @@ function curl_email($emails, $subject, $view, $date){
         \Illuminate\Support\Facades\Log::error($e->getMessage());
     }
     curl_close($curl);
+}
+
+function userPhases() {
+    if (auth()->check()) {
+        if (auth()->id() == 1) {
+            return Phase::query()->pluck('id')->toArray();
+        } else {
+            return auth()->user()->phasesPivot()->pluck('phase_id')->toArray();
+        }
+    }
+    return [];
+}
+
+function createMeeting($request) {
+    $user = Zoom::user()->first();
+
+    $meeting = Zoom::meeting()->make([
+        'topic' => $request->title['en'],
+        'duration' => $request->minutes,
+        'start_time' => $request->start_time,
+        'timezone' => config('zoom.timezone')
+    ]);
+
+    $meeting->settings()->make([
+        'join_before_host' => false,
+        'host_video' => false,
+        'participant_video' => false,
+        'mute_upon_entry' => true,
+        'waiting_room' => true,
+        'approval_type' => config('zoom.approval_type'),
+        'audio' => config('zoom.audio'),
+        'auto_recording' => config('zoom.auto_recording')
+    ]);
+
+    return $user->meetings()->save($meeting);
 }

@@ -37,18 +37,18 @@ class LoginController extends Controller
     }
 
     public function dashboard() {
-        $users = User::query()->where('type', 2)->get();
-        $courses = Course::query()->get();
+        $users = User::query()->WithMainPhase()->where('type', 2)->get();
+        $courses = Course::query()->WithMainPhase()->get();
         $data['users'] = $users->count();
         $data['courses'] = $courses->count();
-        $data['lectures'] = Lecture::query()->count();
+        $data['lectures'] = Lecture::query()->WithMainPhase()->count();
         $data['users_per_gender'] = [
-            'male' => User::query()->where('gender', 1)->count(),
-            'female' => User::query()->where('gender', 2)->count(),
+            'male' => User::query()->WithMainPhase()->where('gender', 1)->count(),
+            'female' => User::query()->WithMainPhase()->where('gender', 2)->count(),
         ];
         foreach ($courses as $course) {
             $course->users_count = User::query()->whereHas('lectures', function ($q) use ($course){
-                $q->where('course_id', $course->getKey());
+                $q->where('course_id', $course->getKey())->WithMainPhase();
             })->count();
         }
         $data['users_per_courses'] = $courses;

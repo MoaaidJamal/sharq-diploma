@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\CP;
 
 use App\Http\Controllers\Controller;
+use App\Imports\UsersImport;
+use App\Models\Chat;
 use App\Models\Country;
 use App\Models\Course;
 use App\Models\Interest;
 use App\Models\Language;
+use App\Models\Phase;
 use App\Models\User;
 use App\Models\UsersInterest;
 use App\Models\UsersLanguage;
+use App\Models\UsersPhase;
 use App\Models\UsersVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -31,7 +36,7 @@ class UserController extends Controller
     }
 
     public function list(Request $request) {
-        $items = $this->model::query();
+        $items = $this->model::query()->WithMainPhase();
 
         if ($request['name'])
             $items->where('name', 'like','%'.$request['name'].'%');
@@ -124,6 +129,9 @@ class UserController extends Controller
                 }
                 return '';
             })
+            ->addColumn('name', function ($item) {
+                return $item->name;
+            })
             ->addColumn('image', function ($item) {
                 return '<a href="'.$item->full_path_image.'" target="_blank"><img class="table-image" src="'.$item->full_path_image.'" alt="'.$item->{'name_'.locale()}.'" style="max-width: 120px; max-height: 120px"></a>';
             })
@@ -177,6 +185,7 @@ class UserController extends Controller
         $data['countries'] = Country::query()->get();
         $data['interests'] = Interest::query()->get();
         $data['languages'] = Language::query()->get();
+        $data['phases'] = Phase::query()->get();
         $data['courses'] = Course::query()->get();
         $data['record'] = null;
         if ($id) {
@@ -223,8 +232,8 @@ class UserController extends Controller
             ]);
         }
 
+        UsersInterest::query()->where('user_id', $user->getKey())->delete();
         if (isset($request['interests']) && is_array($request['interests'])) {
-            UsersInterest::query()->where('user_id', $user->getKey())->delete();
             foreach ($request['interests'] as $item) {
                 UsersInterest::query()->create([
                     'user_id' => $user->getKey(),
@@ -233,13 +242,25 @@ class UserController extends Controller
             }
         }
 
+        UsersLanguage::query()->where('user_id', $user->getKey())->delete();
         if (isset($request['languages']) && is_array($request['languages'])) {
-            UsersLanguage::query()->where('user_id', $user->getKey())->delete();
             foreach ($request['languages'] as $item) {
                 UsersLanguage::query()->create([
                     'user_id' => $user->getKey(),
                     'language_id' => $item
                 ]);
+            }
+        }
+
+        UsersPhase::query()->where('user_id', $user->getKey())->delete();
+        if (isset($request['phases']) && is_array($request['phases'])) {
+            foreach ($request['phases'] as $item) {
+                UsersPhase::query()->create([
+                    'user_id' => $user->getKey(),
+                    'phase_id' => $item
+                ]);
+                $chat = Chat::query()->firstOrCreate(['phase_id' => $item]);
+                $chat->users()->attach($user->getKey());
             }
         }
 
@@ -286,6 +307,19 @@ class UserController extends Controller
             return response()->json([
                 'success'=> TRUE,
                 'message'=> __($this->module.'.verification_sent_successfully')
+            ]);
+        }
+        return response()->json([
+            'success'=> FALSE
+        ]);
+    }
+
+    public function import_users(Request $request) {
+        if ($request->hasFile('file')) {
+            Excel::import(new UsersImport, $request->file('file'));
+            return response()->json([
+                'success'=> TRUE,
+                'message'=> __($this->module.'.imported_successfully')
             ]);
         }
         return response()->json([

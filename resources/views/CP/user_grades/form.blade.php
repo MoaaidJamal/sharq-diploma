@@ -10,6 +10,23 @@
             @csrf
             <div class="modal-body">
                 <div class="row">
+                    @if(auth()->user()->type == \App\Models\User::TYPE_ADMIN)
+                        <div class="form-group col-lg-6 col-sm-12">
+                            <div class="row">
+                                <label class="col-12" for="lecturer_id">@lang($module.'.lecturer_id') <span class="text-danger">*</span></label>
+                                <div class="col-12">
+                                    <select name="lecturer_id" id="lecturer_id" class="selectpicker form-control" data-live-search="true">
+                                        <option selected value="">--</option>
+                                        @foreach($lecturers as $item)
+                                            <option value="{{$item->id}}" @if(isset($record) && $record->lecturer_id == $item->id) selected @endif>{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-12 text-danger" id="user_id_error"></div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="form-group col-lg-6 col-sm-12">
                         <div class="row">
                             <label class="col-12" for="user_id">@lang($module.'.user_id') <span class="text-danger">*</span></label>
@@ -104,6 +121,9 @@
 <script>
     $('#add_edit_form').validate({
         rules: {
+            lecturer_id: {
+                required: true,
+            },
             user_id: {
                 required: true,
             },

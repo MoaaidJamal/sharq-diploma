@@ -10,6 +10,25 @@
             @csrf
             <div class="modal-body">
                 <div class="row">
+                    @if(!session('dashboard_phase_id'))
+                        <div class="form-group col-12">
+                            <div class="row">
+                                <label class="col-12" for="phase_id">@lang($module.'.phase_id')</label>
+                                <div class="col-12">
+                                    <select name="phase_id" id="phase_id" class="selectpicker form-control" data-live-search="true">
+                                        <option selected value="">--</option>
+                                        @foreach($phases as $item)
+                                            <option value="{{$item->id}}" @if(isset($record) && $record->phase_id == $item->id) selected @endif>{{$item->title}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-12 text-danger" id="phase_id_error"></div>
+                            </div>
+                        </div>
+                    @else
+                        <input type="hidden" name="phase_id" value="{{session('dashboard_phase_id')}}">
+                    @endif
+
                     <div class="form-group col-12">
                         <div class="row">
                             <label class="col-12" for="image">@lang($module.'.image') @if(!$record)<span class="text-danger">*</span>@endif</label>
@@ -51,6 +70,7 @@
             $(element).parents('.dropdown.bootstrap-select.form-control').removeClass("is-invalid");
         }
     });
+    $('.selectpicker').selectpicker();
 
     @if($record)
         file_input('#image', {

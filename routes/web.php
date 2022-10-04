@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(
     [
-        'prefix' => \Mcamara\LaravelLocalization\Facades\LaravelLocalization::setLocale(),
+        'prefix' => LaravelLocalization::setLocale(),
         'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
     ], function(){
     Route::namespace('App\Http\Controllers\CP')->group(function () {
@@ -22,7 +23,7 @@ Route::group(
 
                 Route::get('logout', 'LoginController@logout')->name('admin.logout');
 
-                Route::prefix('countries')->name('countries')->group(function () {
+                Route::prefix('countries')->name('countries')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'CountryController@index');
                     Route::any('/list', 'CountryController@list')->name('.list');
                     Route::post('/status', 'CountryController@status')->name('.status');
@@ -31,7 +32,7 @@ Route::group(
                     Route::post('/delete', 'CountryController@delete')->name('.delete');
                 });
 
-                Route::prefix('users')->name('users')->group(function () {
+                Route::prefix('users')->name('users')->middleware('checkPermission:users')->group(function () {
                     Route::get('/', 'UserController@index');
                     Route::any('/list', 'UserController@list')->name('.list');
                     Route::post('/status', 'UserController@status')->name('.status');
@@ -40,6 +41,7 @@ Route::group(
                     Route::post('/delete', 'UserController@delete')->name('.delete');
                     Route::post('/check_unique', 'UserController@check_unique')->name('.check_unique');
                     Route::post('/send_verification_link', 'UserController@send_verification_link')->name('.send_verification_link');
+                    Route::post('/import_users', 'UserController@import_users')->name('.import_users');
 
                     Route::prefix('sessions_requests')->name('.sessions_requests')->group(function () {
                         Route::get('/{id}', 'SessionRequestController@index');
@@ -57,26 +59,17 @@ Route::group(
                     });
                 });
 
-                Route::prefix('lectures_groups')->name('lectures_groups')->group(function () {
-                    Route::get('/', 'LectureGroupController@index');
-                    Route::any('/list', 'LectureGroupController@list')->name('.list');
-                    Route::post('/status', 'LectureGroupController@status')->name('.status');
-                    Route::any('/show_form/{id?}', 'LectureGroupController@show_form')->name('.show_form');
-                    Route::post('/add_edit', 'LectureGroupController@add_edit')->name('.add_edit');
-                    Route::post('/delete', 'LectureGroupController@delete')->name('.delete');
-                    Route::post('/reorder', 'LectureGroupController@reorder')->name('.reorder');
+                Route::prefix('phases')->name('phases')->middleware('checkPermission:phases')->group(function () {
+                    Route::get('/', 'PhaseController@index');
+                    Route::any('/list', 'PhaseController@list')->name('.list');
+                    Route::post('/status', 'PhaseController@status')->name('.status');
+                    Route::any('/show_form/{id?}', 'PhaseController@show_form')->name('.show_form');
+                    Route::post('/add_edit', 'PhaseController@add_edit')->name('.add_edit');
+                    Route::post('/delete', 'PhaseController@delete')->name('.delete');
+                    Route::post('/reorder', 'PhaseController@reorder')->name('.reorder');
                 });
 
-                Route::prefix('courses_categories')->name('courses_categories')->group(function () {
-                    Route::get('/', 'CourseCategoryController@index');
-                    Route::any('/list', 'CourseCategoryController@list')->name('.list');
-                    Route::post('/status', 'CourseCategoryController@status')->name('.status');
-                    Route::any('/show_form/{id?}', 'CourseCategoryController@show_form')->name('.show_form');
-                    Route::post('/add_edit', 'CourseCategoryController@add_edit')->name('.add_edit');
-                    Route::post('/delete', 'CourseCategoryController@delete')->name('.delete');
-                });
-
-                Route::prefix('sliders')->name('sliders')->group(function () {
+                Route::prefix('sliders')->name('sliders')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'SliderController@index');
                     Route::any('/list', 'SliderController@list')->name('.list');
                     Route::post('/status', 'SliderController@status')->name('.status');
@@ -85,13 +78,7 @@ Route::group(
                     Route::post('/delete', 'SliderController@delete')->name('.delete');
                 });
 
-                Route::prefix('contacts')->name('contacts')->group(function () {
-                    Route::get('/', 'ContactController@index');
-                    Route::any('/list', 'ContactController@list')->name('.list');
-                    Route::post('/delete', 'ContactController@delete')->name('.delete');
-                });
-
-                Route::prefix('courses')->name('courses')->group(function () {
+                Route::prefix('courses')->name('courses')->middleware('checkPermission:courses')->group(function () {
                     Route::get('/', 'CourseController@index');
                     Route::any('/list', 'CourseController@list')->name('.list');
                     Route::post('/status', 'CourseController@status')->name('.status');
@@ -135,7 +122,7 @@ Route::group(
                     });
                 });
 
-                Route::prefix('interests')->name('interests')->group(function () {
+                Route::prefix('interests')->name('interests')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'InterestController@index');
                     Route::any('/list', 'InterestController@list')->name('.list');
                     Route::post('/status', 'InterestController@status')->name('.status');
@@ -144,7 +131,7 @@ Route::group(
                     Route::post('/delete', 'InterestController@delete')->name('.delete');
                 });
 
-                Route::prefix('languages')->name('languages')->group(function () {
+                Route::prefix('languages')->name('languages')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'LanguageController@index');
                     Route::any('/list', 'LanguageController@list')->name('.list');
                     Route::post('/status', 'LanguageController@status')->name('.status');
@@ -153,7 +140,7 @@ Route::group(
                     Route::post('/delete', 'LanguageController@delete')->name('.delete');
                 });
 
-                Route::prefix('partners')->name('partners')->group(function () {
+                Route::prefix('partners')->name('partners')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'PartnerController@index');
                     Route::any('/list', 'PartnerController@list')->name('.list');
                     Route::post('/status', 'PartnerController@status')->name('.status');
@@ -162,7 +149,7 @@ Route::group(
                     Route::post('/delete', 'PartnerController@delete')->name('.delete');
                 });
 
-                Route::prefix('galleries')->name('galleries')->group(function () {
+                Route::prefix('galleries')->name('galleries')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'GalleryController@index');
                     Route::any('/list', 'GalleryController@list')->name('.list');
                     Route::post('/status', 'GalleryController@status')->name('.status');
@@ -171,20 +158,12 @@ Route::group(
                     Route::post('/delete', 'GalleryController@delete')->name('.delete');
                 });
 
-                Route::prefix('subscriptions')->name('subscriptions')->group(function () {
-                    Route::get('/', 'SubscriptionController@index');
-                    Route::any('/list', 'SubscriptionController@list')->name('.list');
-                    Route::any('/show_form/{id?}', 'SubscriptionController@show_form')->name('.show_form');
-                    Route::post('/add_edit', 'SubscriptionController@add_edit')->name('.add_edit');
-                    Route::post('/delete', 'SubscriptionController@delete')->name('.delete');
-                });
-
-                Route::prefix('settings')->name('settings')->group(function () {
+                Route::prefix('settings')->name('settings')->middleware('checkPermission:settings')->group(function () {
                     Route::get('/', 'SettingsController@index');
                     Route::post('/update', 'SettingsController@update')->name('.update');
                 });
 
-                Route::prefix('user_grades')->name('user_grades')->group(function () {
+                Route::prefix('user_grades')->name('user_grades')->middleware('checkPermission:user_grades')->group(function () {
                     Route::get('/', 'UserGradeController@index');
                     Route::any('/list', 'UserGradeController@list')->name('.list');
                     Route::post('/status', 'UserGradeController@status')->name('.status');
@@ -193,15 +172,30 @@ Route::group(
                     Route::post('/delete', 'UserGradeController@delete')->name('.delete');
                 });
 
-                Route::prefix('user_assignments')->name('user_assignments')->group(function () {
+                Route::prefix('user_assignments')->name('user_assignments')->middleware('checkPermission:user_assignments')->group(function () {
                     Route::get('/', 'UserAssignmentController@index');
                     Route::any('/list', 'UserAssignmentController@list')->name('.list');
+                    Route::any('/show_form/{id}', 'UserAssignmentController@show_form')->name('.show_form');
+                    Route::post('/add_edit', 'UserAssignmentController@add_edit')->name('.add_edit');
+                    Route::get('/download', 'UserAssignmentController@download')->name('.download');
                 });
 
-                Route::prefix('users_quizzes')->name('users_quizzes')->group(function () {
+                Route::prefix('users_quizzes')->name('users_quizzes')->middleware('checkPermission:users_quizzes')->group(function () {
                     Route::get('/', 'UserQuizController@index');
                     Route::any('/list', 'UserQuizController@list')->name('.list');
                     Route::any('/show_form/{id}', 'UserQuizController@show_form')->name('.show_form');
+                });
+
+                Route::prefix('users_courses')->name('users_courses')->middleware('checkPermission:users_courses')->group(function () {
+                    Route::get('/', 'UserCourseController@index');
+                    Route::any('/list', 'UserCourseController@list')->name('.list');
+                });
+
+                Route::prefix('chats')->name('chats')->middleware('checkPermission:chats')->group(function () {
+                    Route::get('/', 'ChatController@index');
+                    Route::any('/list', 'ChatController@list')->name('.list');
+                    Route::post('/delete', 'ChatController@delete')->name('.delete');
+                    Route::post('/clear_messages/{id}', 'ChatController@clear_messages')->name('.clear_messages');
                 });
             });
         });
@@ -217,6 +211,9 @@ Route::group(
             Route::get('/', 'HomeController@index')->name('ws.home');
             Route::get('/modules', 'HomeController@modules')->name('ws.modules');
             Route::get('/module/{course_id}/{lecture_id?}', 'CourseController@show')->name('ws.course.show');
+            Route::post('/module/reviews', 'CourseController@more_reviews')->name('ws.course.more_reviews');
+            Route::post('/module/reviews/add', 'CourseController@add_review')->name('ws.course.add_review');
+            Route::post('/module/reviews/delete', 'CourseController@delete_review')->name('ws.course.delete_review');
             Route::post('assignment', 'CourseController@assignment')->name('ws.assignment');
             Route::post('complete_lecture', 'CourseController@complete_lecture')->name('ws.complete_lecture');
             Route::get('quiz/{id}', 'CourseController@quiz')->name('ws.quiz');
@@ -232,6 +229,13 @@ Route::group(
             Route::get('teammates/{interest_id?}', 'HomeController@teammates')->name('ws.teammates');
             Route::get('mentors', 'HomeController@mentors')->name('ws.mentors');
             Route::get('schedule', 'HomeController@schedule')->name('ws.schedule');
+
+            Route::get('messages/start/{id}', 'HomeController@start_chat')->name('ws.start_chat');
+            Route::get('messages/{id?}', 'HomeController@messages')->name('ws.messages');
+            Route::get('get_messages', 'HomeController@get_messages')->name('ws.messages.get');
+            Route::get('show_chat', 'HomeController@show_chat')->name('ws.chat.show');
+            Route::post('store_message', 'HomeController@store_message')->name('ws.messages.store');
+            Route::post('delete_message', 'HomeController@delete_message')->name('ws.messages.destroy');
         });
     });
 });

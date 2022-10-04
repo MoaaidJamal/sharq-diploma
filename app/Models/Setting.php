@@ -34,6 +34,7 @@ class Setting extends Model
         'find_your_mate_menu_title',
         'mentors_menu_title',
         'schedule_menu_title',
+        'messages_menu_title',
         'follow_us_on_social_media',
         'copyright',
     ];
@@ -70,6 +71,7 @@ class Setting extends Model
         'find_your_mate_menu_title',
         'mentors_menu_title',
         'schedule_menu_title',
+        'messages_menu_title',
         'follow_us_on_social_media',
         'copyright',
     ];

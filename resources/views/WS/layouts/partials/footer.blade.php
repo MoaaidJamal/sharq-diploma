@@ -6,6 +6,7 @@
             <a href="{{route('ws.teammates')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->find_your_mate_menu_title}}</a>
             <a href="{{route('ws.mentors')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->mentors_menu_title}}</a>
             <a href="{{route('ws.schedule')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->schedule_menu_title}}</a>
+            <a href="{{route('ws.messages')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->messages_menu_title}}</a>
         </div>
         <hr style="background-color: #fff;" width="100%" />
         <div class="d-flex justify-content-between align-items-center w-100 flex-column flex-lg-row">

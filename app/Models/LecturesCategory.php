@@ -46,7 +46,7 @@ class LecturesCategory extends Model
 	];
 
     public function getImageAttribute($file){
-        return $file && file_exists(base_path($file)) ? url($file) : url('uploads/image_placeholder.png');
+        return $file && file_exists(public_path($file)) ? url($file) : url('uploads/image_placeholder.png');
     }
 
 	public function lectures()

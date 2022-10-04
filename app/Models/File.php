@@ -46,7 +46,7 @@ class File extends Model
 	];
 
     public function getPathAttribute($file){
-        return $file && file_exists(base_path($file)) ? url($file) : url('assets/images/image_placeholder.png');
+        return $file && file_exists(public_path($file)) ? url($file) : url('assets/images/image_placeholder.png');
     }
 
     public function file() {

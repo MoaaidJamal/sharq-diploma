@@ -79,7 +79,6 @@
                     </ul>
 
                     <div class="tab-content" id="myTab">
-                        <!-- Profile -->
                         <div class="tab-pane rtl show fade active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="d-flex flex-column mb-0 pb-5">
                                 <div class="row d-flex justify-content-between">
@@ -87,10 +86,16 @@
                                         <div class="mx-3">
                                             <h2 class="font-bold700 font-inter my-4">@lang('ws.personal_info')</h2>
                                             <div class="mb-3">
-                                                <label for="name" class="form-label font-inter tc-gray-1">@lang('ws.name')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="name" id="name"
-                                                       value="{{auth()->user()->name}}" placeholder="@lang('ws.your_name')">
-                                                <div class="text-danger" id="name_error"></div>
+                                                <label for="name_ar" class="form-label font-inter tc-gray-1">@lang('users.name_ar')</label>
+                                                <input type="text" class="form-control font-inter small-text font-bold700" name="name[ar]" id="name_ar"
+                                                       value="{{auth()->user()->getTranslation('name', 'ar')}}" placeholder="@lang('ws.your_name')">
+                                                <div class="text-danger" id="name_ar_error"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="name_en" class="form-label font-inter tc-gray-1">@lang('users.name_en')</label>
+                                                <input type="text" class="form-control font-inter small-text font-bold700" name="name[en]" id="name_en"
+                                                       value="{{auth()->user()->getTranslation('name', 'en')}}" placeholder="@lang('ws.your_name')">
+                                                <div class="text-danger" id="name_en_error"></div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="email" class="form-label font-inter tc-gray-1">@lang('ws.email')</label>
@@ -172,10 +177,16 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="bio" class="form-label">@lang('ws.bio')</label>
-                                                <textarea name="bio" class="form-control font-inter small-text font-bold700" id="bio" rows="4"
-                                                          style="resize: none;border: none;border-bottom: 1px solid #00000030 !important;background: none;">{{auth()->user()->bio}}</textarea>
-                                                <div class="text-danger" id="bio_error"></div>
+                                                <label for="bio_ar" class="form-label">@lang('users.bio_ar')</label>
+                                                <textarea name="bio[ar]" class="form-control font-inter small-text font-bold700" id="bio_ar" rows="4"
+                                                          style="resize: none;border: none;border-bottom: 1px solid #00000030 !important;background: none;">{{auth()->user()->getTranslation('bio', 'ar')}}</textarea>
+                                                <div class="text-danger" id="bio_ar_error"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="bio_en" class="form-label">@lang('users.bio_en')</label>
+                                                <textarea name="bio[en]" class="form-control font-inter small-text font-bold700" id="bio_en" rows="4"
+                                                          style="resize: none;border: none;border-bottom: 1px solid #00000030 !important;background: none;">{{auth()->user()->getTranslation('bio', 'en')}}</textarea>
+                                                <div class="text-danger" id="bio_en_error"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -183,16 +194,28 @@
                                         <div class="mx-3">
                                             <h2 class="font-bold700 font-inter my-4">@lang('ws.experience')</h2>
                                             <div class="mb-3">
-                                                <label for="work" class="form-label font-inter tc-gray-1">@lang('ws.work')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="work" id="work"
-                                                       value="{{auth()->user()->work}}" placeholder="@lang('ws.work')">
-                                                <div class="text-danger" id="work_error"></div>
+                                                <label for="work_ar" class="form-label font-inter tc-gray-1">@lang('users.work_ar')</label>
+                                                <input type="text" class="form-control font-inter small-text font-bold700" name="work[ar]" id="work_ar"
+                                                       value="{{auth()->user()->getTranslation('work', 'ar')}}" placeholder="@lang('users.work_ar')">
+                                                <div class="text-danger" id="work_ar_error"></div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="study" class="form-label font-inter tc-gray-1">@lang('ws.study')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="study" id="study"
-                                                       value="{{auth()->user()->study}}" placeholder="@lang('ws.study')">
-                                                <div class="text-danger" id="study_error"></div>
+                                                <label for="work_en" class="form-label font-inter tc-gray-1">@lang('users.work_en')</label>
+                                                <input type="text" class="form-control font-inter small-text font-bold700" name="work[en]" id="work_en"
+                                                       value="{{auth()->user()->getTranslation('work', 'en')}}" placeholder="@lang('users.work_en')">
+                                                <div class="text-danger" id="work_en_error"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="study_ar" class="form-label font-inter tc-gray-1">@lang('users.study_ar')</label>
+                                                <input type="text" class="form-control font-inter small-text font-bold700" name="study[ar]" id="study_ar"
+                                                       value="{{auth()->user()->getTranslation('study', 'ar')}}" placeholder="@lang('users.study_ar')">
+                                                <div class="text-danger" id="study_ar_error"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="study_en" class="form-label font-inter tc-gray-1">@lang('users.study_en')</label>
+                                                <input type="text" class="form-control font-inter small-text font-bold700" name="study[en]" id="study_en"
+                                                       value="{{auth()->user()->getTranslation('study', 'en')}}" placeholder="@lang('users.study_en')">
+                                                <div class="text-danger" id="study_en_error"></div>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label font-inter tc-gray-1">@lang('ws.languages')</label>
@@ -212,9 +235,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end profile -->
 
-                        <!-- Contact Links -->
                         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                             <div class="d-flex flex-column mb-0 pb-5">
                                 <div class="row d-flex justify-content-between">
@@ -329,9 +350,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end Contact Links -->
 
-                        <!-- personality -->
                         <div class="tab-pane fade" id="personality" role="tabpanel" aria-labelledby="personality-tab">
                             <div class="d-flex flex-column mb-0 pb-5">
                                 <div class="row d-flex justify-content-between">
@@ -405,9 +424,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end Personality -->
 
-                        <!-- Role -->
                         <div class="tab-pane fade" id="role" role="tabpanel" aria-labelledby="role-tab">
                             <div class="d-flex flex-column mb-0 pb-5">
                                 <div class="row d-flex justify-content-between">
@@ -539,10 +556,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end Role -->
 
-                    @if(auth()->user()->grades)
-                        <!-- Role -->
+                        @if(auth()->user()->grades)
                             <div class="tab-pane fade rtl" id="grades" role="tabpanel" aria-labelledby="role-tab">
                                 <div class="d-flex flex-column mb-0 pb-5">
                                     <div class="row d-flex justify-content-between mt-4">
@@ -555,12 +570,20 @@
                                                 <th>@lang('ws.grade3')</th>
                                                 <th>@lang('ws.grade4')</th>
                                                 <th>@lang('ws.grade5')</th>
+                                                <th>@lang('ws.assignment_grade')</th>
                                                 <th>@lang('ws.total')</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             @foreach(auth()->user()->grades as $item)
+                                                @php
+                                                    $assignments = \App\Models\UsersAssignment::query()->where('user_id', $item->user_id)->whereHas('lecture', function ($q) use ($item) {
+														$q->where('course_id', $item->course_id);
+                                                    })->get();
+													$assignments_grade = $assignments->sum('grade') ?: 0;
+													$total = $item->grade1 + $item->grade2 + $item->grade3 + $item->grade4 + $item->grade5 + $assignments_grade;
+                                                @endphp
                                                 <tr>
                                                     <td>{{optional($item->course)->title}}</td>
                                                     <td>{{$item->grade1}}</td>
@@ -568,8 +591,20 @@
                                                     <td>{{$item->grade3}}</td>
                                                     <td>{{$item->grade4}}</td>
                                                     <td>{{$item->grade5}}</td>
-                                                    <td>{{$item->grade1 + $item->grade2 + $item->grade3 + $item->grade4 + $item->grade5}}</td>
-                                                    <td>{{($item->grade1 + $item->grade2 + $item->grade3 + $item->grade4 + $item->grade5) >= 60 ? __('ws.successfully_passed') : __('ws.not_passed')}}</td>
+                                                    <td>{{$item->grade5}}</td>
+                                                    @if(count($assignments))
+                                                        <td>
+                                                            <ul>
+                                                                @foreach($assignments as $assignment)
+                                                                    <li>{{$assignment->lecture->title}}: {{$assignment->grade}}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </td>
+                                                    @else
+                                                        <td>-</td>
+                                                    @endif
+                                                    <td>{{$total}}</td>
+                                                    <td>{{$total >= 60 ? __('ws.successfully_passed') : __('ws.not_passed')}}</td>
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -577,9 +612,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- end Role -->
                         @endif
-
                     </div>
                 </div>
             </div>

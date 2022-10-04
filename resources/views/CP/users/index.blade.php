@@ -13,6 +13,17 @@
 
 @section('style')
     <style>
+        div.upload-file {
+            position: relative;
+            overflow: hidden;
+        }
+        div.upload-file input {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
     </style>
 @endsection
 
@@ -40,7 +51,14 @@
                             <div class="card-header">
                                 <h3 class="card-title">@lang($module.'.title')</h3>
                                 <div class="card-toolbar">
-                                    <a href="{{ route($module.'.show_form')}}" class="btn btn-primary" id="add_edit_btn">
+                                    <div class="upload-file btn btn-success mx-2">
+                                        <i class="fa fa-file-excel"></i> Import Users
+                                        <input type="file" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="cursor: pointer"/>
+                                    </div>
+                                    <a href="{{url('/')}}/assets/template_example.xlsx" download class="btn btn-success mx-2">
+                                        Download Excel Template
+                                    </a>
+                                    <a href="{{ route($module.'.show_form')}}" class="btn btn-primary mx-2" id="add_edit_btn">
                                         <i class="flaticon-plus"></i>@lang('constants.new')
                                     </a>
                                 </div>
@@ -239,5 +257,37 @@
                 }
             });
         }
+
+        $(document).on('change', '.upload-file input', function () {
+            let here = $(this);
+            let data = new FormData();
+            data.append('file', here[0].files[0]);
+            data.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            $.ajax({
+                url: '{{route($module.'.import_users')}}',
+                type: 'post',
+                processData: false,
+                contentType: false,
+                data: data,
+                beforeSend() {
+                    KTApp.blockPage({
+                        overlayColor: '#000000',
+                        type: 'v2',
+                        state: 'success',
+                        message: '@lang('constants.please_wait') ...'
+                    });
+                },
+                success: function (data) {
+                    if (data.success) {
+                        $('#items_table').DataTable().ajax.reload(null, false);
+                        here.val('');
+                        showAlertMessage('success', data.message);
+                    } else {
+                        showAlertMessage('error', '@lang('constants.unknown_error')');
+                    }
+                    KTApp.unblockPage();
+                }
+            })
+        });
     </script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Phase;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -27,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::share('settings', settings_row());
+        View::share('phases', Phase::query()->get());
     }
 }

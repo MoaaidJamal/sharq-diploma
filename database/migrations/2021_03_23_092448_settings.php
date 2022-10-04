@@ -44,6 +44,7 @@ class Settings extends Migration
             $table->text('find_your_mate_menu_title')->nullable();
             $table->text('mentors_menu_title')->nullable();
             $table->text('schedule_menu_title')->nullable();
+            $table->text('messages_menu_title')->nullable();
             $table->text('follow_us_on_social_media')->nullable();
             $table->text('copyright')->nullable();
             $table->timestamps();

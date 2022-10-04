@@ -4,11 +4,7 @@
     @lang($module.'.title')
 @endsection
 
-@section('courses_menu')
-    menu-item-active
-@endsection
-
-@section('course_settings_menu')
+@section('users_quizzes_menu')
     menu-item-active
 @endsection
 
@@ -53,7 +49,7 @@
                                                         <select name="lecture_id" id="lecture_id" class="selectpicker form-control" data-live-search="true">
                                                             <option selected value="">--</option>
                                                             @foreach($lectures as $item)
-                                                                <option value="{{$item->id}}">{{$item->title}}</option>
+                                                                <option value="{{$item->id}}">{{$item->course ? $item->course->title . ' - ' : ''}}{{$item->title}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>

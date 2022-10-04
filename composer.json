@@ -23,7 +23,9 @@
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.0",
         "maatwebsite/excel": "^3.1",
+        "macsidigital/laravel-zoom": "^5.0",
         "mcamara/laravel-localization": "^1.6",
+        "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-permission": "^3.17",
         "spatie/laravel-translatable": "^4.6",
         "yajra/laravel-datatables-oracle": "~9.0"

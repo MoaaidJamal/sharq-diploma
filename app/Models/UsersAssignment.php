@@ -17,8 +17,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int|null $user_id
  * @property int|null $lecture_id
+ * @property float|null $grade
  * @property string|null $file
  * @property string|null $file_name
+ * @property string|null $comment
  * @property string|null $content
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -36,6 +38,7 @@ class UsersAssignment extends Model
 	protected $table = 'users_assignments';
 
 	protected $casts = [
+		'grade' => 'float',
 		'user_id' => 'int',
 		'lecture_id' => 'int'
 	];
@@ -45,11 +48,13 @@ class UsersAssignment extends Model
 		'lecture_id',
 		'file',
 		'file_name',
+		'grade',
+		'comment',
 		'content'
 	];
 
     public function getFileAttribute($file){
-        return $file && file_exists(base_path($file)) ? url($file) : url('uploads/image_placeholder.png');
+        return $file && file_exists(public_path($file)) ? url($file) : url('uploads/image_placeholder.png');
     }
 
 	public function lecture()
@@ -61,4 +66,15 @@ class UsersAssignment extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->whereHas('lecture', function ($q) {
+                $q->whereHas('course', function ($q) {
+                    $q->where('phase_id', session('dashboard_phase_id'));
+                });
+            });
+        });
+    }
 }

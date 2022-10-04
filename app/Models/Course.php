@@ -18,6 +18,7 @@ use Spatie\Translatable\HasTranslations;
  *
  * @property int $id
  * @property int|null $category_id
+ * @property int|null $phase_id
  * @property int|null $user_id
  * @property int|null $order
  * @property string|null $title
@@ -39,6 +40,7 @@ use Spatie\Translatable\HasTranslations;
  * @property Collection|Lecture[] $available_lectures
  * @property Collection|LecturesGroup[] $lectures_groups
  * @property Collection|User[] $users
+ * @property Collection|Phase[] $phases
  *
  * @package App\Models
  */
@@ -51,6 +53,7 @@ class Course extends Model
     private $order = 1;
 
     protected $casts = [
+        'phase_id' => 'int',
         'user_id' => 'int',
         'category_id' => 'int',
         'order' => 'int',
@@ -64,6 +67,7 @@ class Course extends Model
     ];
 
     protected $fillable = [
+        'phase_id',
         'user_id',
         'category_id',
         'order',
@@ -88,7 +92,7 @@ class Course extends Model
     }
 
     public function getImageAttribute($file){
-        return $file && file_exists(base_path($file)) ? url($file) : url('uploads/image_placeholder.png');
+        return $file && file_exists(public_path($file)) ? url($file) : url('uploads/image_placeholder.png');
     }
 
     public function courses_category()
@@ -101,9 +105,19 @@ class Course extends Model
         return $this->hasMany(User::class);
     }
 
+    public function phase()
+    {
+        return $this->belongsTo(Phase::class);
+    }
+
     public function lectures()
     {
         return $this->hasMany(Lecture::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function available_lectures()
@@ -123,6 +137,11 @@ class Course extends Model
                 $q->where('enabled', '!=', 1);
             });
         })->orderBy('order');
+    }
+
+    public function all_lectures_groups()
+    {
+        return $this->hasMany(LecturesGroup::class)->orderBy('order');
     }
 
     public function lectures_groups()
@@ -151,8 +170,15 @@ class Course extends Model
         return $this->getOriginal('order') ? self::query()->where('order', '<', $this->getOriginal('order'))->where('enabled', 1)->orderBy('order', 'DESC')->first() : null;
     }
 
-    public function getUserScore()
+    public function getUserScore($user_id = null)
     {
-        return $this->available_lectures()->count() ? number_format(UsersLecture::query()->where('user_id', auth()->id())->whereIn('lecture_id', $this->available_lectures()->pluck('lectures.id')->toArray())->get()->unique('lecture_id')->count() / $this->available_lectures()->count() * 100) : 0;
+        return $this->available_lectures()->count() ? number_format(UsersLecture::query()->where('user_id', $user_id ?: auth()->id())->whereIn('lecture_id', $this->available_lectures()->pluck('lectures.id')->toArray())->get()->unique('lecture_id')->count() / $this->available_lectures()->count() * 100) : 0;
+    }
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->where('phase_id', session('dashboard_phase_id'));
+        });
     }
 }

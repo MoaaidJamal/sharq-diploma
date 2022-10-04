@@ -58,4 +58,15 @@ class UserAttempt extends Model
 	{
 		return $this->hasMany(UserAttemptAnswer::class, 'attempt_id');
 	}
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->whereHas('lecture', function ($q) {
+                $q->whereHas('course', function ($q) {
+                    $q->where('phase_id', session('dashboard_phase_id'));
+                });
+            });
+        });
+    }
 }

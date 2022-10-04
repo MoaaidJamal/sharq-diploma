@@ -46,7 +46,10 @@
 
     <section class="d-flex flex-column align-items-center" data-aos="fade-down">
         <div class="container my-5">
-            <h2 class="font-inter font-bold700 rtl">{{$course->title}}</h2>
+            <div class="d-flex justify-content-between">
+                <h2 class="font-inter font-bold700 rtl">{{$course->title}}</h2>
+{{--                <a href="{{route('ws.start_chat', ['id' => $course->id])}}?is_course=1" class="btn btn-primary btn-lg">@lang('ws.go_to_chat')</a>--}}
+            </div>
             <div class="my-2 rtl">
                 <span class="font-inter font-bold700 xs-small">{{$course->getLecturesCount()}} @lang('ws.lectures')</span>
                 <span class="font-inter font-bold700 xs-small tc-gray"><i class="bi bi-dot"></i>{{$course->hours ?? 0}} @lang('ws.hours')</span>
@@ -55,7 +58,7 @@
                 <!-- Left Box -->
                 <div class="col-lg-8">
                     <div>
-                        @if($lecture->category_id != \App\Models\Lecture::CATEGORY_QUIZ)
+                        @if(!in_array($lecture->category_id, [\App\Models\Lecture::CATEGORY_QUIZ, \App\Models\Lecture::CATEGORY_ZOOM]))
                             <div>
                                 @if($lecture->embedded_code)
                                     <div>
@@ -77,6 +80,10 @@
                                     @endif
                                 @endif
                             </div>
+                        @endif
+                        @if($lecture->category_id == \App\Models\Lecture::CATEGORY_ZOOM)
+                            <h3>@lang('ws.this_live_lecture'): {{\Carbon\Carbon::parse($lecture->start_date)->toDateTimeString()}}</h3>
+                            @lang('ws.joining_link'): <a href="{{$lecture->join_url}}" target="_blank">{{$lecture->join_url}}</a>
                         @endif
                         @if($lecture->description)
                             <div class="mb-4 rtl">
@@ -161,11 +168,12 @@
                                                 <div class="d-flex flex-column flex-md-row justify-content-between">
                                                     <div style="padding-right: 10px">
                                                         <div><a class="s-small font-inter font-bold700 tc-gray" href="{{route('ws.course.show', ['course_id' => $course->id, 'lecture_id' => $group_lecture->id])}}">{{$i}}. {{$group_lecture->title}}</a></div>
-                                                        <div class="xs-small font-inter font-bold700 tc-gray"><i class="fas fa-play-circle"></i>{{$group_lecture->minutes ? $group_lecture->minutes . 'm' : ''}}</div>
+                                                        @if(!in_array($group_lecture->category_id, [\App\Models\Lecture::CATEGORY_ASSIGNMENT, \App\Models\Lecture::CATEGORY_QUIZ]))
+                                                            <div class="xs-small font-inter font-bold700 tc-gray"><i class="fas fa-play-circle"></i>{{$group_lecture->minutes ? $group_lecture->minutes . 'm' : ''}}</div>
+                                                        @endif
                                                     </div>
                                                     <div class="d-flex">
                                                         @if($group_lecture->is_user_lecture())
-
                                                             <div class="complete-text font-inter font-bold700 xs-small" style="padding: 5px">
                                                                 @lang('ws.completed')
                                                             </div>
@@ -180,7 +188,7 @@
                                                                 </button>
                                                             </form>
                                                         @endif
-                                                        @if($group_lecture->id == $lecture->id)
+                                                        @if($group_lecture->id == $lecture->id && !in_array($group_lecture->category_id, [\App\Models\Lecture::CATEGORY_ASSIGNMENT, \App\Models\Lecture::CATEGORY_QUIZ]))
                                                             <div class="playing-text font-inter font-bold700 xs-small" style="padding: 5px">
                                                                 @lang('ws.playing')
                                                             </div>
@@ -209,7 +217,9 @@
                                                 <div class="d-flex flex-column flex-md-row justify-content-between">
                                                     <div style="padding-right: 10px">
                                                         <div><a class="s-small font-inter font-bold700 tc-gray" href="{{route('ws.course.show', ['course_id' => $course->id, 'lecture_id' => $group_lecture->id])}}">{{$i}}. {{$group_lecture->title}}</a></div>
-                                                        <div class="xs-small font-inter font-bold700 tc-gray"><i class="fas fa-play-circle"></i>{{$group_lecture->minutes ? $group_lecture->minutes . 'm' : ''}}</div>
+                                                        @if(!in_array($group_lecture->category_id, [\App\Models\Lecture::CATEGORY_ASSIGNMENT, \App\Models\Lecture::CATEGORY_QUIZ]))
+                                                            <div class="xs-small font-inter font-bold700 tc-gray"><i class="fas fa-play-circle"></i>{{$group_lecture->minutes ? $group_lecture->minutes . 'm' : ''}}</div>
+                                                        @endif
                                                     </div>
                                                     <div class="d-flex">
                                                         @if($group_lecture->is_user_lecture())
@@ -227,7 +237,7 @@
                                                                 </button>
                                                             </form>
                                                         @endif
-                                                        @if($group_lecture->id == $lecture->id)
+                                                        @if($group_lecture->id == $lecture->id && !in_array($group_lecture->category_id, [\App\Models\Lecture::CATEGORY_ASSIGNMENT, \App\Models\Lecture::CATEGORY_QUIZ]))
                                                             <div class="playing-text font-inter font-bold700 xs-small" style="padding: 5px">
                                                                 @lang('ws.playing')
                                                             </div>
@@ -240,6 +250,73 @@
                                     </div>
                                 </div>
                             @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="reviews">
+                    <div class="container">
+                        <header class="team-header">
+                            <h4>@lang('ws.course_reviews')</h4>
+                        </header>
+                        <div class="reviews-list">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-8">
+                                    <div class="reviews-head d-flex justify-content-between align-items-center">
+                                        <p>@lang('ws.reviews') (<span id="reviews_count">{{$course->reviews()->count()}}</span>)</p>
+                                        <a href="#add-review-modal" data-toggle="modal" class="btn btn-orange">@lang('ws.add_review') <i class="fas fa-plus"></i></a>
+                                    </div>
+                                    <ul class="list-unstyled have-more mb-0" id="all_reviews">
+                                        @include('WS.courses.list_reviews', ['reviews' => $course->reviews()->limit(6)->orderBy('created_at', 'desc')->get()])
+                                    </ul>
+                                    @if($course->reviews()->count() > 6)
+                                        <div class="show-more text-center">
+                                            <button type="button" class="btn btn-outline-primary" id="show_more">@lang('ws.show_more')</button>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="add-review-modal" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <div class="media mt-4 align-items-center">
+                                        <div class="media-body">
+                                            <h3>@lang('ws.write_review')</h3>
+                                        </div>
+                                    </div>
+                                    <form id="add_review_form">
+                                        <div class="cs-form">
+                                            <div class="form-group">
+                                                <label for="rate">@lang('ws.rate')</label>
+                                                <select name="rate" id="rate" class="form-control rating-select" style="max-width: 100%">
+                                                    <option value="" disabled selected>--</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                                <span class="text-danger" id="rate_error"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="comment">@lang('ws.your_comment')</label>
+                                                <textarea name="comment" id="comment" class="form-control" placeholder="@lang('ws.your_comment')"></textarea>
+                                                <span class="text-danger" id="comment_error"></span>
+                                            </div>
+                                            <div class="actions">
+                                                <button type="button" class="btn mark-as-complete mt-3 px-4 py-3" id="add_review_btn">@lang('ws.send')</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,5 +356,132 @@
 
             $("#assignment_form").submit();
         });
+
+
+        let page = {{request('page') ?? 1}};
+        $(document).on('click', '#show_more', function () {
+            $.ajax({
+                url: '{{route('ws.course.more_reviews')}}',
+                data: {
+                    page: ++page,
+                    id: '{{$course->id ?? ''}}',
+                    _token: '{{csrf_token()}}'
+                },
+                type: "POST",
+                beforeSend() {
+                    blockPage({
+                        overlayColor: '#000000',
+                        type: 'v2',
+                        state: 'success',
+                        message: '@lang('constants.please_wait') ...'
+                    });
+                },
+                success: function (data) {
+                    if (data.success) {
+                        $('#all_reviews').append(data.page);
+                        if (data.last_page) {
+                            $('#show_more').fadeOut(300);
+                            $('.reviews-list .have-more li:last-child .review-item').css({
+                                'opacity': 1,
+                                'background': '#fff'
+                            });
+                        }
+                    } else {
+                        showAlertMessage('error', '@lang('constants.unknown_error')');
+                    }
+                    unblockPage();
+                },
+            });
+        });
+
+        $('#add_review_form').validate({
+            rules: {
+                rate: {
+                    required: true,
+                },
+                comment: {
+                    required: true,
+                },
+            },
+            errorElement: 'span',
+            errorClass: 'help-block help-block-error',
+            focusInvalid: true,
+            errorPlacement: function (error, element) {
+                $(element).addClass("is-invalid");
+                error.appendTo('#' + $(element).attr('id') + '_error');
+            },
+            success: function (label, element) {
+                $(element).removeClass("is-invalid");
+            },
+        });
+
+        $(document).on('click', '#add_review_btn', function () {
+            if (!$('#add_review_form').valid())
+                return false;
+            $.ajax({
+                url : '{{route('ws.course.add_review')}}',
+                data : {
+                    _token: '{{csrf_token()}}',
+                    rate: $('#rate').val(),
+                    comment: $('#comment').val(),
+                    id: {{$course->id}},
+                },
+                type: "POST",
+                beforeSend(){
+                    block('#add-review-modal', {
+                        overlayColor: '#000000',
+                        type: 'v2',
+                        state: 'success',
+                        message: '@lang('constants.please_wait') ...'
+                    });
+                },
+                success:function(data) {
+                    if (data.success) {
+                        showAlertMessage('success', data.message);
+                        unblock('#add-review-modal');
+                        $("#add-review-modal .close").click();
+                        $('#all_reviews').prepend(data.page);
+                        $('#reviews_count').html((parseInt($('#reviews_count').text())+1));
+                        $('#rate').val(0).trigger('change');
+                        $('#comment').val('');
+                    } else {
+                        for (let i = 0; i < data.errors.length; i++) {
+                            showAlertMessage('error', data.errors[i]);
+                        }
+                        unblock('#add-review-modal');
+                    }
+                },
+            });
+        });
+
+        $(document).on('click', '.delete_review', function () {
+            let $this = $(this);
+            $.ajax({
+                url: '{{route('ws.course.delete_review')}}',
+                data: {
+                    id: $(this).data('id'),
+                    _token: '{{csrf_token()}}'
+                },
+                type: "POST",
+                beforeSend() {
+                    blockPage({
+                        overlayColor: '#000000',
+                        type: 'v2',
+                        state: 'success',
+                        message: '@lang('constants.please_wait') ...'
+                    });
+                },
+                success: function (data) {
+                    if (data.success) {
+                        showAlertMessage('success', data.message);
+                        $this.parents('li').remove();
+                        $('#reviews_count').html((parseInt($('#reviews_count').text())-1));
+                    } else {
+                        showAlertMessage('error', '@lang('constants.unknown_error')');
+                    }
+                    unblockPage();
+                },
+            });
+        })
     </script>
 @endsection

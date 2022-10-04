@@ -18,11 +18,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $user_id
  * @property int|null $lecturer_id
  * @property int|null $course_id
- * @property int|null $grade1
- * @property int|null $grade2
- * @property int|null $grade3
- * @property int|null $grade4
- * @property int|null $grade5
+ * @property float|null $grade1
+ * @property float|null $grade2
+ * @property float|null $grade3
+ * @property float|null $grade4
+ * @property float|null $grade5
  * @property int|null $enabled
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -76,4 +76,13 @@ class UsersGrades extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
+
+    public function scopeWithMainPhase($q)
+    {
+        return $q->when(session('dashboard_phase_id'), function ($q) {
+            $q->whereHas('course', function ($q) {
+                $q->where('phase_id', session('dashboard_phase_id'));
+            });
+        });
+    }
 }
