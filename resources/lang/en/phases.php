@@ -12,5 +12,7 @@ return [
     'image' => 'Icon',
     'order' => 'Order',
     'phases_settings' => 'Diplomas Settings',
+    'duplicate' => 'Duplicate',
+    'success_duplicate' => 'Diploma Duplicated Successfully',
 
 ];

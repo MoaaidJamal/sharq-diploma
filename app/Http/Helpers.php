@@ -1,8 +1,10 @@
 <?php
 
 use App\Helpers\APIResponse;
+use App\Models\Lecture;
 use App\Models\Phase;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use MacsiDigital\Zoom\Facades\Zoom;
 use Spatie\Permission\Models\Permission;
@@ -274,6 +276,8 @@ function userPhases() {
 }
 
 function createMeeting($request) {
+    config('zoom', array_merge(config('zoom'), Lecture::ZOOM_ACCOUNTS[$request->zoom_account]));
+
     $user = Zoom::user()->first();
 
     $meeting = Zoom::meeting()->make([
@@ -295,4 +299,43 @@ function createMeeting($request) {
     ]);
 
     return $user->meetings()->save($meeting);
+}
+
+function duplicate_course($course, $phase_id) {
+    DB::beginTransaction();
+    $new_course = $course->replicate();
+    $new_course->phase_id = $phase_id;
+    $new_course->title = [
+        'ar' => $new_course->getTranslation('title', 'ar') . ' - (نسخة)',
+        'en' => $new_course->getTranslation('title', 'en') . ' - (Copy)',
+    ];
+    $new_course->order = ($course->order ?: 0) + 1;
+    $new_course->save();
+    foreach ($course->lecture_groups ?? [] as $lecture_group) {
+        $new_lecture_group = $lecture_group->replicate();
+        $new_lecture_group->course_id = $new_course->getKey();
+        $new_lecture_group->save();
+        foreach ($lecture_group->lectures ?? [] as $lecture) {
+            $new_lecture = $lecture->replicate();
+            $new_lecture->group_id = $new_lecture_group->getKey();
+            $new_lecture->course_id = $new_course->getKey();
+            $new_lecture->save();
+            foreach ($lecture->questions ?? [] as $question) {
+                $new_question = $question->replicate();
+                $new_question->lecture_id = $new_lecture->getKey();
+                $new_question->save();
+            }
+        }
+    }
+    foreach ($course->lectures()->whereDoesntHave('lectures_group')->get() as $lecture) {
+        $new_lecture = $lecture->replicate();
+        $new_lecture->course_id = $new_course->getKey();
+        $new_lecture->save();
+        foreach ($lecture->questions ?? [] as $question) {
+            $new_question = $question->replicate();
+            $new_question->lecture_id = $new_lecture->getKey();
+            $new_question->save();
+        }
+    }
+    DB::commit();
 }

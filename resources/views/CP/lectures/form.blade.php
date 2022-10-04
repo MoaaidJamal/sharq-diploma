@@ -178,6 +178,21 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group col-lg-4 col-md-6 col-sm-12" style="display: none">
+                                            <div class="row">
+                                                <label class="col-12" for="zoom_account">@lang($module.'.zoom_account') <span class="text-danger">*</span></label>
+                                                <div class="col-12">
+                                                    <select name="zoom_account" id="zoom_account" class="selectpicker form-control" data-live-search="true">
+                                                        <option selected value="">--</option>
+                                                        @foreach(\App\Models\Lecture::ZOOM_ACCOUNTS as $email => $name)
+                                                            <option value="{{$email}}">{{$email}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 text-danger" id="zoom_account_error"></div>
+                                            </div>
+                                        </div>
+
                                         <div class="col-12" id="lecture_content" @if($record && $record->category_id == \App\Models\Lecture::CATEGORY_QUIZ) style="display: none" @endif>
                                             <div class="row">
                                                 <div class="form-group col-lg-4 col-md-6 col-sm-12">
@@ -302,6 +317,9 @@
                 category_id: {
                     required: true,
                 },
+                zoom_account: {
+                    required: true,
+                },
                 group_id: {
                     required: true,
                 },
@@ -400,6 +418,7 @@
 
         $('#category_id').change(function () {
             if ($(this).val() == {{\App\Models\Lecture::CATEGORY_ASSIGNMENT}}) {
+                $('#zoom_account').parents('.form-group').hide();
                 $('#description_div').show();
                 $('#second_actions').addClass('d-flex').show();
                 $('#assignment_div').show();
@@ -409,6 +428,7 @@
                 $('#minutes').prop('required', false);
                 $('#date').prop('required', false);
             } else if ($(this).val() == {{\App\Models\Lecture::CATEGORY_QUIZ}}) {
+                $('#zoom_account').parents('.form-group').hide();
                 $('#description_div').hide();
                 $('#second_actions').removeClass('d-flex').hide();
                 $('#quiz_div').show();
@@ -426,7 +446,9 @@
                 $('#quiz_div').hide();
                 $('#minutes').prop('required', true);
                 $('#date').prop('required', true);
+                $('#zoom_account').parents('.form-group').show();
             } else {
+                $('#zoom_account').parents('.form-group').hide();
                 $('#second_actions').addClass('d-flex').show();
                 $('#description_div').show();
                 $('#assignment_div').hide();

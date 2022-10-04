@@ -25,5 +25,7 @@ return [
     'is_available' => 'Is Available',
     'phase_id' => 'Diploma',
     'lectures_groups' => 'Lectures Groups',
+    'duplicate' => 'Duplicate',
+    'success_duplicate' => 'Module Duplicated Successfully',
 
 ];

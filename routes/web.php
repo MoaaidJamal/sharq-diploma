@@ -67,6 +67,7 @@ Route::group(
                     Route::post('/add_edit', 'PhaseController@add_edit')->name('.add_edit');
                     Route::post('/delete', 'PhaseController@delete')->name('.delete');
                     Route::post('/reorder', 'PhaseController@reorder')->name('.reorder');
+                    Route::post('/duplicate/{id}', 'PhaseController@duplicate')->name('.duplicate');
                 });
 
                 Route::prefix('sliders')->name('sliders')->middleware('checkPermission:settings')->group(function () {
@@ -87,6 +88,8 @@ Route::group(
                     Route::post('/add_edit', 'CourseController@add_edit')->name('.add_edit');
                     Route::post('/delete', 'CourseController@delete')->name('.delete');
                     Route::post('/reorder', 'CourseController@reorder')->name('.reorder');
+                    Route::any('/show_duplicate_form/{id?}', 'CourseController@show_duplicate_form')->name('.show_duplicate_form');
+                    Route::post('/duplicate/{id}', 'CourseController@duplicate')->name('.duplicate');
 
                     Route::prefix('lectures')->name('.lectures')->group(function () {
                         Route::get('/{id}', 'LectureController@index');

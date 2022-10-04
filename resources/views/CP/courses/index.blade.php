@@ -83,6 +83,7 @@
                                             </label>
                                         </th>
                                         <th>@lang($module.'.title_en')</th>
+                                        <th>@lang($module.'.phase_id')</th>
                                         <th>@lang($module.'.image')</th>
                                         <th>@lang($module.'.order')</th>
                                         <th>@lang($module.'.is_available')</th>
@@ -122,6 +123,7 @@
                 columns: [
                     {className: 'text-center', data: 'check', name: 'check', orderable: false},
                     {className: 'text-center cursor-pointer', data: 'title', name: 'title'},
+                    {className: 'text-center cursor-pointer', data: 'phase_id', name: 'phase_id'},
                     {className: 'text-center cursor-pointer', data: 'image', name: 'image'},
                     {className: 'text-center cursor-pointer', data: 'order', name: 'order'},
                     {className: 'text-center', data: 'is_available', name: 'is_available', orderable: false},

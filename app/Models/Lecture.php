@@ -103,6 +103,17 @@ class Lecture extends Model
         self::CATEGORY_ZOOM => 'primary',
     ];
 
+    const ZOOM_ACCOUNTS = [
+        'diploma@sharqforum.org' => [
+            'api_key' => '-e50ANalRNqOrgQ62xY9Xg',
+            'api_secret' => 'o7WoIRJ8u2iwsmOafjnpL2ISJdvMOo3UMdfj',
+        ],
+        'exedu@sharqforum.org' => [
+            'api_key' => '-Ho9yht3TuSRHDgX-q8Tmg',
+            'api_secret' => 'P7p8nW1adDZfC8ch7PvOD5bPuhj62gisv4JE',
+        ]
+    ];
+
 	protected $casts = [
 		'group_id' => 'int',
 		'course_id' => 'int',

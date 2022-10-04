@@ -190,5 +190,48 @@
                 }
             });
         });
+
+        function duplicate(url) {
+            Swal.fire({
+                title: '@lang($module.'.duplicate')',
+                text: "@lang('constants.sure')",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#84dc61',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '@lang('constants.yes')',
+                cancelButtonText: '@lang('constants.no')'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        beforeSend(){
+                            KTApp.blockPage({
+                                overlayColor: '#000000',
+                                type: 'v2',
+                                state: 'success',
+                                message: '@lang('constants.please_wait') ...'
+                            });
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $('#items_table').DataTable().ajax.reload(null, false);
+                                showAlertMessage('success', data.message);
+                            } else {
+                                showAlertMessage('error', '@lang('constants.unknown_error')');
+                            }
+                            KTApp.unblockPage();
+                        },
+                        error: function (data) {
+                            KTApp.unblockPage();
+                        },
+                    });
+                }
+            });
+        }
     </script>
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\Phase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class PhaseController extends Controller
@@ -32,6 +33,10 @@ class PhaseController extends Controller
 
         return Datatables::of($items)
             ->addColumn('actions', function ($item) {
+                $duplicate = '<a href="javascript:;" class="dropdown-item" onclick="duplicate(\''.route($this->module.'.duplicate', ['id' => $item->id]).'\')">
+                            <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
+                            <span style="padding-top: 3px">'.__($this->module.'.duplicate').'</span>
+                        </a>';
                 $edit = '<a href="javascript:;" class="dropdown-item" onclick="showModal(\''.route($this->module.'.show_form', ['id' => $item->id]).'\')">
                             <i class="flaticon-edit" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__('constants.update').'</span>
@@ -46,6 +51,7 @@ class PhaseController extends Controller
                                 <i class="la la-ellipsis-h"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                '.$duplicate.'
                                 '.$edit.'
                                 '.$delete.'
                             </div>
@@ -161,6 +167,24 @@ class PhaseController extends Controller
         }
 
         return response()->noContent();
+    }
+
+    public function duplicate($id) {
+        $phase = $this->model::query()->findOrFail($id);
+        $new_phase = $phase->replicate();
+        $new_phase->title = [
+            'ar' => $new_phase->getTranslation('title', 'ar') . ' - (نسخة)',
+            'en' => $new_phase->getTranslation('title', 'en') . ' - (Copy)',
+        ];
+        $new_phase->order = ($phase->order ?: 0) + 1;
+        $new_phase->save();
+        foreach ($phase->courses ?? [] as $course) {
+            duplicate_course($course, $new_phase->getKey());
+        }
+        return response()->json([
+            'success' => TRUE,
+            'message' => __($this->module . '.success_duplicate'),
+        ]);
     }
 
 }

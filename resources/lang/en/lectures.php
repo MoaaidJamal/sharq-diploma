@@ -41,5 +41,6 @@ return [
     'answer4' => 'Answer 4',
     'correct_answer' => 'Correct Answer',
     'copy_url' => 'Copy Join URL',
+    'zoom_account' => 'Zoom Account',
 
 ];

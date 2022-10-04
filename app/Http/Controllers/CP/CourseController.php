@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UsersChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class CourseController extends Controller
@@ -40,6 +41,10 @@ class CourseController extends Controller
                             <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__($this->module.'.lectures').'</span>
                         </a>';
+                $duplicate = '<a href="javascript:;" class="dropdown-item" onclick="showModal(\''.route($this->module.'.show_duplicate_form', ['id' => $item->id]).'\')">
+                            <i class="flaticon-layers" style="padding: 0 10px 0 13px;"></i>
+                            <span style="padding-top: 3px">'.__($this->module.'.duplicate').'</span>
+                        </a>';
                 $edit = '<a class="dropdown-item" href="'.route($this->module.'.show_form', ['id' => $item->id]).'">
                             <i class="flaticon-edit" style="padding: 0 10px 0 13px;"></i>
                             <span style="padding-top: 3px">'.__('constants.update').'</span>
@@ -54,6 +59,7 @@ class CourseController extends Controller
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                             '.$details.'
+                            '.$duplicate.'
                             '.$edit.'
                             '.$delete.'
                         </div>
@@ -95,6 +101,9 @@ class CourseController extends Controller
             })
             ->addColumn('title', function ($item) {
                 return $item->title;
+            })
+            ->addColumn('phase_id', function ($item) {
+                return optional($item->phase)->title ?: '-';
             })
             ->addColumn('image', function ($item) {
                 return '<a href="'.$item->image.'" target="_blank"><img class="table-image" src="'.$item->image.'" alt="'.$item->{'name_'.locale()}.'" style="max-width: 120px; max-height: 120px"></a>';
@@ -209,6 +218,26 @@ class CourseController extends Controller
         }
 
         return response()->noContent();
+    }
+
+    public function show_duplicate_form($id)
+    {
+        $data['module'] = $this->module;
+        $data['record'] = null;
+        $data['phases'] = Phase::query()->get();
+        $data['id'] = $id;
+        return response()->json([
+            'success' => TRUE,
+            'page' => view('CP.'.$this->module.'.duplicate_form', $data)->render()
+        ]);
+    }
+
+    public function duplicate($id, Request $request) {
+        duplicate_course($this->model::query()->findOrFail($id), $request->phase_id);
+        return response()->json([
+            'success' => TRUE,
+            'message' => __($this->module . '.success_duplicate'),
+        ]);
     }
 
 }

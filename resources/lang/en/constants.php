@@ -81,6 +81,7 @@ return [
     'hours' => 'Hours',
     'apply' => 'Apply',
     'custom' => 'Custom',
+    'copy' => 'Copy',
 
     //------------------------------------Validation Messages
 
