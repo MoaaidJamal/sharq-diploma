@@ -181,6 +181,12 @@ class PhaseController extends Controller
         foreach ($phase->courses ?? [] as $course) {
             duplicate_course($course, $new_phase->getKey());
         }
+        foreach ($phase->chats as $chat) {
+            $new_chat = $chat->replicate();
+            $new_chat->phase_id = $new_phase->getKey();
+            $new_chat->save();
+            $new_chat->users()->sync($chat->users()->pluck('user_id')->toArray());
+        }
         return response()->json([
             'success' => TRUE,
             'message' => __($this->module . '.success_duplicate'),
