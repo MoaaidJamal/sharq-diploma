@@ -197,7 +197,7 @@ function showAlertMessage(type, message) {
         "debug": true,
         "newestOnTop": true,
         "progressBar": false,
-        "positionClass": "toast-bottom-left",
+        "positionClass": "toast-bottom-right",
         "preventDuplicates": true,
         "onclick": null,
         "showDuration": "300",

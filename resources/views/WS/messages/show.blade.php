@@ -1,30 +1,27 @@
-<div class="col-12 col-lg-7 col-xl-9 chat_messages_container" style="direction: ltr">
-    <div class="py-2 px-4 border-bottom d-none d-lg-block">
-        <div class="d-flex align-items-center py-1">
-            <div class="position-relative">
-                <img src="{{$chat->phase ? $chat->phase->image : $chat->users()->where('users.id', '!=', auth()->id())->first()->full_path_image}}" class="rounded-circle mr-1" alt="" style="width: 40px; height:40px">
-            </div>
-            <div class="flex-grow-1 pl-3 px-3">
-                <strong>{{$chat->phase ? $chat->phase->title : $chat->users()->where('users.id', '!=', auth()->id())->first()->name}}</strong>
-            </div>
-        </div>
+<div class="chatDetails chat_messages_container">
+    <div class="chatTitle">
+        {{$chat->phase ? $chat->phase->title : $chat->users()->where('users.id', '!=', auth()->id())->first()->name}}
     </div>
-
-    <div class="position-relative">
-        <div class="chat-messages scrollable p-4" data-chat_id="{{$chat->id}}">
-            @include('WS.messages.messages', ['messages' => $chat->messages()->latest()->limit(20)->get()->reverse()])
-        </div>
+    <div class="chatBoxMessages chat-messages scrollable" data-chat_id="{{$chat->id}}">
+        @include('WS.messages.messages', ['messages' => $chat->messages()->latest()->limit(20)->get()->reverse()])
     </div>
+    <div class="replayChatBox">
+        <form action="" class="replayChatForm">
+            <input type="text" id="message" placeholder="Type your message" class="chatText">
 
-    <div class="flex-grow-0 py-3 px-4 border-top">
-        <div class="input-group">
-            <div class="upload-file btn btn-lg btn-success p-3">
-                <i class="bi bi-card-image"></i>
-                <input type="file" name="file" accept="image/*" data-chat_id="{{$chat->id}}" style="cursor: pointer"/>
+            <div class="inputAttach upload-file">
+                <label for="inputFileChat">
+                    <input type="file" id="inputFileChat" name="file" accept="image/*" data-chat_id="{{$chat->id}}">
+                    <i class="fa  fa-image"></i>
+                </label>
             </div>
-            <textarea id="message" class="form-control" placeholder="Type your message"></textarea>
-            <button class="btn btn-primary send_message" disabled data-chat_id="{{$chat->id}}">@lang('ws.send')</button>
-        </div>
+
+            <button type="submit" class="btn sendChatBtn send_message" data-chat_id="{{$chat->id}}">
+                <i>
+                    <img src="{{url('/')}}/ws_assets/images/send.svg" alt="">
+                </i>
+            </button>
+        </form>
     </div>
 </div>
 <script>

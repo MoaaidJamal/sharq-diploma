@@ -80,16 +80,21 @@ class CourseController extends Controller
             return response()->json([
                 'success' => TRUE,
                 'message' => __('ws.success_rate'),
-                'page' => view('WS.courses.list_reviews', $data)->render()
+                'page' => view('WS.courses.list_reviews', $data)->render(),
+                'summery' => view('WS.courses.reviews_summery', ['course' => Course::query()->find($request['id'])])->render(),
             ]);
         }
     }
 
     public function delete_review(Request $request)
     {
-        Review::query()->findOrFail($request['id'])->delete();
+        $review = Review::query()->findOrFail($request['id']);
+        $course_id = $review->course_id;
+        $review->delete();
+        $summery = view('WS.courses.reviews_summery', ['course' => Course::query()->find($course_id)])->render();
         return response()->json([
             'success' => TRUE,
+            'summery' => $summery,
             'message' => __('ws.review_deleted'),
         ]);
     }

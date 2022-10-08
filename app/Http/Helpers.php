@@ -276,7 +276,7 @@ function userPhases() {
 }
 
 function createMeeting($request) {
-    config('zoom', array_merge(config('zoom'), Lecture::ZOOM_ACCOUNTS[$request->zoom_account]));
+    config(['zoom' => array_merge(config('zoom'), Lecture::ZOOM_ACCOUNTS[$request->zoom_account])]);
 
     $user = Zoom::user()->first();
 
@@ -311,7 +311,7 @@ function duplicate_course($course, $phase_id) {
     ];
     $new_course->order = ($course->order ?: 0) + 1;
     $new_course->save();
-    foreach ($course->lecture_groups ?? [] as $lecture_group) {
+    foreach ($course->all_lectures_groups ?? [] as $lecture_group) {
         $new_lecture_group = $lecture_group->replicate();
         $new_lecture_group->course_id = $new_course->getKey();
         $new_lecture_group->save();

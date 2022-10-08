@@ -20,149 +20,158 @@
 
 @section('body')
 
-    <section class="h-100 padding-top" data-aos="fade-down">
+    <section class="instructorDetailsPageHeader">
         <div class="container">
-            <div class="container-box">
-                <img src="{{url('/')}}/ws_assets/images/profile/bg-profile.jpeg"/>
-            </div>
-            <div class="row info-box px-4 justify-content-between">
-                <div class="col-lg-8 d-flex flex-column flex-md-row justify-content-start align-items-start align-items-md-end">
-                    <div class="h-100">
-                        <div class="h-100 profile">
-                            <a href="{{$user->full_path_image}}" class="fancybox" data-fancybox-group="gallery">
-                                <img src="{{$user->full_path_image}}" alt="person" class="profile-image thumb"/>
-                            </a>
-                        </div>
+            <div class="row ">
+                <div class="col-md-10">
+                    <div class="InstuctorNameImg">
+                        <img src="{{$user->full_path_image}}" alt="">
                     </div>
-                    <h2 class="font-bold700 font-inter text-name">{{$user->type == 3 && locale() == 'en' ? $user->name_en : $user->name}}</h2>
-                    @if($user->type == 3 && count($user->dates))
-                        <div class="d-flex justify-content-end margin-left mb-2 request">
-                            <button type="submit" class="btn font-inter font-bold700" data-toggle="modal"
-                                    data-target="#exampleModalCenter">@lang('ws.request_for_session')</button>
-                        </div>
-                    @endif
+                    <div class="InstructorNameDetails">
+
+                        <h5>{{$user->type == 3 && locale() == 'en' ? $user->name_en : $user->name}}</h5>
+                        <p>
+                            {{$user->bio}}
+                        </p>
+
+                    </div>
                 </div>
             </div>
+            @if($user->type == 3 && count($user->dates))
+                <div class="d-flex justify-content-end margin-left mb-2 request">
+                    <button type="submit" class="btn btn-warning" data-toggle="modal"
+                            data-target="#exampleModalCenter">@lang('ws.request_for_session')</button>
+                </div>
+            @endif
+        </div>
+    </section>
 
-            <div class="tab-pane show fade active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="row d-flex justify-content-between">
-                    <div class="col-12 col-lg-8 mate">
-                        <div class="mx-3">
-                            <h2 class="font-bold700 font-inter my-4 rtl">@lang('ws.about') {{explode(' ', $user->type == 3 && locale() == 'en' ? $user->name_en : $user->name)[0]}}</h2>
-                            <p class="mb-3 tc-gray font-inter font-bold600 mb-3 mb-md-5 rtl">
-                                {{$user->bio}}
-                            </p>
-                            @if(count($user->interests))
-                                <div class="mb-3">
-                                    <h2 for="exampleInputEmail1" class="form-label font-inter font-bold700 mb-4">@lang('ws.interests')</h2>
-                                    <div class="d-flex tags flex-wrap mb-3 mb-md-5">
-                                        @foreach($user->interests as $interest)
-                                            <div class="tc-black-2 font-inter small-text tag" style="background-color: white;">
-                                                <a href="{{route('ws.teammates', ['interest_id' => $interest->id])}}" target="_blank">
-                                                    {{$interest->name}}
-                                                </a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4 mate2 mb-5 rtl">
-                        <div class="mx-3">
-                            @if($user->work)
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.job_description'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2">{{$user->work}}</span>
-                                </div>
-                            @endif
-                            @if($user->study)
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.degree'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2">{{$user->study}}</span>
-                                </div>
-                            @endif
-                            @if($user->gender && in_array($user->gender, [1, 2]))
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.gender'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2">
-                                        @if($user->gender == 1)
-                                            @lang('ws.male')
-                                        @else
-                                            @lang('ws.female')
-                                        @endif
+    <section class="InstructorDetailsPage">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class=" table table-striped instructorDetailsTable ">
+                        <tbody>
+                        @if($user->work)
+                            <tr>
+                                <td width="60%" style="padding-left: 30px;">
+                                    @lang('ws.job_description')
+                                </td>
+                                <td width="40%" class="text-center">
+                                    {{$user->work}}
+                                </td>
+                            </tr>
+                        @endif
+                        @if($user->study)
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.degree') </td>
+                                <td class="text-center">
+                                    {{$user->study}}
+                                </td>
+                            </tr>
+                        @endif
+                        @if($user->gender && in_array($user->gender, [1, 2]))
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.gender')
+                                </td>
+                                <td class="text-center">
+                                    @if($user->gender == 1)
+                                        @lang('ws.male')
+                                    @else
+                                        @lang('ws.female')
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                        @if(count($user->languages))
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.languages')
+                                </td>
+                                <td class="text-center">
+                                    {{implode(', ', $user->languages->pluck('name')->toArray())}}
+                                </td>
+                            </tr>
+                        @endif
+                        @if(count($user->interests))
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.interests')
+                                </td>
+                                <td class="text-center">
+                                    {{implode(', ', $user->interests->pluck('name')->toArray())}}
+                                </td>
+                            </tr>
+                        @endif
+                        @if($user->country)
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.nationality')
+                                </td>
+                                <td class="text-center">
+                                    <span>
+                                        <i class="countryFlag"><img src="{{$user->country->image}}" alt=""></i>
+                                        {{$user->country->name}}
                                     </span>
-                                </div>
-                            @endif
-                            @if(count($user->languages))
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.languages'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2 d-flex" style="padding-left: 10px">{{implode(', ', $user->languages->pluck('name')->toArray())}}</span>
-                                </div>
-                            @endif
-                            @if($user->country)
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.nationality'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2 d-flex">
-                                      <div class="flag-ps"><img src="{{$user->country->image}}"/></div>
-                                      {{$user->country->name}}
-                                    </span>
-                                </div>
-                            @endif
-                            @if($user->type != 3)
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.dob'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2">{{\Carbon\Carbon::parse($user->dob)->toDateString()}}</span>
-                                </div>
-                            @endif
-                            @if($user->instagram || $user->facebook || $user->twitter || $user->linkedin || $user->slack)
-                                <div class="d-flex justify-content-between my-4 flex-column flex-sm-row flex-lg-column flex-xxl-row">
-                                    <span class="font-bold700 font-inter font18 tc-black-2 mb-2 mb-sm-0" style="padding-right: 20px;">@lang('ws.social'):</span>
-                                    <span class="font-bold600 font-inter font18 tc-black-2 d-flex mate2-icon flex-wrap">
-                                        @if($user->instagram)
-                                            <span class="profile-icons my-2">
-                                                <a href="{{$user->instagram}}" target="_blank">
-                                                    <i class="bi bi-instagram"></i>
-                                                </a>
-                                            </span>
-                                        @endif
+                                </td>
+                            </tr>
+                        @endif
+                        @if($user->type != 3)
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.dob')
+                                </td>
+                                <td class="text-center">
+                                    {{\Carbon\Carbon::parse($user->dob)->toDateString()}}
+                                </td>
+                            </tr>
+                        @endif
+                        @if($user->instagram || $user->facebook || $user->twitter || $user->linkedin || $user->slack)
+                            <tr>
+                                <td style="padding-left: 30px;">
+                                    @lang('ws.social')
+                                </td>
+                                <td class="text-center">
+                                    <ul class=" instructorSocial">
                                         @if($user->facebook)
-                                            <span class="profile-icons my-2">
-                                                <a href="{{$user->facebook}}" target="_blank">
-                                                    <i class="fab fa-facebook-f"></i>
-                                                </a>
-                                            </span>
+                                            <li>
+                                                <a href="{{$user->facebook}}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                            </li>
+                                        @endif
+                                        @if($user->instagram)
+                                            <li>
+                                                <a href="{{$user->instagram}}" target="_blank"><i class="fab fa-instagram"></i></a>
+                                            </li>
                                         @endif
                                         @if($user->twitter)
-                                            <span class="profile-icons my-2">
-                                                <a href="{{$user->twitter}}" target="_blank">
-                                                    <i class="bi bi-twitter"></i>
-                                                </a>
-                                            </span>
+                                            <li>
+                                                <a href="{{$user->twitter}}" target="_blank"><i class="fab fa-twitter"></i></a>
+                                            </li>
                                         @endif
                                         @if($user->linkedin)
-                                            <span class="profile-icons my-2">
-                                                <a href="{{$user->linkedin}}" target="_blank">
-                                                    <i class="fab fa-linkedin-in"></i>
-                                                </a>
-                                            </span>
+                                            <li>
+                                                <a href="{{$user->linkedin}}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                                            </li>
                                         @endif
                                         @if($user->slack)
-                                            <span class="profile-icons my-2">
-                                                <a href="{{$user->slack}}" target="_blank">
-                                                    <i class="fab fa-slack"></i>
-                                                </a>
-                                            </span>
+                                            <li>
+                                                <a href="{{$user->slack}}" target="_blank"><i class="fab fa-slack"></i></a>
+                                            </li>
                                         @endif
-                                    </span>
-                                </div>
-                            @endif
-                            <a href="{{route('ws.start_chat', ['id' => $user->id])}}" class="btn btn-primary btn-block">@lang('ws.go_to_chat')</a>
-                        </div>
-                    </div>
+                                    </ul>
+                                </td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        <a href="{{route('ws.start_chat', ['id' => $user->id])}}" class="chat instructorChat">
+            <i><img src="{{url('/')}}/ws_assets/images/chat.svg" alt=""></i>
+        </a>
     </section>
 
     @if(count($user->dates))

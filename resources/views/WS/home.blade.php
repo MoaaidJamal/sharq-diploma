@@ -6,337 +6,124 @@
 @section('body')
 
     @if(count($sliders))
-        <section class="main-section d-flex align-items-center" data-aos="fade-down">
-            <div class="container">
-                <div id="carouselExampleCaptions" class="carousel slide position-relative" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        @foreach($sliders as $key => $item)
-                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{$key}}" @if($key == 0) class="active" @endif aria-current="true" aria-label="Slide {{$key+1}}"></button>
-                        @endforeach
-                    </div>
-                    <div class="carousel-inner">
-                        @foreach($sliders as $key => $item)
-                            <div class="carousel-item @if($key == 0) active @endif">
-                                <div class="h-100"><img src="{{$item->image}}" class="w-100" alt="..."></div>
+        <section class="hero" id="hero">
+            <div class="owl-carousel heroSlider">
+                @foreach($sliders as $slider)
+                    <div class="heroSliderItem" style="background-image: url('{{$slider->image}}');">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="heroText">
+                                        <h1>
+                                            {{$settings->header_title}}
+                                        </h1>
+                                        <span>
+                                            {!! settings('header_description') !!}
+                                        </span>
+                                        <a href="{{route('ws.modules')}}" class="btn joinBtn"><span>@lang('ws.start_learning_now')</span></a>
+                                    </div>
+                                </div>
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="carousel-caption position-absolute top-0 left-0 rtl" style="border-radius: 15px; @if(locale() == 'ar') text-align: right !important; @else text-align: left !important @endif">
-                        <div class="d-flex flex-column justify-content-center p-5 w-50 h-100">
-                            <h2 class="font-bold700 font-inter my-4" style="margin-top: 370px !important;">{{$settings->header_title}}</h2>
-                            <p class="font-bold700 font-inter mb-4">{!! settings('header_description') !!}</p>
-                            <div><a class="btn start font-inter font-bold700" href="{{route('ws.modules')}}">@lang('ws.start_learning_now')</a></div>
                         </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
+    @if(count($courses))
+        <section class="diplomaProgram">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="sectionTitle">
+                            <h5>{{$settings->learning_paths_title}}</h5>
+                            <p>{{$settings->learning_paths_description}}</p>
+                        </div>
+                        @include('WS.partials.courses', ['courses' => $courses])
                     </div>
                 </div>
             </div>
         </section>
     @endif
 
-    <section class="learning-path" data-aos="fade-down">
-        <div class="container font-inter rtl">
-            <h3 class="font-bold700 mb-4">{{$settings->home_video_title}}</h3>
-            <div>
-                {!! settings('home_video_description') !!}
-            </div>
-            @if(settings('home_video_id'))
-                <div class="container-video">
-                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{$settings->home_video_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <section class="joinSec">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="joinDeplomaImg clearfix">
+                        <img src="{{url('/')}}/ws_assets/images/Union 1.png" alt="">
+                    </div>
                 </div>
-            @endif
+                <div class="col-md-6">
+                    <div class="sectionTitle">
+                        <h5>{{$settings->home_video_title}}</h5>
+                    </div>
+                    <p>
+                        {!! $settings->home_video_description !!}
+                    </p>
+                    <a href="https://www.youtube.com/watch?v={{$settings->home_video_id}}" target="_blank" class="viewVideoBtn btn">
+                        <span>
+                            <div class="playvideoIcon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14.781" height="17.727" viewBox="0 0 14.781 17.727">
+                                    <path id="Stroke_3" data-name="Stroke 3"
+                                          d="M12.831,9.87a37.09,37.09,0,0,1-9.27,6.324,9.906,9.906,0,0,1-1.651.532,1.253,1.253,0,0,1-1.141-.671,13.029,13.029,0,0,1-.413-1.713A41.29,41.29,0,0,1,0,8.366,38.852,38.852,0,0,1,.393,2.186C.463,1.8.666.906.726.762A1.237,1.237,0,0,1,1.288.15,1.229,1.229,0,0,1,1.91,0,8.679,8.679,0,0,1,3.34.443a36.758,36.758,0,0,1,9.467,6.386c.169.182.634.669.711.768a1.247,1.247,0,0,1,.027,1.5C13.463,9.206,12.988,9.7,12.831,9.87Z"
+                                          transform="translate(0.5 0.5)" fill="none" stroke="#761C33"
+                                          stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                          stroke-width="1"></path>
+                                </svg>
+                            </div> @lang('ws.view_video')
+                        </span>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
-    @if(count($courses))
-        <section class="fellowship-program" data-aos="fade-down">
-            <div class="container rtl">
-                <h2 class="font-inter px-0 d-flex">{{$settings->learning_paths_title}}</h2>
-                <div class="font-inter" style="margin-bottom: 15px;">{{$settings->learning_paths_description}}</div>
-                <div class="row">
-                    @include('WS.partials.courses', ['courses' => $courses])
-                </div>
-            </div>
-        </section>
-    @endif
-
-{{--    @if(count($mates))--}}
-{{--        <section class="find-your-mate">--}}
-{{--            <div class="container" data-aos="fade-down">--}}
-{{--                <div class="d-flex justify-content-between tabs">--}}
-{{--                    <h3 class="font-inter font-bold700">{{$settings->find_your_mate_title}}</h3>--}}
-{{--                    <div>--}}
-{{--                        <a href="{{route('ws.teammates')}}" class="btn font-inter font-bold700 d-flex align-items-center" style="color: #9B3B5A !important;">--}}
-{{--                            @lang('ws.view_more_team') <i class="bi bi-arrow-right"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="font-inter mb-4 paragraph ">--}}
-{{--                    {{$settings->find_your_mate_description}}--}}
-{{--                </div>--}}
-{{--                <div class="row flex-wrap">--}}
-{{--                    @foreach($mates as $mate)--}}
-{{--                        <figure class="figure col-12 col-sm-6 col-md-4 col-lg-3" data-aos="flip-left">--}}
-{{--                            <a href="{{route('ws.user_profile', ['id' => $mate->id])}}" style="display: block; background-image: url('{{$mate->full_path_image}}'); background-size: cover; width: 100%; height: 310px"></a>--}}
-{{--                            @if($mate->country)--}}
-{{--                                <div class="flag">--}}
-{{--                                    <img alt="img" src="{{$mate->country->image}}"/>--}}
-{{--                                </div>--}}
-{{--                            @endif--}}
-{{--                            <figcaption class="figure-caption">--}}
-{{--                                <div class="font-inter font-bold700 tc-black-2">{{$mate->name}}</div>--}}
-{{--                            </figcaption>--}}
-{{--                            <div class="d-flex flex-wrap justify-content-between my-2">--}}
-{{--                                <div class="d-flex justify-content-between">--}}
-{{--                                    @if($mate->instagram)--}}
-{{--                                        <div class="profile-icons">--}}
-{{--                                            <a href="{{$mate->instagram}}" target="_blank">--}}
-{{--                                                <i class="bi bi-instagram"></i>--}}
-{{--                                            </a>--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
-{{--                                    @if($mate->facebook)--}}
-{{--                                        <div class="profile-icons">--}}
-{{--                                            <a href="{{$mate->facebook}}" target="_blank">--}}
-{{--                                                <i class="fab fa-facebook-f"></i>--}}
-{{--                                            </a>--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
-{{--                                    @if($mate->twitter)--}}
-{{--                                        <div class="profile-icons">--}}
-{{--                                            <a href="{{$mate->twitter}}" target="_blank">--}}
-{{--                                                <i class="bi bi-twitter"></i>--}}
-{{--                                            </a>--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
-{{--                                    @if($mate->linkedin)--}}
-{{--                                        <div class="profile-icons">--}}
-{{--                                            <a href="{{$mate->linkedin}}" target="_blank">--}}
-{{--                                                <i class="fab fa-linkedin-in"></i>--}}
-{{--                                            </a>--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
-{{--                                    @if($mate->slack)--}}
-{{--                                        <div class="profile-icons">--}}
-{{--                                            <a href="{{$mate->slack}}" target="_blank">--}}
-{{--                                                <i class="fab fa-slack"></i>--}}
-{{--                                            </a>--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
-{{--                                </div>--}}
-{{--                                <a href="{{route('ws.user_profile', ['id' => $mate->id])}}" class="btn font-inter font-bold700 d-flex align-items-center s-small" style="color: #9B3B5A !important;">--}}
-{{--                                    @lang('ws.view_profile')--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                        </figure>--}}
-{{--                    @endforeach--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
-{{--    @endif--}}
-
     @if(count($mentors))
-        <section class="popular-instructor wrapper">
-            <div>
-                <div class="container rtl" data-aos="fade-down">
-                    <div class="d-flex justify-content-between tabs">
-                        <h3 class="font-inter font-bold700">{{$settings->popular_mentors_title}}</h3>
-                        <div>
-                            <a href="{{route('ws.mentors')}}" style="color: #9B3B5A !important;" class="btn font-inter font-bold700 d-flex align-items-center"> @lang('ws.view_more_mentors') <i class="bi bi-arrow-right"></i>
-                            </a>
+        <section class="Instructors">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="sectionTitle">
+                            <h5>{{$settings->popular_mentors_title}}</h5>
+                            <p>{{$settings->popular_mentors_description}}</p>
+                        </div>
+                        <div class="InstructorsSlider owl-carousel">
+                            @foreach($mentors as $mentor)
+                                @include('WS.users.user_card', ['user' => $mentor])
+                            @endforeach
                         </div>
                     </div>
-                    <div class="font-inter mb-4 paragraph ">{{$settings->popular_mentors_description}}</div>
-                </div>
-                <div class="carousel carousel-slide">
-                    @foreach($mentors as $mentor)
-                        <div class="px-1" data-aos="flip-left">
-                            <a href="{{route('ws.user_profile', ['id' => $mentor->id])}}" class="image-person">
-                                <img alt="img" src="{{$mentor->full_path_image}}"
-                                     class="figure-img img-fluid rounded">
-                            </a>
-                            @if($mentor->country)
-                                <div class="flag">
-                                    <img alt="img" src="{{$mentor->country->image}}"/>
-                                </div>
-                            @endif
-                            <figcaption class="figure-caption">
-                                <div class="font-inter font-bold700 tc-black-2">{{locale() == 'ar' ? $mentor->name : $mentor->name_en}}</div>
-                            </figcaption>
-                            <div class="d-flex flex-wrap justify-content-between my-2">
-                                <div class="d-flex justify-content-between">
-                                    @if($mentor->instagram)
-                                        <div class="profile-icons">
-                                            <a href="{{$mentor->instagram}}" target="_blank">
-                                                <i class="bi bi-instagram"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($mentor->facebook)
-                                        <div class="profile-icons">
-                                            <a href="{{$mentor->facebook}}" target="_blank">
-                                                <i class="fab fa-facebook-f"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($mentor->twitter)
-                                        <div class="profile-icons">
-                                            <a href="{{$mentor->twitter}}" target="_blank">
-                                                <i class="bi bi-twitter"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($mentor->linkedin)
-                                        <div class="profile-icons">
-                                            <a href="{{$mentor->linkedin}}" target="_blank">
-                                                <i class="fab fa-linkedin-in"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($mentor->slack)
-                                        <div class="profile-icons">
-                                            <a href="{{$mate->slack}}" target="_blank">
-                                                <i class="fab fa-slack"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div>
-                                    <a href="{{route('ws.user_profile', ['id' => $mentor->id])}}" class="btn font-inter font-bold700 d-flex align-items-center s-small" style="color: #9B3B5A !important;">
-                                        @lang('ws.view_profile')
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
                 </div>
             </div>
         </section>
     @endif
-
-    @if(count($team))
-        <section class="popular-instructor wrapper">
-            <div>
-                <div class="container rtl" data-aos="fade-down">
-                    <div class="d-flex justify-content-between tabs">
-                        <h3 class="font-inter font-bold700">@lang('ws.our_team')</h3>
-                    </div>
-                </div>
-                <div class="carousel carousel-slide">
-                    @foreach($team as $member)
-                        <div class="px-1" data-aos="flip-left">
-                            <a href="{{route('ws.user_profile', ['id' => $member->id])}}" class="image-person">
-                                <img alt="img" src="{{$member->full_path_image}}"
-                                     class="figure-img img-fluid rounded">
-                            </a>
-                            @if($member->country)
-                                <div class="flag">
-                                    <img alt="img" src="{{$member->country->image}}"/>
-                                </div>
-                            @endif
-                            <figcaption class="figure-caption">
-                                <div class="font-inter font-bold700 tc-black-2">{{$member->name}}</div>
-                            </figcaption>
-                            <div class="d-flex flex-wrap justify-content-between my-2">
-                                <div class="d-flex justify-content-between">
-                                    @if($member->instagram)
-                                        <div class="profile-icons">
-                                            <a href="{{$member->instagram}}" target="_blank">
-                                                <i class="bi bi-instagram"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($member->facebook)
-                                        <div class="profile-icons">
-                                            <a href="{{$member->facebook}}" target="_blank">
-                                                <i class="fab fa-facebook-f"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($member->twitter)
-                                        <div class="profile-icons">
-                                            <a href="{{$member->twitter}}" target="_blank">
-                                                <i class="bi bi-twitter"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($member->linkedin)
-                                        <div class="profile-icons">
-                                            <a href="{{$member->linkedin}}" target="_blank">
-                                                <i class="fab fa-linkedin-in"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($member->slack)
-                                        <div class="profile-icons">
-                                            <a href="{{$mate->slack}}" target="_blank">
-                                                <i class="fab fa-slack"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div>
-                                    <a href="{{route('ws.user_profile', ['id' => $member->id])}}" class="btn font-inter font-bold700 d-flex align-items-center s-small" style="color: #9B3B5A !important;">
-                                        @lang('ws.view_profile')
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
-{{--    @if(count($gallery))--}}
-{{--        <section class="explore-our-gallery" data-aos="fade-down">--}}
-{{--            <div class="container">--}}
-{{--                <h3 class="font-inter font-bold700 rtl">{{$settings->gallery_title}}</h3>--}}
-{{--                <div class="d-flex justify-content-between">--}}
-{{--                    <div class="font-inter paragraph ">{{$settings->gallery_description}}</div>--}}
-{{--                    <div>--}}
-{{--                        <a href="{{route('ws.gallery')}}" class="btn font-inter font-bold700 d-flex align-items-center" style="color: #9B3B5A;"> @lang('ws.view_all') <i class="bi bi-arrow-right"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="row flex-wrap container-gallery mb-0">--}}
-{{--                    @foreach($gallery as $file)--}}
-{{--                        <div class="gallery col-12 col-sm-6 col-lg-4">--}}
-{{--                            <a href="{{$file->path}}" class="fancybox" data-fancybox-group="gallery">--}}
-{{--                                <img alt="img" src="{{$file->path}}" class="thumb"/>--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
-{{--                    @endforeach--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
-{{--    @endif--}}
 
     @if(count($partners))
-        <section class="our-great-partnars" data-aos="fade-down" style="min-height: auto">
+        <section class="partners">
             <div class="container">
-                <h3 class="font-inter font-bold700 rtl">{{$settings->partners_title}}</h3>
-                <div class="d-flex justify-content-between rtl">
-                    <div class="font-inter paragraph ">{{$settings->partners_description}}</div>
-                </div>
-                <div class="row justify-content-between flex-wrap container-gallery">
-                    @foreach($partners as $partner)
-                        <a href="{{$partner->url}}" target="_blank" class="photo-logo col-6 col-sm-6 col-lg-3">
-                            <img alt="img" src="{{$partner->image}}" style="margin: auto; display: block; max-height: 100%; max-width: 100%; width: auto; height: auto">
-                        </a>
-                    @endforeach
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="sectionTitle">
+                            <h5>{{$settings->partners_title}}</h5>
+                            <p>{{$settings->partners_description}}</p>
+                        </div>
+                        <div class="partnerSlider owl-carousel">
+                            @foreach($partners as $partner)
+                                <div class="partnerBox">
+                                    <div class="partnerImg">
+                                        <a href="{{$partner->url}}" target="_blank">
+                                            <img alt="img" src="{{$partner->image}}">
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     @endif
 
-@endsection
-@section('js')
-    <script>
-        $(document).ready(function () {
-            $(".fancybox").jqPhotoSwipe();
-            $(".forcedgallery > a").jqPhotoSwipe({
-                forceSingleGallery: true
-            });
-        });
-    </script>
 @endsection

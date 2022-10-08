@@ -1,567 +1,464 @@
 @extends('WS.layouts.main')
 
-@section('title') @lang('ws.profile') @endsection
+@section('title')
+    @lang('ws.profile')
+@endsection
+
 @section('style')
-    <link href="{{url('/')}}/ws_assets/css/profile_style.css" rel="stylesheet"/>
-    <link href="{{url('/')}}/ws_assets/css/userprofile.css" rel="stylesheet"/>
-    <style>
-        .is-invalid {
-            margin-bottom: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endsection
 
 @section('body')
-    <section class="h-100" data-aos="fade-down">
-        <form action="{{route('ws.profile_post')}}" method="POST" enctype="multipart/form-data" id="form" style="margin: 0">
-            @csrf
+    <form action="{{route('ws.profile_post')}}" method="POST" class="SuggestCourseForm" enctype="multipart/form-data" id="form" style="margin: 0">
+        @csrf
+        <section class="myProfileHeader">
             <div class="container">
-                <div class="container-box"><img src="{{url('/')}}/ws_assets/images/profile/bg-profile.jpeg"/></div>
-                <div class="row info-box px-4 justify-content-between" style="margin: 0">
-                    <div class="col-lg-6 d-flex justify-content-start align-items-end">
-                        <div style="width: 170px; height: 170px">
-                            <div class="h-100 w-100">
-                                <img class="h-100 w-100" src="{{auth()->user()->full_path_image}}" alt="person" id="profile_image" style="border-radius: 10px"/>
-                            </div>
-                            <div class="d-flex flex-column add-photo">
-                                <div class="upload-btn-wrapper">
-                                    <button class="btn"><img alt="icon" src="{{url('/')}}/ws_assets/images/profile/add_a_photo_24px.png"/></button>
-                                    <input type="file" name="image" id="image" accept="image/*" @if(!auth()->user()->image) required @endif/>
+                <div class="row ">
+                    <div class="col-md-10">
+                        <div class="myProfileHeaderCont">
+                            <div class="profileImgCont">
+                                <label for="uploadProfImg">
+                                    <a href="javascript:;" class="MyProfIcon">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19.807" height="19.5"
+                                                 viewBox="0 0 19.807 19.5">
+                                                <g id="Image_2" data-name="Image 2" transform="translate(0.75 0.75)">
+                                                    <path id="Stroke_1" data-name="Stroke 1"
+                                                          d="M13.217,0H4.783C1.842,0,0,2.081,0,5.026v7.947C0,15.919,1.834,18,4.783,18h8.434C16.166,18,18,15.919,18,12.974V5.026C18,2.081,16.166,0,13.217,0Z"
+                                                          fill="none" stroke="#761c33" stroke-linecap="round"
+                                                          stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+                                                    <path id="Stroke_3" data-name="Stroke 3"
+                                                          d="M3.6,1.8A1.8,1.8,0,1,1,1.8,0,1.8,1.8,0,0,1,3.6,1.8Z"
+                                                          transform="translate(4.156 4.085)" fill="none" stroke="#761c33"
+                                                          stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-miterlimit="10" stroke-width="1.5"/>
+                                                    <path id="Stroke_5" data-name="Stroke 5"
+                                                          d="M17.025,2.856A22.244,22.244,0,0,0,14.1.327a2.287,2.287,0,0,0-3.083.743c-.746.966-1.212,2.266-2.339,2.876C7.291,4.7,6.476,3.486,5.318,3c-1.292-.541-2.273.432-3.028,1.367S.768,6.23,0,7.157"
+                                                          transform="translate(0.975 9.042)" fill="none" stroke="#761c33"
+                                                          stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-miterlimit="10" stroke-width="1.5"/>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </label>
+                                <input type="file" style="cursor: pointer" name="image" accept="image/*" id="uploadProfImg" onchange="readURL(this)">
+                                <script>
+                                    function readURL(input) {
+                                        var $input = input;
+                                        if (input.files && input.files[0]) {
+                                            var reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                $($input).parent().parent().find(".myProfileImg img")
+                                                    .attr('src', e.target.result)
+
+
+                                            };
+                                            reader.readAsDataURL(input.files[0]);
+                                        }
+                                    }
+                                </script>
+
+                                <div class="myProfileImg">
+                                    <img src="{{auth()->user()->full_path_image}}" alt="">
                                 </div>
                             </div>
+                            <div class="ProfNameDetails">
+                                <h4>{{auth()->user()->name}}</h4>
+                                <p>
+                                    {{auth()->user()->bio}}
+                                </p>
+                            </div>
                         </div>
-                        <div class="font-bold700 font-inter text-name">{{auth()->user()->name}}</div>
                     </div>
                 </div>
-                <!-- tabs -->
-                <div>
-                    <ul class="nav nav-tabs justify nav-customer rtl" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link nav-btn active" style="text-transform:initial !important;" id="profile-tab" data-bs-toggle="tab"
-                                    data-bs-target="#profile"
-                                    type="button" role="tab" aria-controls="profile-tab" aria-selected="true">
-                                @lang('ws.profile')
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link nav-btn" style="text-transform:initial;" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
-                                    type="button" role="tab" aria-controls="contact-tab" aria-selected="false">
-                                @lang('ws.contact_links')
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link nav-btn" style="text-transform:initial;" id="contact2-tab" data-bs-toggle="tab" data-bs-target="#reset_password"
-                                    type="button" role="tab" aria-controls="contact-tab" aria-selected="false">
-                                @lang('ws.account')
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link nav-btn" style="text-transform:initial;" id="personality-tab" data-bs-toggle="tab"
-                                    data-bs-target="#personality" type="button" role="tab" aria-controls="personality-tab"
-                                    aria-selected="false">
-                                @lang('ws.personality')
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link nav-btn" style="text-transform:initial;" id="role-tab" data-bs-toggle="tab"
-                                    data-bs-target="#role" type="button" role="tab" aria-controls="role-tab" aria-selected="false">
-                                @lang('ws.role')
-                            </button>
-                        </li>
-                        @if(auth()->user()->grades)
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link nav-btn" style="text-transform:initial;" id="role-tab" data-bs-toggle="tab"
-                                        data-bs-target="#grades" type="button" role="tab" aria-controls="role-tab" aria-selected="false">
-                                    @lang('ws.grades')
-                                </button>
-                            </li>
-                        @endif
-                    </ul>
-
-                    <div class="tab-content" id="myTab">
-                        <div class="tab-pane rtl show fade active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <div class="d-flex flex-column mb-0 pb-5">
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-12 col-lg-6">
-                                        <div class="mx-3">
-                                            <h2 class="font-bold700 font-inter my-4">@lang('ws.personal_info')</h2>
-                                            <div class="mb-3">
-                                                <label for="name_ar" class="form-label font-inter tc-gray-1">@lang('users.name_ar')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="name[ar]" id="name_ar"
-                                                       value="{{auth()->user()->getTranslation('name', 'ar')}}" placeholder="@lang('ws.your_name')">
-                                                <div class="text-danger" id="name_ar_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="name_en" class="form-label font-inter tc-gray-1">@lang('users.name_en')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="name[en]" id="name_en"
-                                                       value="{{auth()->user()->getTranslation('name', 'en')}}" placeholder="@lang('ws.your_name')">
-                                                <div class="text-danger" id="name_en_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label font-inter tc-gray-1">@lang('ws.email')</label>
-                                                <input type="email" class="form-control font-inter small-text font-bold700" name="email" id="email"
-                                                       value="{{auth()->user()->email}}" placeholder="@lang('ws.your_email')">
-                                                <div class="text-danger" id="email_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label font-inter">@lang('ws.gender')</label>
-                                                <div class="d-flex align-items-center tags">
-                                                    <div class="form-check p-0 d-flex align-items-center">
-                                                        <input class="form-check-input m-auto" type="radio" name="gender" value="1" id="male"
-                                                               @if(auth()->user()->gender == 1) checked @endif>
-                                                        <label for="male" class="form-check-label font-inter font-bold700">
-                                                            @lang('ws.male')
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check p-0 mx-5 d-flex align-items-center">
-                                                        <input class="form-check-input m-auto" type="radio" name="gender" value="2" id="female"
-                                                               @if(auth()->user()->gender == 2) checked @endif>
-                                                        <label for="female" class="form-check-label font-inter font-bold700">
-                                                            @lang('ws.female')
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="text-danger" id="male_error"></div>
-                                                <div class="text-danger" id="female_error"></div>
-                                            </div>
-                                            <div class="mb-3 d-flex flex-column">
-                                                <label class="form-label font-inter tc-gray-1">@lang('ws.nationality')</label>
-                                                <div class="dropdown">
-                                                    <input type="hidden" name="country_id" id="country_id" value="{{auth()->user()->country_id}}"/>
-                                                    <input type="checkbox" class="dropdown__switch" id="filter-switch" hidden/>
-                                                    <label for="filter-switch" class="dropdown__options-filter">
-                                                        <ul class="dropdown__filter" role="listbox" tabindex="-1">
-                                                            <li class="dropdown__filter-selected" aria-selected="true">
-                                                                @if(auth()->user()->country)
-                                                                    <div class="option-img">
-                                                                        <img src="{{auth()->user()->country->image}}"/>
-                                                                    </div>
-                                                                    {{auth()->user()->country->name}}
-                                                                @endif
-                                                            </li>
-                                                            <li>
-                                                                <ul class="dropdown__select" style="height: 300px; overflow-y: scroll">
-                                                                    @foreach($countries as $country)
-                                                                        <li class="dropdown__select-option small-text">
-                                                                            <div class="option-img ordersubmitbytable" data-id="{{ $country->id }}"><img
-                                                                                    src="{{ $country->image }}"/></div>
-                                                                            {{ $country->name }}
-                                                                        </li>
-                                                                    @endforeach
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
+            </div>
+        </section>
+        <section class="myCoursesPageSec">
+            <div class="coursesTabsSection ">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="nav nav-pills coursepage-tabs" id="MycoursesTabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link  active Profile-tab" data-toggle="pill" href="#profile" role="tab"
+                                       aria-controls="pills-Profile" aria-selected="true"> @lang('ws.profile')
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  contactList-tab" data-toggle="pill" href="#contact" role="tab"
+                                       aria-controls="pills-contactList" aria-selected="false"> @lang('ws.contact_links')
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  Account-tab" data-toggle="pill" href="#reset_password" role="tab"
+                                       aria-controls="pills-Account" aria-selected="false">@lang('ws.account')</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  Personality-tab" data-toggle="pill" href="#personality" role="tab"
+                                       aria-controls="pills-Personality" aria-selected="false">@lang('ws.personality')</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  Role-tab" data-toggle="pill" href="#role" role="tab"
+                                       aria-controls="pills-Roll" aria-selected="false">@lang('ws.role')</a>
+                                </li>
+                                @if(auth()->user()->grades)
+                                    <li class="nav-item">
+                                        <a class="nav-link  ExamInfo-tab" data-toggle="pill" href="#grades" role="tab"
+                                           aria-controls="pills-ExamInfo" aria-selected="false">@lang('ws.grades')</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mycoursesTabContainer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="tab-content" id="MycoursesTabContent">
+                            <div class="tab-pane show active fade" id="profile" role="tabpanel"
+                                 aria-labelledby="Profile-tab">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="name_ar">@lang('users.name_ar')</label>
+                                        <input type="text" class="form-control" name="name[ar]" id="name_ar"
+                                               value="{{auth()->user()->getTranslation('name', 'ar')}}" placeholder="@lang('ws.your_name')">
+                                        <div class="text-danger" id="name_ar_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="name_en">@lang('users.name_en')</label>
+                                        <input type="text" class="form-control" name="name[en]" id="name_en"
+                                               value="{{auth()->user()->getTranslation('name', 'en')}}" placeholder="@lang('ws.your_name')">
+                                        <div class="text-danger" id="name_en_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="email">@lang('users.email')</label>
+                                        <input type="text" class="form-control" name="email" id="email"
+                                               value="{{auth()->user()->email}}" placeholder="@lang('ws.email')">
+                                        <div class="text-danger" id="email_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="dob">@lang('ws.dob')</label>
+                                        <input type="text" class="datepicker form-control" name="dob" id="dob"
+                                               value="{{auth()->user()->dob ? Carbon\Carbon::parse(auth()->user()->dob)->toDateString() : ''}}"
+                                               placeholder="1995-12-10">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="gender">@lang('ws.gender')</label>
+                                        <select name="gender" id="gender" class="select">
+                                            <option disabled selected value="">-</option>
+                                            <option value="1" @if(auth()->user()->gender == 1) selected @endif>@lang('ws.male')</option>
+                                            <option value="2" @if(auth()->user()->gender == 2) selected @endif>@lang('ws.female')</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="country_id">@lang('ws.nationality')</label>
+                                        <select name="country_id" id="country_id" class="select">
+                                            <option disabled selected value="">-</option>
+                                            @foreach($countries as $country)
+                                                <option value="{{$country->id}}" @if(auth()->user()->country_id == $country->id) selected @endif>{{$country->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="bio_ar">@lang('users.bio_ar')</label>
+                                        <textarea type="text" class="form-control" name="bio[ar]" id="bio_ar"
+                                                  placeholder="@lang('users.bio_ar')">{{auth()->user()->getTranslation('bio', 'ar')}}</textarea>
+                                        <div class="text-danger" id="bio_ar_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="bio_en">@lang('users.bio_en')</label>
+                                        <textarea type="text" class="form-control" name="bio[en]" id="bio_en"
+                                                  placeholder="@lang('users.bio_en')">{{auth()->user()->getTranslation('bio', 'en')}}</textarea>
+                                        <div class="text-danger" id="bio_en_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="work_ar">@lang('users.work_ar')</label>
+                                        <input type="text" class="form-control" name="work[ar]" id="work_ar"
+                                               value="{{auth()->user()->getTranslation('work', 'ar')}}" placeholder="@lang('users.work_ar')">
+                                        <div class="text-danger" id="work_ar_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="work_en">@lang('users.work_en')</label>
+                                        <input type="text" class="form-control" name="work[en]" id="work_en"
+                                               value="{{auth()->user()->getTranslation('work', 'en')}}" placeholder="@lang('users.work_en')">
+                                        <div class="text-danger" id="work_en_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="study_ar">@lang('users.study_ar')</label>
+                                        <input type="text" class="form-control" name="study[ar]" id="study_ar"
+                                               value="{{auth()->user()->getTranslation('study', 'ar')}}" placeholder="@lang('users.study_ar')">
+                                        <div class="text-danger" id="study_ar_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="study_en">@lang('users.study_en')</label>
+                                        <input type="text" class="form-control" name="study[en]" id="study_en"
+                                               value="{{auth()->user()->getTranslation('study', 'en')}}" placeholder="@lang('users.study_en')">
+                                        <div class="text-danger" id="study_en_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>@lang('ws.languages')</label>
+                                        <div class="chooselangCont">
+                                            @foreach($languages as $key => $language)
+                                                <label for="lang{{$key}}" class="langCheckCont">
+                                                    <input type="checkbox" name="languages[]" @if(auth()->user()->languages->contains($language->id)) checked @endif class="langCheckBoxInput" id="lang{{$key}}" value="{{$language->id}}">
+                                                    <div class="langCheckBox"><span>{{$language->name}}</span></div>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    @if(count($interests))
+                                        <div class="form-group col-md-6">
+                                            <label>@lang('ws.interests')</label>
+                                            <div class="ChooseIntrsestBox">
+                                                @foreach($interests as $key => $interest)
+                                                    <label for="Interset{{$key}}" class="langCheckCont">
+                                                        <input type="checkbox" name="interests[]" value="{{$interest->id}}" @if(auth()->user()->interests->contains($interest->id)) checked @endif class="langCheckBoxInput" id="Interset{{$key}}">
+                                                        <div class="langCheckBox"><span>{{$interest->name}}</span></div>
                                                     </label>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="dob" class="form-label font-inter tc-gray-1 ">@lang('ws.dob')</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="far fa-calendar-alt"></i></span>
-                                                    <input type="text" name="dob" id="dob" class="form-control font-inter font-bold700 s-small"
-                                                           placeholder="1993-03-21"
-                                                           value="{{auth()->user()->dob ? Carbon\Carbon::parse(auth()->user()->dob)->toDateString() : ''}}"
-                                                           style="margin: 0; border: none !important;">
-                                                </div>
-                                                <div class="text-danger" id="dob_error"></div>
-                                            </div>
-                                            <h2 class="font-bold700 font-inter my-5">@lang('ws.about_me')</h2>
-                                            <div class="mb-3">
-                                                <label class="form-label font-inter tc-gray-1">@lang('ws.interests')</label>
-                                                <div class="d-flex tags flex-wrap">
-                                                    @foreach($interests as $key => $interest)
-                                                        <input class="checkbox" type="checkbox" name="interests[]" id="interest{{$key}}" value="{{$interest->id}}"
-                                                               @if(auth()->user()->interests->contains($interest->id)) checked @endif/>
-                                                        <label for="interest{{$key}}" class="tc-black-2 font-inter small-text tag">{{$interest->name}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="bio_ar" class="form-label">@lang('users.bio_ar')</label>
-                                                <textarea name="bio[ar]" class="form-control font-inter small-text font-bold700" id="bio_ar" rows="4"
-                                                          style="resize: none;border: none;border-bottom: 1px solid #00000030 !important;background: none;">{{auth()->user()->getTranslation('bio', 'ar')}}</textarea>
-                                                <div class="text-danger" id="bio_ar_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="bio_en" class="form-label">@lang('users.bio_en')</label>
-                                                <textarea name="bio[en]" class="form-control font-inter small-text font-bold700" id="bio_en" rows="4"
-                                                          style="resize: none;border: none;border-bottom: 1px solid #00000030 !important;background: none;">{{auth()->user()->getTranslation('bio', 'en')}}</textarea>
-                                                <div class="text-danger" id="bio_en_error"></div>
+                                                @endforeach
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="mx-3">
-                                            <h2 class="font-bold700 font-inter my-4">@lang('ws.experience')</h2>
-                                            <div class="mb-3">
-                                                <label for="work_ar" class="form-label font-inter tc-gray-1">@lang('users.work_ar')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="work[ar]" id="work_ar"
-                                                       value="{{auth()->user()->getTranslation('work', 'ar')}}" placeholder="@lang('users.work_ar')">
-                                                <div class="text-danger" id="work_ar_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="work_en" class="form-label font-inter tc-gray-1">@lang('users.work_en')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="work[en]" id="work_en"
-                                                       value="{{auth()->user()->getTranslation('work', 'en')}}" placeholder="@lang('users.work_en')">
-                                                <div class="text-danger" id="work_en_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="study_ar" class="form-label font-inter tc-gray-1">@lang('users.study_ar')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="study[ar]" id="study_ar"
-                                                       value="{{auth()->user()->getTranslation('study', 'ar')}}" placeholder="@lang('users.study_ar')">
-                                                <div class="text-danger" id="study_ar_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="study_en" class="form-label font-inter tc-gray-1">@lang('users.study_en')</label>
-                                                <input type="text" class="form-control font-inter small-text font-bold700" name="study[en]" id="study_en"
-                                                       value="{{auth()->user()->getTranslation('study', 'en')}}" placeholder="@lang('users.study_en')">
-                                                <div class="text-danger" id="study_en_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label font-inter tc-gray-1">@lang('ws.languages')</label>
-                                                <div class="d-flex tags flex-wrap">
-                                                    @foreach($languages as $key => $language)
-                                                        <input class="checkbox" type="checkbox" name="languages[]" id="language{{$key}}" value="{{$language->id}}"
-                                                               @if(auth()->user()->languages->contains($language->id)) checked @endif/>
-                                                        <label for="language{{$key}}" class="tc-black-2 font-inter small-text tag">{{$language->name}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endif
                                 </div>
-                                <div class="d-flex justify-content-end my-5">
-                                    <button class="btn" type="submit">@lang('ws.save_changes')</button>
+
+                                <div class="col-md-12">
+                                    <button class="btn sendSuggestBtn" type="submit"><span>@lang('ws.save_changes')</span></button>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                            <div class="d-flex flex-column mb-0 pb-5">
-                                <div class="row d-flex justify-content-between">
-                                    <h2 class="font-bold700 font-inter my-4 rtl">@lang('ws.contact_links')</h2>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="mx-3">
-                                            <div class="mb-3">
-                                                <label for="slack" class="form-label font-inter tc-gray-1">Slack</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="fab fa-slack"></i></span>
-                                                    <input type="url" class="form-control font-inter small-text" name="slack" id="slack" placeholder="www.slack.com"
-                                                           value="{{auth()->user()->slack}}">
-                                                </div>
-                                                <div class="text-danger" id="slack_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="facebook" class="form-label font-inter tc-gray-1">Facebook</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="fab fa-facebook-f"></i></span>
-                                                    <input type="url" class="form-control font-inter small-text" name="facebook" id="facebook"
-                                                           placeholder="www.facebook.com" value="{{auth()->user()->facebook}}">
-                                                </div>
-                                                <div class="text-danger" id="facebook_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="instagram" class="form-label font-inter tc-gray-1">Instagram</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="fab fa-instagram"></i></span>
-                                                    <input type="url" class="form-control font-inter small-text" name="instagram" id="instagram"
-                                                           placeholder="www.instagram.com" value="{{auth()->user()->instagram}}">
-                                                </div>
-                                                <div class="text-danger" id="instagram_error"></div>
-                                            </div>
-                                        </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contactList-tab">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="slack">Slack</label>
+                                        <input type="url" class="form-control" name="slack" id="slack" placeholder="www.slack.com"
+                                               value="{{auth()->user()->slack}}">
+                                        <div class="text-danger" id="slack_error"></div>
                                     </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="mx-3">
-                                            <div class="mb-3">
-                                                <label for="twitter" class="form-label font-inter tc-gray-1">Twitter</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="fab fa-twitter"></i></span>
-                                                    <input type="url" class="form-control font-inter small-text" name="twitter" id="twitter"
-                                                           placeholder="www.twitter.com" value="{{auth()->user()->twitter}}">
-                                                </div>
-                                                <div class="text-danger" id="twitter_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="linkedin" class="form-label font-inter tc-gray-1">LinkedIn</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="fab fa-linkedin-in"></i></span>
-                                                    <input type="url" class="form-control font-inter small-text" name="linkedin" id="linkedin"
-                                                           placeholder="www.linkedin.com" value="{{auth()->user()->linkedin}}">
-                                                </div>
-                                                <div class="text-danger" id="linkedin_error"></div>
-                                            </div>
-                                        </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="instagram">Instagram</label>
+                                        <input type="url" class="form-control" name="instagram" id="instagram" placeholder="www.instagram.com"
+                                               value="{{auth()->user()->instagram}}">
+                                        <div class="text-danger" id="instagram_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="facebook">Facebook</label>
+                                        <input type="url" class="form-control" name="facebook" id="facebook" placeholder="www.facebook.com"
+                                               value="{{auth()->user()->facebook}}">
+                                        <div class="text-danger" id="facebook_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="linkedin">LinkedIn</label>
+                                        <input type="url" class="form-control" name="linkedin" id="linkedin" placeholder="www.linkedin.com"
+                                               value="{{auth()->user()->linkedin}}">
+                                        <div class="text-danger" id="linkedin_error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="twitter">Twitter</label>
+                                        <input type="url" class="form-control" name="twitter" id="twitter" placeholder="www.twitter.com"
+                                               value="{{auth()->user()->twitter}}">
+                                        <div class="text-danger" id="twitter_error"></div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-end my-5">
-                                    <button class="btn" type="submit">@lang('ws.save_changes')</button>
+
+                                <div class="col-md-12">
+                                    <button class="btn sendSuggestBtn" type="submit"><span>@lang('ws.save_changes')</span></button>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="tab-pane fade rtl" id="reset_password" role="tabpanel" aria-labelledby="contact-tab">
-                            <div class="d-flex flex-column mb-0 pb-5">
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-12 col-lg-6">
-                                        <div class="mx-3">
-                                            <h2 class="font-bold700 font-inter my-4">@lang('ws.email')</h2>
-
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail" class="form-label font-inter font-bold700">@lang('ws.email')</label>
-                                                <div class="input-group mb-3" style="background: #EEEEEE;">
-                                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
-                                                    <input type="email" disabled class="form-control font-inter small-text" id="exampleInputEmail"
-                                                           aria-describedby="emailHelp" placeholder="{{auth()->user()->email}}"
-                                                           style="margin: 0; border: 0 !important;">
-                                                </div>
-                                            </div>
-
-                                        </div>
+                            <div class="tab-pane fade" id="reset_password" role="tabpanel" aria-labelledby="Account-tab">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">@lang('ws.email')</label>
+                                        <input type="email" class="form-control" disabled
+                                               value="{{auth()->user()->email}}">
                                     </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="mx-3">
-                                            <h2 class="font-bold700 font-inter my-4">@lang('ws.password')</h2>
-                                            <div class="font-inter mb-3 tc-gray-1">
-                                                @lang('ws.change_password_desc')
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="old_password" class="form-label font-inter tc-gray-1">@lang('ws.current_password')</label>
-                                                <input type="password" class="form-control font-inter small-text font-bold700" id="old_password" name="old_password">
-                                                <div class="text-danger" id="old_password_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="password" class="form-label font-inter tc-gray-1">@lang('ws.new_password')</label>
-                                                <input type="password" class="form-control font-inter small-text font-bold700" id="password" name="password">
-                                                <div class="text-danger" id="password_error"></div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="password_confirmation"
-                                                       class="form-label font-inter tc-gray-1">@lang('ws.new_password_confirmation')</label>
-                                                <input type="password" class="form-control font-inter small-text font-bold700" id="password_confirmation"
-                                                       name="password_confirmation">
-                                                <div class="text-danger" id="password_confirmation_error"></div>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label for="old_password">@lang('ws.current_password')</label>
+                                            <input type="password" class="form-control" placeholder="@lang('ws.current_password')" id="old_password" name="old_password">
+                                            <div class="text-danger" id="old_password_error"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">@lang('ws.new_password')</label>
+                                            <input type="password" class="form-control" placeholder="@lang('ws.new_password')" id="password" name="password">
+                                            <div class="text-danger" id="password_error"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password_confirmation">@lang('ws.new_password_confirmation')</label>
+                                            <input type="password" class="form-control" placeholder="@lang('ws.new_password_confirmation')" id="password_confirmation"
+                                                   name="password_confirmation">
+                                            <div class="text-danger" id="password_confirmation_error"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-end my-5">
-                                    <button class="btn" type="submit">@lang('ws.save_changes')</button>
+                                <div class="col-md-12">
+                                    <button class="btn sendSuggestBtn" type="submit"><span>@lang('ws.save_changes')</span></button>
                                 </div>
                             </div>
-                        </div>
+                            <div class="tab-pane fade" id="personality" role="tabpanel" aria-labelledby="Personality-tab">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.introvert')</label>
+                                            <span>
+                                                <input type="text" class="amount" id="introvert" name="extrovert"
+                                                       value="{{auth()->user()->extrovert ?: 0}}" readonly
+                                                       style="border:0; font-weight:500; display: none;">
+                                                @lang('ws.extrovert')
+                                            </span>
+                                            <div class="slider-range-min"></div>
 
-                        <div class="tab-pane fade" id="personality" role="tabpanel" aria-labelledby="personality-tab">
-                            <div class="d-flex flex-column mb-0 pb-5">
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-12 col-lg-6 mt-4">
-                                        <div class="mx-3">
-                                            <div class="mb-3">
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.introvert')</div>
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.extrovert')</div>
-                                                </div>
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="content">
-                                                            <input type="range" id="introvert" name="extrovert" min="1" max="100"
-                                                                   value="{{auth()->user()->extrovert ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.thinking')</div>
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.feeling')</div>
-                                                </div>
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="content">
-                                                            <input type="range" id="thinking" name="feeling" min="1" max="100" value="{{auth()->user()->feeling ?: 0}}"
-                                                                   data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-6 mt-0 mt-lg-4 ">
-                                        <div class="mx-3">
-                                            <div class="mb-3">
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.intuition')</div>
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.perceiving')</div>
-                                                </div>
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="content">
-                                                            <input type="range" id="extrovert" name="perceiving" min="1" max="100"
-                                                                   value="{{auth()->user()->perceiving ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.sensing')</div>
-                                                    <div class="font-bold600 font-inter text-prog">@lang('ws.intuition')</div>
-                                                </div>
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="content">
-                                                            <input type="range" id="sensing" name="intuition" min="1" max="100"
-                                                                   value="{{auth()->user()->intuition ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.thinking')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="thinking" name="feeling"
+                                                       value="{{auth()->user()->feeling ?: 0}}"
+                                                       style="border:0; font-weight:500; display: none;">
+                                                @lang('ws.feeling')
+                                            </span>
+                                            <div class="slider-range-min"></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.intuition')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="extrovert" name="perceiving"
+                                                       value="{{auth()->user()->perceiving ?: 0}}"
+                                                       style="border:0; font-weight:500; display: none;">
+                                                @lang('ws.perceiving')
+                                            </span>
+                                            <div class="slider-range-min"></div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="d-flex justify-content-end my-5">
-                                    <button class="btn" type="submit">@lang('ws.save_changes')</button>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.sensing')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="sensing" name="intuition"
+                                                       value="{{auth()->user()->intuition ?: 0}}"
+                                                       style="border:0; font-weight:500; display: none;">
+                                                @lang('ws.intuition')
+                                            </span>
+                                            <div class="slider-range-min"></div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <button class="btn sendSuggestBtn" type="submit"><span>@lang('ws.save_changes')</span></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="role" role="tabpanel" aria-labelledby="role-tab">
-                            <div class="d-flex flex-column mb-0 pb-5">
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-12 col-lg-6 mt-4">
-                                        <div class="mx-3">
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.maker')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="maker"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-maker" name="maker" min="1" max="100" value="{{auth()->user()->maker ?: 0}}"
-                                                                   data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.connector')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="connector"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-connector" name="connector" min="1" max="100"
-                                                                   value="{{auth()->user()->connector ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.idea_generator')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="generator"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-generator" name="idea_generator" min="1" max="100"
-                                                                   value="{{auth()->user()->idea_generator ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.collaborator')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="collaborator"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-collaborator" name="collaborator" min="1" max="100"
-                                                                   value="{{auth()->user()->collaborator ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div class="tab-pane fade" id="role" role="tabpanel" aria-labelledby="Role-tab">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.maker')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-maker" name="maker"
+                                                       value="{{auth()->user()->maker ?: 0}}"
+                                                       style="border:0; font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-6 mt-0 mt-lg-4">
-                                        <div class="mx-3">
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.finisher')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="finisher"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-finisher" name="finisher" min="1" max="100"
-                                                                   value="{{auth()->user()->finisher ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.evaluator')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="evaluator"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-evaluator" name="evaluator" min="1" max="100"
-                                                                   value="{{auth()->user()->evaluator ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.organiser')
-                                                            </div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="organiser"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-organiser" name="organiser" min="1" max="100"
-                                                                   value="{{auth()->user()->organiser ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="budget-wrap">
-                                                    <div class="budget">
-                                                        <div class="header d-flex justify-content-between mb-2">
-                                                            <div class="font-bold600 font-inter text-prog">@lang('ws.moderator')</div>
-                                                            <div class="font-bold600 font-inter text-prog pull-right" id="moderator"></div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <input type="range" id="range-moderator" name="moderator" min="1" max="100"
-                                                                   value="{{auth()->user()->moderator ?: 0}}" data-rangeslider>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.connector')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-connector" name="connector"
+                                                       value="{{auth()->user()->connector ?: 0}}"
+                                                       style="border:0; font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="d-flex justify-content-end my-5">
-                                    <button class="btn" type="submit">@lang('ws.save_changes')</button>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.idea_generator')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-generator" name="idea_generator"
+                                                       value="{{auth()->user()->idea_generator ?: 0}}"
+                                                       style="border:0;  font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.collaborator')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-collaborator" name="collaborator"
+                                                       value="{{auth()->user()->collaborator ?: 0}}"
+                                                       style="border:0; font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.finisher')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-finisher" name="finisher"
+                                                       value="{{auth()->user()->finisher ?: 0}}"
+                                                       style="border:0; font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.evaluator')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-evaluator" name="evaluator"
+                                                       value="{{auth()->user()->evaluator ?: 0}}"
+                                                       style="border:0;  font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.organiser')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-organiser" name="organiser"
+                                                       value="{{auth()->user()->organiser ?: 0}}"
+                                                       style="border:0;  font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="slidecontainer clearfix">
+                                            <label for="">@lang('ws.moderator')</label>
+                                            <span>
+                                                <input type="text" class="amount" readonly id="range-moderator" name="moderator"
+                                                       value="{{auth()->user()->moderator ?: 0}}"
+                                                       style="border:0;  font-weight:500;">
+                                            </span>
+                                            <div class="slider-range-min"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button class="btn sendSuggestBtn" type="submit"><span>@lang('ws.save_changes')</span></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        @if(auth()->user()->grades)
-                            <div class="tab-pane fade rtl" id="grades" role="tabpanel" aria-labelledby="role-tab">
-                                <div class="d-flex flex-column mb-0 pb-5">
-                                    <div class="row d-flex justify-content-between mt-4">
-                                        <table class="table table-striped text-center">
+                            @if(auth()->user()->grades)
+                                <div class="tab-pane fade" id="grades" role="tabpanel" aria-labelledby="ExamInfo-tab">
+                                    <div class="row">
+                                        <table class="MyMarks table">
                                             <thead>
                                             <tr>
                                                 <th>@lang('ws.course_id')</th>
@@ -579,10 +476,10 @@
                                             @foreach(auth()->user()->grades as $item)
                                                 @php
                                                     $assignments = \App\Models\UsersAssignment::query()->where('user_id', $item->user_id)->whereHas('lecture', function ($q) use ($item) {
-														$q->where('course_id', $item->course_id);
+                                                        $q->where('course_id', $item->course_id);
                                                     })->get();
-													$assignments_grade = $assignments->sum('grade') ?: 0;
-													$total = $item->grade1 + $item->grade2 + $item->grade3 + $item->grade4 + $item->grade5 + $assignments_grade;
+                                                    $assignments_grade = $assignments->sum('grade') ?: 0;
+                                                    $total = $item->grade1 + $item->grade2 + $item->grade3 + $item->grade4 + $item->grade5 + $assignments_grade;
                                                 @endphp
                                                 <tr>
                                                     <td>{{optional($item->course)->title}}</td>
@@ -590,7 +487,6 @@
                                                     <td>{{$item->grade2}}</td>
                                                     <td>{{$item->grade3}}</td>
                                                     <td>{{$item->grade4}}</td>
-                                                    <td>{{$item->grade5}}</td>
                                                     <td>{{$item->grade5}}</td>
                                                     @if(count($assignments))
                                                         <td>
@@ -611,34 +507,17 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </section>
+        </section>
+    </form>
 @endsection
 @section('js')
-    <script src="{{url('/')}}/ws_assets/js/rangeprogress.js"></script>
-    <script src="{{url('/')}}/ws_assets/js/select_userprofile.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        $('#image').change(function () {
-            var input = this;
-            var url = $(this).val();
-            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
-            if (input.files && input.files[0] && (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#profile_image').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                $('#profile_image').attr('src', '/assets/no_preview.png');
-            }
-        });
-
         $('#form').validate({
             rules: {
                 name: {
@@ -673,7 +552,7 @@
                 },
             },
             errorElement: 'span',
-            ignore: ':hidden:not(#country_id)',
+            ignore: ':hidden',
             errorClass: 'help-block help-block-error is-invalid',
             focusInvalid: true,
             errorPlacement: function (error, element) {
@@ -694,7 +573,10 @@
         });
 
         $('#dob').datepicker({
-            'format': 'yyyy-mm-dd'
+            'format': 'yyyy-mm-dd',
+            endDate: '{{now()->toDateString()}}'
         });
+
+
     </script>
 @endsection

@@ -9,40 +9,32 @@
 
 @section('body')
 
-    <header class="d-flex justify-content-center">
-        <nav class="container navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="javascript:void(0);">
-                    <img alt="img" src="{{url('/')}}/assets/images/logo.svg" style="margin-right: 20px;height: 60px; margin-top: -14px;" />
-                </a>
-            </div>
-        </nav>
-    </header>
 
-    <div class="container-fluid reset-pass" style="background-color: #f7f5fa !important;">
-        <div class="d-flex justify-content-center mt-0 py-5 h-100vh">
-            <div class="col-10 col-lg-5 text-center p-0 mt-3 mb-2" data-aos="fade-down">
-                <form action="{{route('ws.forget_password_post')}}" method="POST" id="form">
-                    @csrf
-                    <div>
-                        <div class="d-flex flex-column mb-4">
-                            <h2 class="font-inter font-bold700 small mb-4 font28">
-                                @lang('ws.reset_password')
-                            </h2>
-                            <h3 class="font-inter font-bold700 small mb-4">
-                                @lang('ws.reset_password_desc')
-                            </h3>
-                            <div class="form-group mb-3">
-                                <label for="email" class="form-label font-inter tc-gray-1">@lang('ws.enter_email')</label>
-                                <input type="email" class="form-control font-inter small-text font-bold700" name="email" id="email" aria-describedby="basic-addon1">
-                                <div class="text-danger" id="email_error"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" name="next" class="btn next action-button next-btn" value="Reset Password">@lang('ws.reset_password')</button>
-                </form>
-            </div>
+    <div class="loginBodySec forgetPassBody">
+        <div class="loginBodySecImg" style="background-image: url('{{url('/')}}/ws_assets/images/bglogin.png')"></div>
+        <div class="loginPageBody">
+            <form action="{{route('ws.forget_password_post')}}" class="loginForm loginPageForm" method="POST" id="form">
+                @csrf
+                <div class="loginLogo">
+                    <img src="{{url('/')}}/ws_assets/images/loginLogo.png" alt="">
+                </div>
+                <div class="loginTitle">
+                    <h6>@lang('ws.reset_password')</h6>
+                    <p>
+                        @lang('ws.reset_password_desc')
+                    </p>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="E-mail address">
+                    <div class="text-danger" id="email_error"></div>
+                </div>
+
+                <button type="submit" class="signBtn btn loginBtns loginLink"> <span>@lang('ws.reset_password')</span></button>
+
+            </form>
+
         </div>
+
     </div>
 @endsection
 @section('js')

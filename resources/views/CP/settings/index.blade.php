@@ -209,15 +209,15 @@
                                                 <div class="col-12 text-danger" id="schedule_menu_title_ar_error"></div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                                            <div class="row">
-                                                <label class="col-12" for="messages_menu_title">@lang($module.'.messages_menu_title') <span class="text-danger">*</span></label>
-                                                <div class="col-12">
-                                                    <input type="text" name="schedule_menu_title[ar]" id="messages_menu_title" class="form-control" placeholder="@lang($module.'.messages_menu_title')" value="{{$settings->getTranslation('schedule_menu_title', 'ar')}}">
-                                                </div>
-                                                <div class="col-12 text-danger" id="messages_menu_title_error"></div>
-                                            </div>
-                                        </div>
+{{--                                        <div class="form-group col-lg-4 col-md-6 col-sm-12">--}}
+{{--                                            <div class="row">--}}
+{{--                                                <label class="col-12" for="messages_menu_title">@lang($module.'.messages_menu_title') <span class="text-danger">*</span></label>--}}
+{{--                                                <div class="col-12">--}}
+{{--                                                    <input type="text" name="schedule_menu_title[ar]" id="messages_menu_title" class="form-control" placeholder="@lang($module.'.messages_menu_title')" value="{{$settings->getTranslation('schedule_menu_title', 'ar')}}">--}}
+{{--                                                </div>--}}
+{{--                                                <div class="col-12 text-danger" id="messages_menu_title_error"></div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                         <div class="form-group col-lg-4 col-md-6 col-sm-12">
                                             <div class="row">
                                                 <label class="col-12" for="follow_us_on_social_media_en">@lang($module.'.follow_us_on_social_media_en')</label>

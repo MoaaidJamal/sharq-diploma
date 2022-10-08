@@ -7,91 +7,46 @@
 
 @section('style')
     <style>
-        .chat-messages {
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-            overflow-y: scroll
-        }
-
-        .chat-message-left,
-        .chat-message-right {
-            display: flex;
-            flex-shrink: 0
-        }
-
-        .chat-message-left {
-            margin-right: auto
-        }
-
-        .chat-message-right {
-            flex-direction: row-reverse;
-            margin-left: auto
-        }
-
-        .py-3 {
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-        }
-
-        .px-4 {
-            padding-right: 1.5rem !important;
-            padding-left: 1.5rem !important;
-        }
-
-        .flex-grow-0 {
-            flex-grow: 0 !important;
-        }
-
-        .border-top {
-            border-top: 1px solid #dee2e6 !important;
-        }
-
-        .owner_message {
-            background: #dcbcc3 !important;
-        }
-
-        .chat_link.active_chat {
-            background: #e9ecef !important;
-        }
-
-        div.upload-file {
-            position: relative;
-            overflow: hidden;
-        }
-        div.upload-file input {
-            position: absolute;
-            font-size: 50px;
-            opacity: 0;
-            right: 0;
-            top: 0;
-        }
     </style>
 @endsection
 
 @section('body')
 
     @if(auth()->user()->chats()->count())
-        <div class="card container rtl p-0">
-            <div class="row g-0 chat_messages">
-                <div class="col-12 col-lg-5 col-xl-3 border-right border-left">
-                    @foreach($chats as $item)
-                        <a href="javascript:;" class="list-group-item list-group-item-action border-0 chat_link {{$chat ? ($chat->id == $item->id ? 'active_chat' : '') : ($loop->first ? 'active_chat' : '')}}" data-chat_id="{{$item->id}}">
-                            <div class="d-flex align-items-start py-1">
-                                <img src="{{$item->phase ? $item->phase->image : $item->users()->where('users.id', '!=', auth()->id())->first()->full_path_image}}"
-                                     class="rounded-circle mr-1" alt="" style="width: 40px; height:40px">
-                                <div class="flex-grow-1 ml-3 py-2 px-3">
-                                    {{$item->phase ? $item->phase->title : $item->users()->where('users.id', '!=', auth()->id())->first()->name}}
+        <section class="chatPageBody">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb chatbreadcrumb">
+                                <li class="breadcrumb-item"><a href="{{url('/')}}">@lang('ws.home')</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">chat</li>
+                            </ol>
+                        </nav>
+                        <div class="chatBox chat_messages">
+                            <div class="chatSide">
+                                <div class="chatCorner">
+                                    <i><img src="{{url('/')}}/ws_assets/images/group.svg" alt=""></i>
+                                </div>
+                                <div class="chatMembers">
+                                    <ul>
+                                        @foreach($chats as $item)
+                                            @php($user = $item->users()->where('users.id', '!=', auth()->id())->first())
+                                            <li class="NoImgMember {{$chat ? ($chat->id == $item->id ? 'active' : '') : ($loop->first ? 'active' : '')}}">
+                                                <a href="javascript:;" class="chat_link {{$chat ? ($chat->id == $item->id ? 'active_chat active' : '') : ($loop->first ? 'active_chat active' : '')}}" data-chat_id="{{$item->id}}">
+                                                    <img src="{{$item->phase ? optional($item->phase)->image : ($user ? $user->full_path_image : '')}}" alt="">
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
-                        </a>
-                    @endforeach
-
-                    <hr class="d-block d-lg-none mt-1 mb-0">
+                            @include('WS.messages.show', ['chat' => $chat ?? auth()->user()->chats()->first()])
+                        </div>
+                    </div>
                 </div>
-                @include('WS.messages.show', ['chat' => $chat ?? auth()->user()->chats()->first()])
             </div>
-        </div>
+        </section>
     @else
         <section class="learning-path">
             <div class="container">
@@ -106,8 +61,10 @@
     <script>
         let page = 2;
         $('.chat_link').click(function () {
-            $('.chat_link').removeClass('active_chat');
-            $(this).addClass('active_chat');
+            $('.chat_link').removeClass('active_chat active');
+            $('.chat_link').parent().removeClass('active');
+            $(this).addClass('active_chat active');
+            $(this).parent().addClass('active');
             let here = $(this);
             $.ajax({
                 url: '{{route('ws.chat.show')}}?chat_id=' + $(this).data('chat_id'),
@@ -124,7 +81,7 @@
                     if (data.success) {
                         $('.chat_messages_container').remove();
                         $('.chat_messages').append(data.page);
-                        $('.chat-messages').scrollTop($('.chat-messages')[0].scrollHeight);
+                        $('.chat-messages').scrollTop($('.chat-messages')[0] ? $('.chat-messages')[0].scrollHeight : 0);
                         page = 2;
                     } else {
                         showAlertMessage('error', '@lang('constants.unknown_error')');

@@ -1,25 +1,80 @@
-<footer class="rtl">
-    <div class="container d-flex flex-column align-items-center">
-        <div class="d-flex justify-content-center align-items-center flex-wrap">
-            <a href="{{route('ws.home')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->home_menu_title}}</a>
-            <a href="{{route('ws.modules')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->learning_paths_menu_title}}</a>
-            <a href="{{route('ws.teammates')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->find_your_mate_menu_title}}</a>
-            <a href="{{route('ws.mentors')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->mentors_menu_title}}</a>
-            <a href="{{route('ws.schedule')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->schedule_menu_title}}</a>
-            <a href="{{route('ws.messages')}}" class="font-bold700 font-inter font18 my-4 mx-3" style="padding: 0 !important">{{$settings->messages_menu_title}}</a>
+<footer>
+    <a href="#hero" class="up">
+        <i class="fa fa-chevron-up"></i>
+    </a>
+    <a href="{{route('ws.messages')}}" class="chat">
+        <i><img src="{{url('/')}}/ws_assets/images/chat.svg" alt=""></i>
+    </a>
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                <ul class="footerList d-flex justify-content-around">
+                    <li>
+                        <a href="{{route('ws.home')}}">
+                            {{$settings->home_menu_title}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('ws.modules')}}">
+                            {{$settings->learning_paths_menu_title}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('ws.teammates')}}">
+                            {{$settings->find_your_mate_menu_title}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('ws.mentors')}}">
+                            {{$settings->mentors_menu_title}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('ws.schedule')}}">
+                            {{$settings->schedule_menu_title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <hr style="background-color: #fff;" width="100%" />
-        <div class="d-flex justify-content-between align-items-center w-100 flex-column flex-lg-row">
-            <div class="font-inter text-f">{{$settings->copyright}}</div>
-            <div class="d-flex justify-content-between align-items-center flex-column flex-md-row">
-                <div  class="mx-4 mt-2 font-inter text-f follow">{{$settings->follow_us_on_social_media}}</div>
-                <div class="d-flex justify-content-between">
-                    <a href="{{$settings->instagram}}" class="icon"><i class="bi bi-instagram"></i></a>
-                    <a href="{{$settings->facebook}}" class="icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="{{$settings->twitter}}" class="icon"><i class="bi bi-twitter"></i></a>
-                    <a href="{{$settings->linkedin}}" class="icon"><i class="fab fa-linkedin-in"></i></a>
+        <div class="row d-flex justify-content-center mt-3">
+            <div style="width: fit-content">
+                <div class="footerListTitle">
+                    {{$settings->follow_us_on_social_media}}
                 </div>
+                <ul class="socialIcons d-flex justify-content-between">
+                    <li>
+                        <a href="{{$settings->facebook}}"><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li>
+                        <a href="{{$settings->twitter}}"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a href="{{$settings->instagram}}"><i class="fab fa-instagram"></i></a>
+                    </li>
+                    <li>
+                        <a href="{{$settings->linkedin}}"><i class="fab fa-linkedin-in"></i></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </footer>
+
+<div class="copy">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center">
+                <div class="left-side">
+                    <p>
+                        {{$settings->copyright}}
+                    </p>
+                </div>
+                <div class="right-side ">
+                    <p>@lang('ws.footer_desc') </p>
+                    <div class="copyLogo"><img src="{{url('/')}}/ws_assets/images/footerLogo.svg" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

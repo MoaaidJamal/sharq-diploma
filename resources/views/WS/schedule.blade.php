@@ -1,159 +1,113 @@
 @extends('WS.layouts.main')
 
-@section('title') @lang('ws.schedule') @endsection
-@section('schedule_active') active @endsection
+@section('title')
+    {{$settings->schedule_menu_title}}
+@endsection
+@section('schedule_active')
+    active
+@endsection
 
 @section('style')
-    <link href="{{url('/')}}/ws_assets/css/fullcalendar.css" rel="stylesheet">
-    <style>
-        a.fc-day-grid-event {
-            text-decoration: none !important;
-        }
-
-        .fc-time, .fc-title, .fc-event-container {
-            color: #9b3b5a !important;
-        }
-
-        .tooltip-arrow {
-            display: none !important;
-        }
-
-        .fc-day-number {
-            margin: 5px;
-            display: block;
-            font-weight: 500;
-        }
-
-        .tooltip.show {
-            opacity: 1;
-        }
-
-        .fc-today {
-            background: #ffeff5;
-        }
-
-        .fc-other-month {
-            background: #f4f4f4;
-        }
-
-        .tooltip-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 20px;
-            box-shadow: 0 10px 54px -15px rgba(0, 0, 0, 0.15);
-            position: absolute;
-            background: #ffffff !important;
-            border-radius: 8px !important;
-            color: #232323 !important;
-            width: 426px !important;
-            max-width: 426px !important;
-            height: fit-content !important;
-            left: -91px;
-            top: 0;
-        }
-
-        .tooltip-inner div {
-            text-align: left;
-            color: #000;
-            flex: none;
-            order: 1;
-            font-size: 14px;
-            font-weight: bolder;
-            padding: 5px 10px;
-            margin-bottom: 10px;
-        }
-
-        .tooltip-inner div:first-child {
-            background: rgba(155, 59, 90, 0.07);
-            text-align: left;
-            color: #9B3B5A;
-            flex: none;
-            order: 0;
-            flex-grow: 0;
-            font-size: 16px;
-            font-weight: bolder;
-            padding: 5px 10px;
-            margin-bottom: 10px;
-        }
-
-        .tooltip-inner div:last-child {
-            background: #DADADA;
-            text-align: center;
-            color: #000;
-            flex: none;
-            order: 3;
-            flex-grow: 0;
-            font-size: 12px;
-            padding: 5px 10px;
-            margin-left: auto;
-            margin-bottom: 0;
-        }
-
-        .btn-link {
-            background: #9B3B5A;
-            border-radius: 3px;
-            padding: 10px 12px;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            margin-right: 6px;
-            width: 200px;
-            text-align: center;
-            margin-left: auto;
-        }
-
-        .btn-link:hover {
-            color: #fff;
-        }
-    </style>
+    <link href="{{url('/')}}/ws_assets/css/fullcalender.css" rel="stylesheet">
 @endsection
 
 @section('body')
+    <section class="coursesHeader">
+        <div class="container">
+            <div class="row ">
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url('/')}}">{{$settings->home_menu_title}}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{$settings->schedule_menu_title}}</li>
+                        </ol>
+                    </nav>
 
-    <section class="d-flex fc" style="flex-direction: column; align-items: start;" data-aos="fade-down">
-        <h2 style="font-family: Inter;font-style: normal;font-weight: bold;font-size: 22px;line-height: 21px;color: #1B1B1B;margin-bottom: 7px; margin-top: 20px">
-            @lang('ws.schedule')
-        </h2>
+                </div>
+                <div class="col-md-8">
+                    <h5>
+                        {{$settings->schedule_menu_title}}
+                    </h5>
+                </div>
+            </div>
+        </div>
     </section>
-    <div class="mb-5" id='calendar' data-aos="fade-down"></div>
+
+    <section class="ScheduleBody">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="calenderCont">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 @endsection
 @section('js')
-    <script src="{{url('/')}}/ws_assets/plugins/fullcalendar/main.min.js"></script>
-    <script src="{{url('/')}}/ws_assets/plugins/fullcalendar/daygrid.js"></script>
+    <script type="text/javascript" src="{{url('/')}}/ws_assets/js/fullcalender.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var calendarEl = document.getElementById("calendar");
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: ["dayGrid"],
-                defaultView: "dayGridMonth",
-                eventRender: function(info) {
-                    $(info.el).tooltip({
-                        title: info.event.extendedProps.description,
-                        html: true,
-                        placement: "bottom",
-                        trigger: "hover",
-                        container: "body",
-                    });
+                headerToolbar: {
+                    left: 'title,prev,next',
+                    //  center: '',
+                    right: ''
                 },
+                navLinks: true, // can click day/week names to navigate views
+                businessHours: true, // display business hours
+                editable: true,
+                selectable: true,
+                eventBackgroundColor: "rgba(118, 28, 51, .08)",
                 events: [
-                    @foreach($courses as $course)
-                        {
-                            title: "{{$course->title}}",
-                            description: "<div>{{$course->title}}</div><div>{{\Illuminate\Support\Str::limit(cleanText($course->description), 200)}}</div><div>{{\Carbon\Carbon::parse($course->start_date)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($course->end_date)->format('Y-m-d')}}</div>",
-                            start: "{{\Carbon\Carbon::parse($course->start_date)->toDateTimeString()}}",
-                            end: "{{\Carbon\Carbon::parse($course->end_date)->toDateTimeString()}}",
-                            url: '{{route('ws.course.show', ['course_id' => $course->id])}}'
-                        },
+                        @foreach($courses as $course)
+                    {
+                        title: "{{$course->title}}",
+                        instructor: "{{$course->user->name}}",
+                        instructor_image: "{{$course->user->full_path_image}}",
+                        description: "{{\Illuminate\Support\Str::limit(cleanText($course->description), 200)}}",
+                        start_from: "{{\Carbon\Carbon::parse($course->start_date)->format('H:i a')}}",
+                        start: "{{\Carbon\Carbon::parse($course->start_date)->toDateTimeString()}}",
+                        end: "{{\Carbon\Carbon::parse($course->end_date)->toDateTimeString()}}",
+                        url: '{{route('ws.course.show', ['course_id' => $course->id])}}'
+                    },
                     @endforeach
                 ],
-                eventClick: function(event) {
-                    if (event.url) {
-                        window.open(event.url, "_blank");
-                        return false;
-                    }
+                eventMouseEnter: function (info) {
+                    $('.fc-description').remove();
+                    var element = $(info.el);
+                    element.append(`<a href="${info.event.url}">
+                                        <div class="fc-description">
+                                            <div class="triangle-up">
+                                                <div class="inner-triangle"></div>
+                                            </div>
+                                            <div class="eventDescHeader">
+                                                <div class="eventDescImg">
+                                                    <img src="${info.event.extendedProps.instructor_image}" alt="">
+                                                </div>
+                                                <div class="eventDescName">
+                                                    <div class="leftEvent">
+                                                        <h4>${info.event.extendedProps.instructor}</h4>
+                                                        <span>
+                                                            ${info.event.extendedProps.start_from}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="EventDescription">
+                                                <p> ${info.event.title}</p>
+                                            </div>
+                                        </div>
+                                    </a>`);
+                },
+                eventMouseLeave: function () {
+                    $('.fc-description').remove();
                 }
+
             });
             calendar.render();
         });

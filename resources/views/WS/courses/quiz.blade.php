@@ -4,104 +4,101 @@
 @section('modules_active') active @endsection
 
 @section('style')
-    <link href="{{url('/')}}/ws_assets/css/stepper.css" rel="stylesheet" />
-    <link href="{{url('/')}}/ws_assets/css/quiz.css" rel="stylesheet" />
-    <link href="{{url('/')}}/ws_assets/css/Lessonassignment.css" rel="stylesheet" />
     <style>
-        header {
-            margin-bottom: 0 !important;
-        }
-
-        [type=submit] {
-            height: 40px;
-            width: auto;
-            padding: 0 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            float: right;
+        .action-button {
+            border: none;
+            padding: 0 30px;
         }
     </style>
 @endsection
 
 @section('body')
 
-
-    <div class="container-fluid rtl">
-        <div class="d-flex justify-content-center mt-0">
-            <div class="col-10 col-lg-7 text-center p-0 mt-3 ">
-                <div class="px-0 pb-0 mb-3">
-                    <div class="s-small tc-gray-2 font-inter font-bold600">@lang('ws.lecture_quiz')</div>
-                    <div class="font-inter font-bold700 mb-3">{{$lecture->title}}</div>
+    <section class="coursesHeader">
+        <div class="container">
+            <div class="row ">
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
+                            <li class="breadcrumb-item "><a href="javascript:;">@lang('ws.lecture_quiz')</a> </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{$lecture->title}}</li>
+                        </ol>
+                    </nav>
                 </div>
-                <ul id="progressbar">
-                    @foreach($questions as $key => $question)
-                        <li @if($key == 0) class="active" @endif id="q{{$key}}">
-                            <span>{{$key+1}}</span>
-                        </li>
-                    @endforeach
-                </ul>
+                <div class="col-md-12">
+                    <h5>{{$lecture->course->title}}
+                        <span> {{$lecture->course->phase->title}} </span>
+                    </h5>
+                    <div class="progress headerProgressBar">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0"
+                             aria-valuemax="100" style="width:{{$lecture->course->getUserScore()}}%">
+                            <span class="sr-only">{{$lecture->course->getUserScore()}}% @lang('ws.completed')</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid rtl" style="background-color: #f7f5fa !important;">
-        <div class="d-flex justify-content-center mt-0 py-5 height">
-            <div class="col-10 col-lg-7 text-center p-0 mt-3 mb-2">
-                <div class="row">
-                    <div class="mx-0">
-                        <form action="{{route('ws.quiz_attempt')}}" method="POST" id="msform">
+    </section>
+
+    <section class="ExamContainer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ExamCont">
+                        <form action="{{route('ws.quiz_attempt')}}" class="examForm" method="POST" id="msform">
                             @csrf
                             <input type="hidden" name="lecture_id" value="{{$lecture->id}}">
-                            @foreach($questions as $key => $question)
-                                <fieldset>
-                                    <div>
-                                        <div class="d-flex flex-column mb-4">
-                                            {!! $question->question !!}
-                                            @if($question->answer1)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="questions[{{$question->id}}]" id="q{{$key+1}}-1" value="1">
-                                                    <label class="form-check-label font-inter font-bold700 s-small" for="q{{$key+1}}-1">
+                            @foreach($questions->chunk(4) as $chunk)
+                                <fieldset @if($loop->first) style="opacity: 1;" @else style="display: none; position: relative; opacity: 0;" @endif>
+                                    @foreach($chunk as $key => $question)
+                                        <div class="QuestionBox">
+                                            <h4>
+                                                {!! $question->question !!}
+                                            </h4>
+                                            <div class="AnswersBox">
+                                                @if($question->answer1)
+                                                    <label class="radioBtnContainer">
                                                         {!! $question->answer1 !!}
+                                                        <input type="radio" class="radioInput" name="questions[{{$question->id}}]" id="q{{$key+1}}-1" value="1">
+                                                        <span class="checkmark"></span>
                                                     </label>
-                                                </div>
-                                            @endif
-                                            @if($question->answer2)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="questions[{{$question->id}}]" id="q{{$key+1}}-2" value="2">
-                                                    <label class="form-check-label font-inter font-bold700 s-small" for="q{{$key+1}}-2">
+                                                @endif
+                                                @if($question->answer2)
+                                                    <label class="radioBtnContainer">
                                                         {!! $question->answer2 !!}
+                                                        <input type="radio" class="radioInput" name="questions[{{$question->id}}]" id="q{{$key+1}}-1" value="2">
+                                                        <span class="checkmark"></span>
                                                     </label>
-                                                </div>
-                                            @endif
-                                            @if($question->answer3)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="questions[{{$question->id}}]" id="q{{$key+1}}-3" value="3">
-                                                    <label class="form-check-label font-inter font-bold700 s-small" for="q{{$key+1}}-3">
+                                                @endif
+                                                @if($question->answer3)
+                                                    <label class="radioBtnContainer">
                                                         {!! $question->answer3 !!}
+                                                        <input type="radio" class="radioInput" name="questions[{{$question->id}}]" id="q{{$key+1}}-1" value="3">
+                                                        <span class="checkmark"></span>
                                                     </label>
-                                                </div>
-                                            @endif
-                                            @if($question->answer4)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="questions[{{$question->id}}]" id="q{{$key+1}}-4" value="4">
-                                                    <label class="form-check-label font-inter font-bold700 s-small" for="q{{$key+1}}-4">
+                                                @endif
+                                                @if($question->answer4)
+                                                    <label class="radioBtnContainer">
                                                         {!! $question->answer4 !!}
+                                                        <input type="radio" class="radioInput" name="questions[{{$question->id}}]" id="q{{$key+1}}-1" value="4">
+                                                        <span class="checkmark"></span>
                                                     </label>
-                                                </div>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endforeach
                                     @if($loop->last)
                                         <div class="d-flex justify-content-between">
-                                            <input type="button" name="previous" class="btn previous action-button next-btn" value="Previous Questions" />
-                                            <input type="submit" name="submit" class="btn action-button btn-success" value="Submit Your Attempt" />
+                                            <input type="button" name="previous" class="action-button commonBtn sumbitExamBtn previous next-btn" value="Previous Questions" />
+                                            <input type="submit" name="submit" class="commonBtn btn action-button btn-success" value="Submit Your Attempt" />
                                         </div>
                                     @else
                                         <div class="d-flex justify-content-between" style="flex-direction: row-reverse;">
                                             @if(!$loop->first)
-                                                <input type="button" name="previous" class="btn previous action-button next-btn" value="Previous Questions" />
+                                                <input type="button" name="previous" class="action-button commonBtn sumbitExamBtn previous next-btn" value="Previous Questions" />
                                             @endif
-                                            <input type="button" name="next" class="btn next action-button next-btn" value="Next Questions" />
+                                            <input type="button" name="next" class="action-button commonBtn sumbitExamBtn next next-btn" value="Next Questions" />
                                         </div>
                                     @endif
                                 </fieldset>
@@ -111,7 +108,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
 @endsection
 @section('js')
