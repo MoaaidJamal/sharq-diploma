@@ -54,7 +54,7 @@ class UsersAssignment extends Model
 	];
 
     public function getFileAttribute($file){
-        return url($file);
+        return url('uploads/'.$file);
     }
 
 	public function lecture()
