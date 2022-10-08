@@ -8,7 +8,7 @@
 @endsection
 
 @section('style')
-    <link href="{{url('/')}}/ws_assets/css/fullcalender.css" rel="stylesheet">
+    <link href="{{url('/')}}/ws_assets/css/fullCalender.css" rel="stylesheet">
 @endsection
 
 @section('body')
@@ -67,8 +67,8 @@
                         @foreach($courses as $course)
                     {
                         title: "{{$course->title}}",
-                        instructor: "{{$course->user->name}}",
-                        instructor_image: "{{$course->user->full_path_image}}",
+                        instructor: "{{$course->user ? $course->user->name : ''}}",
+                        instructor_image: "{{$course->user ? $course->user->full_path_image : ''}}",
                         description: "{{\Illuminate\Support\Str::limit(cleanText($course->description), 200)}}",
                         start_from: "{{\Carbon\Carbon::parse($course->start_date)->format('H:i a')}}",
                         start: "{{\Carbon\Carbon::parse($course->start_date)->toDateTimeString()}}",

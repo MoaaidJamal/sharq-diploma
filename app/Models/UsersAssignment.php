@@ -54,7 +54,7 @@ class UsersAssignment extends Model
 	];
 
     public function getFileAttribute($file){
-        return $file && file_exists(public_path($file)) ? url($file) : url('uploads/image_placeholder.png');
+        return url($file);
     }
 
 	public function lecture()

@@ -1,6 +1,7 @@
 <div class="chatDetails chat_messages_container">
     <div class="chatTitle">
-        {{$chat->phase ? $chat->phase->title : $chat->users()->where('users.id', '!=', auth()->id())->first()->name}}
+        @php($message_user = $chat->users()->where('users.id', '!=', auth()->id())->first())
+        {{$chat->phase ? $chat->phase->title : ($message_user ? $message_user->name : '-')}}
     </div>
     <div class="chatBoxMessages chat-messages scrollable" data-chat_id="{{$chat->id}}">
         @include('WS.messages.messages', ['messages' => $chat->messages()->latest()->limit(20)->get()->reverse()])
