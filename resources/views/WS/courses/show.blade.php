@@ -204,21 +204,23 @@
                                     </p>
                                 @endif
                             </div>
-                            <div class="lectureDetails" id="lectureDetails">
-                                <h6 class="aboutCourseTitle">
-                                    @lang('ws.lecturer')
-                                </h6>
-                                <div class="lectureDetailsBox clearfix">
-                                    <div class="lectureImg"><img src="{{$course->user->full_path_image}}" alt=""></div>
-                                    <div class="lectureDesc">
-                                        <h6 class="aboutCourseTitle">{{$course->user->name}}</h6>
-                                        <p class="aboutCoursePar">
-                                            {{$course->user->bio}}
-                                        </p>
-                                    </div>
+                            @if($course->user)
+                                <div class="lectureDetails" id="lectureDetails">
+                                    <h6 class="aboutCourseTitle">
+                                        @lang('ws.lecturer')
+                                    </h6>
+                                    <div class="lectureDetailsBox clearfix">
+                                        <div class="lectureImg"><img src="{{$course->user->full_path_image}}" alt=""></div>
+                                        <div class="lectureDesc">
+                                            <h6 class="aboutCourseTitle">{{$course->user->name}}</h6>
+                                            <p class="aboutCoursePar">
+                                                {{$course->user->bio}}
+                                            </p>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
 
                             <div class="Learnerreviews" id="Reviews">
                                 <h6 class="aboutCourseTitle">@lang('ws.course_reviews')</h6>
