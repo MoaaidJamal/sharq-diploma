@@ -25,7 +25,7 @@
             <div class="row ">
                 <div class="col-md-10">
                     <div class="InstuctorNameImg">
-                        <img src="{{$user->full_path_image}}" alt="">
+                        <img src="{{$user ? $user->full_path_image : ''}}" alt="">
                     </div>
                     <div class="InstructorNameDetails">
 

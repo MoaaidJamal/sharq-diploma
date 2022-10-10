@@ -2,11 +2,11 @@
     <div class="learnerReviewBox">
         <div class="reviewerDetails clearfix">
             <div class="reviewerImg">
-                <img src="{{@$item->user->full_path_image}}" alt="">
+                <img src="{{$item->user ? $item->user->full_path_image : ''}}" alt="">
             </div>
             <div class="reviewerName">
                 <h6 class="aboutCourseTitle">
-                    {{@$item->user->name}}
+                    {{$item->user ? $item->user->name : ''}}
                 </h6>
                 <p class="aboutCoursePar">{{\Carbon\Carbon::parse($item->created_at)->diffForHumans()}}</p>
             </div>
