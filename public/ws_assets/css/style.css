@@ -885,7 +885,6 @@ header .container-fluid {
 
 .diplomaIcon {
     display: flex;
-    align-self: center;
 }
 
 .circle-wrap {
@@ -1838,6 +1837,8 @@ footer .container {
     margin-right: 20px;
     float: left;
     position: relative;
+    display: flex;
+    overflow: hidden;
 }
 
 .profileSec span {
@@ -3011,7 +3012,7 @@ element.style {}
 
 .InstructorsSlider .instructorImg {
     position: relative;
-
+    display: flex;
 }
 
 .InstructorsSlider .instructorImg:before {
@@ -6794,6 +6795,49 @@ max-width: 538px;
 .examResultModal.MarkFormModal .modal-content{
     padding: 45px;
 }
+/*************************************/
+.InstuctorNameImg2{
+    display: block;
+    float: none;
+    margin-bottom: 20px;
+    width: 170px;
+    height: 170px;
+    display: flex;
+}
+.instructorDetailsBox2{
+    display: block;
+}
+.instructorDetailsBox2 h5{
+    margin-bottom: 10px;
+}
+.InstructorNameDetails.InstructorNameDetails2{
+    margin-top:-90px;
+    position: relative;
+    z-index: 555;
+    margin-left:0;
+}
+.tagBox{
+    height: 37px;
+    border-radius: 100px;
+    display: inline-flex;
+    background-color: #E6E6E6;
+    padding:0 15px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+    font-size: .875em;
+    font-weight: 500;
+}
+.tagBox span{
+    align-self: center;
+}
+.tagsTitle{
+    margin-top:25px
+}
+.tagBox:hover{
+    color:#591526
+}
+/***********************************/
 @media (max-width: 1199.98px) {
     .fc-unthemed .fc-toolbar {
         margin-bottom: 1.5rem;

@@ -1,5 +1,8 @@
 @foreach($courses as $course)
     @php($score = $course->getUserScore())
+    @if($course->is_available)
+        <a href="{{route('ws.course.show', ['course_id' => $course->id])}}" style="color:#000; text-decoration:none;">
+    @endif
     <div class="diplomaProgramBox">
         <div class="diplomIconCont">
             <div class="diplomaIcon ">
@@ -9,13 +12,7 @@
         <div class="diplomaProgramDetails">
             <div class="diplomaProgramTitle">
                 <h6>
-                    @if($course->is_available)
-                        <a href="{{route('ws.course.show', ['course_id' => $course->id])}}" style="color:#000; text-decoration:none;">
-                            {{$course->title}}
-                        </a>
-                    @else
-                        {{$course->title}}
-                    @endif
+                    {{$course->title}}
                 </h6>
                 <span style="width: fit-content">{{$course->phase->title}}</span>
             </div>
@@ -47,4 +44,7 @@
             @endif
         </div>
     </div>
+    @if($course->is_available)
+        </a>
+    @endif
 @endforeach

@@ -255,6 +255,10 @@ class UserController extends Controller
 
         UsersPhase::query()->where('user_id', $user->getKey())->delete();
         if (isset($request['phases']) && is_array($request['phases'])) {
+            $chats = Chat::query()->whereNotIn('phase_id', $request['phases'])->get();
+            foreach ($chats as $chat) {
+                $chat->users()->detach($user->getKey());
+            }
             foreach ($request['phases'] as $item) {
                 UsersPhase::query()->create([
                     'user_id' => $user->getKey(),
