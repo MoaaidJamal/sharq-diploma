@@ -155,5 +155,6 @@ return [
     'star' => 'نجمة',
     'leave_review' => 'اترك تقييماً',
     'submit_review' => 'ارسل التقييم',
+    'assignment_comment' => 'تعليق على التكليف',
 
 ];

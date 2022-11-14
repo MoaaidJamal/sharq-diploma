@@ -169,7 +169,13 @@
 
                             @if($assignment)
                                 <div class="row mb-3 d-flex justify-content-center border-top pt-3">
-                                    <h6 style="margin: 0;">@lang('ws.your_submitted_file'): &nbsp  <a href="{{$assignment->file}}" class="commonBtn uploadHomeworkBtn btn" download="{{$assignment->file_name}}" style="padding: 10px;">@lang('ws.your_file')</a></h6>
+                                    <h6>@lang('ws.your_submitted_file'): &nbsp  <a href="{{$assignment->file}}" class="commonBtn uploadHomeworkBtn btn" download="{{$assignment->file_name}}" style="padding: 10px;">@lang('ws.your_file')</a></h6>
+                                    @if($assignment->comment)
+                                        <h6>@lang('ws.assignment_comment'): {{$assignment->comment}}</h6>
+                                    @endif
+                                    @if($assignment->grade)
+                                        <h6>@lang('ws.assignment_grade'): {{$assignment->grade}}</h6>
+                                    @endif
                                 </div>
                             @endif
                             @if(\Carbon\Carbon::parse($lecture->start_date)->lt(now()) && \Carbon\Carbon::parse($lecture->end_date)->gt(now()))

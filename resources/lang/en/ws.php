@@ -155,5 +155,6 @@ return [
     'star' => 'Star',
     'leave_review' => 'Leave a Review',
     'submit_review' => 'Submit Review',
+    'assignment_comment' => 'Assignment Comment',
 
 ];
