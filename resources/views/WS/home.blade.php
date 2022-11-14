@@ -32,7 +32,7 @@
     @endif
 
     @if(count($courses))
-        <section class="diplomaProgram">
+        <section class="diplomaProgram pb-0">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -47,38 +47,40 @@
         </section>
     @endif
 
-    <section class="joinSec">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="joinDeplomaImg clearfix">
-                        <img src="{{url('/')}}/ws_assets/images/Union 1.png" alt="">
+    @if($settings->home_video_id)
+        <section class="joinSec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="joinDeplomaImg clearfix">
+                            <img src="{{url('/')}}/ws_assets/images/Union 1.png" alt="">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="sectionTitle">
-                        <h5>{{$settings->home_video_title}}</h5>
+                    <div class="col-md-6">
+                        <div class="sectionTitle">
+                            <h5>{{$settings->home_video_title}}</h5>
+                        </div>
+                        <p>
+                            {!! $settings->home_video_description !!}
+                        </p>
+                        <a href="https://www.youtube.com/watch?v={{$settings->home_video_id}}" target="_blank" class="viewVideoBtn btn">
+                            <span>
+                                <div class="playvideoIcon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14.781" height="17.727" viewBox="0 0 14.781 17.727">
+                                        <path id="Stroke_3" data-name="Stroke 3"
+                                              d="M12.831,9.87a37.09,37.09,0,0,1-9.27,6.324,9.906,9.906,0,0,1-1.651.532,1.253,1.253,0,0,1-1.141-.671,13.029,13.029,0,0,1-.413-1.713A41.29,41.29,0,0,1,0,8.366,38.852,38.852,0,0,1,.393,2.186C.463,1.8.666.906.726.762A1.237,1.237,0,0,1,1.288.15,1.229,1.229,0,0,1,1.91,0,8.679,8.679,0,0,1,3.34.443a36.758,36.758,0,0,1,9.467,6.386c.169.182.634.669.711.768a1.247,1.247,0,0,1,.027,1.5C13.463,9.206,12.988,9.7,12.831,9.87Z"
+                                              transform="translate(0.5 0.5)" fill="none" stroke="#761C33"
+                                              stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                              stroke-width="1"></path>
+                                    </svg>
+                                </div> @lang('ws.view_video')
+                            </span>
+                        </a>
                     </div>
-                    <p>
-                        {!! $settings->home_video_description !!}
-                    </p>
-                    <a href="https://www.youtube.com/watch?v={{$settings->home_video_id}}" target="_blank" class="viewVideoBtn btn">
-                        <span>
-                            <div class="playvideoIcon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14.781" height="17.727" viewBox="0 0 14.781 17.727">
-                                    <path id="Stroke_3" data-name="Stroke 3"
-                                          d="M12.831,9.87a37.09,37.09,0,0,1-9.27,6.324,9.906,9.906,0,0,1-1.651.532,1.253,1.253,0,0,1-1.141-.671,13.029,13.029,0,0,1-.413-1.713A41.29,41.29,0,0,1,0,8.366,38.852,38.852,0,0,1,.393,2.186C.463,1.8.666.906.726.762A1.237,1.237,0,0,1,1.288.15,1.229,1.229,0,0,1,1.91,0,8.679,8.679,0,0,1,3.34.443a36.758,36.758,0,0,1,9.467,6.386c.169.182.634.669.711.768a1.247,1.247,0,0,1,.027,1.5C13.463,9.206,12.988,9.7,12.831,9.87Z"
-                                          transform="translate(0.5 0.5)" fill="none" stroke="#761C33"
-                                          stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
-                                          stroke-width="1"></path>
-                                </svg>
-                            </div> @lang('ws.view_video')
-                        </span>
-                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     @if(count($mentors))
         <section class="Instructors">

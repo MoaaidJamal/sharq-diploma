@@ -271,7 +271,7 @@ class User extends Authenticatable
 
     public function scopeInMyPhases($q)
     {
-        return $q->when(auth()->id() != 1, function ($q) {
+        return $q->when(auth()->user()->type != User::TYPE_ADMIN, function ($q) {
             $q->whereHas('phases', function ($q) {
                 $q->whereIn('phases.id', userPhases());
             });

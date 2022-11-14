@@ -1,7 +1,7 @@
 @foreach($courses as $course)
     @php($score = $course->getUserScore())
     @if($course->is_available)
-        <a href="{{route('ws.course.show', ['course_id' => $course->id])}}" style="color:#000; text-decoration:none;">
+        <a href="{{route('ws.course.show', ['course_id' => $course->id])}}" style="color:#000; text-decoration:none; width: 100%">
     @endif
     <div class="diplomaProgramBox">
         <div class="diplomIconCont">

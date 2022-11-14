@@ -266,7 +266,7 @@ function curl_email($emails, $subject, $view, $date){
 
 function userPhases() {
     if (auth()->check()) {
-        if (auth()->id() == 1) {
+        if (auth()->id() == 1 || auth()->user()->type == User::TYPE_ADMIN) {
             return Phase::query()->pluck('id')->toArray();
         } else {
             return auth()->user()->phasesPivot()->pluck('phase_id')->toArray();

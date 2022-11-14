@@ -99,7 +99,7 @@
                                         </span>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">@lang('lectures.title')</a>
+                                        <a href="javascript:;" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">@lang('lectures.title')</a>
                                         <div class="text-dark-75 font-size-h5">{{$lectures}}</div>
                                     </div>
                                 </div>
